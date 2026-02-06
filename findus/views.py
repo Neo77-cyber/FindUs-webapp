@@ -1,38 +1,33 @@
-import decimal
 import logging
+import os
+from datetime import datetime, timedelta
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.db.models import Avg, Case, Count, DecimalField, F, Value, When
+from django.core.exceptions import ValidationError
+from django.core.paginator import EmptyPage, Page, PageNotAnInteger, Paginator
+from django.db import DatabaseError, IntegrityError
+from django.db.models import Avg, Count, Q, Value
 from django.db.models.functions import Coalesce
-from django.http import JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, Page
-from django.db.models import Q
-from django.db import DatabaseError, IntegrityError
-from django.core.exceptions import ValidationError
+
 from .email_utils import send_welcome_email_async
 from .forms import *
 from .models import *
-import os
-from datetime import datetime, timedelta
-from django.http import HttpResponse
-import logging
-from django.db import DatabaseError
-from django.core.exceptions import ValidationError
 
 # Get logger for this module
 logger = logging.getLogger(__name__)
 
+
 def home(request):
-    is_htmx = request.headers.get('HX-Request') == 'true'
+    is_htmx = request.headers.get("HX-Request") == "true"
 
     if not is_htmx and request.user.is_authenticated:
         if hasattr(request.user, "userprofile"):
@@ -41,7 +36,7 @@ def home(request):
                 return redirect("craftsman_dashboard")
             except:
                 return redirect("customer_dashboard")
-    
+
     try:
         # Get filter parameters
         category_filter = request.GET.get("category", "")
@@ -54,217 +49,229 @@ def home(request):
         features = request.GET.getlist("features", [])
         job_sizes = request.GET.getlist("job_size", [])
         sort_by = request.GET.get("sort", "relevance")
-        
+
         # Check if filters are active
-        filters_active = any([
-            category_filter, region_filter, search_query,
-            price_min, price_max, rating,
-            availability, job_sizes, features, sort_by != "relevance"
-        ])
-        
+        filters_active = any(
+            [
+                category_filter,
+                region_filter,
+                search_query,
+                price_min,
+                price_max,
+                rating,
+                availability,
+                job_sizes,
+                features,
+                sort_by != "relevance",
+            ]
+        )
+
         # Base context
         context = {
-            'Service': Service,
-            'selected_category': category_filter,
-            'selected_region': region_filter,
-            'search_query': search_query,
-            'filters_active': filters_active,
-            'price_min': price_min,
-            'price_max': price_max,
-            'rating': rating,
-            'availability': availability,
-            'job_sizes': job_sizes,
-            'features': features,
-            'sort_by': sort_by,
+            "Service": Service,
+            "selected_category": category_filter,
+            "selected_region": region_filter,
+            "search_query": search_query,
+            "filters_active": filters_active,
+            "price_min": price_min,
+            "price_max": price_max,
+            "rating": rating,
+            "availability": availability,
+            "job_sizes": job_sizes,
+            "features": features,
+            "sort_by": sort_by,
         }
-        
+
         # Initialize variables
         services = Service.objects.none()
         craftsmen = CraftsmanProfile.objects.none()
         page_obj = None
-        
+
         if filters_active:
             try:
                 services = Service.objects.filter(service_status="Active")
-                
+
                 if category_filter:
                     services = services.filter(category=category_filter)
-                
+
                 if region_filter:
                     services = services.filter(region=region_filter)
-                
+
                 if search_query and len(search_query.strip()) >= 2:
                     services = services.filter(
-                        Q(title__icontains=search_query) |
-                        Q(description__icontains=search_query) |
-                        Q(craftsman__business_name__icontains=search_query)
+                        Q(title__icontains=search_query)
+                        | Q(description__icontains=search_query)
+                        | Q(craftsman__business_name__icontains=search_query)
                     )
-                
+
                 if price_min:
                     try:
                         price_min_val = float(price_min)
                         if price_min_val >= 0:
                             services = services.filter(
-                                Q(hourly_rate__gte=price_min_val) |
-                                Q(fixed_price__gte=price_min_val)
+                                Q(hourly_rate__gte=price_min_val)
+                                | Q(fixed_price__gte=price_min_val)
                             )
                     except:
                         pass
-                        
+
                 if price_max:
                     try:
                         price_max_val = float(price_max)
                         if price_max_val >= 0:
                             services = services.filter(
-                                Q(hourly_rate__lte=price_max_val) |
-                                Q(fixed_price__lte=price_max_val)
+                                Q(hourly_rate__lte=price_max_val)
+                                | Q(fixed_price__lte=price_max_val)
                             )
                     except:
                         pass
-                        
+
                 if rating:
                     try:
                         rating_val = float(rating)
                         if 0 <= rating_val <= 5:
-                            services = services.filter(craftsman__rating__gte=rating_val)
+                            services = services.filter(
+                                craftsman__rating__gte=rating_val
+                            )
                     except:
                         pass
-                
+
                 if availability:
                     services = services.filter(availability__in=availability)
-                
+
                 if job_sizes:
                     services = services.filter(job_size__in=job_sizes)
-                
+
                 if features:
                     for feature in features:
                         services = services.filter(features__contains=[feature])
-                
+
                 # Apply sorting
                 services = apply_service_sorting(services, sort_by)
-                
-                context['services'] = services
-                context['has_services'] = services.exists()
-                
+
+                context["services"] = services
+                context["has_services"] = services.exists()
+
             except Exception as e:
                 logger.error(f"Filter error: {e}")
                 services = Service.objects.filter(service_status="Active")[:50]
-                context['services'] = services
-                context['has_services'] = services.exists()
-                context['show_alert'] = "Showing limited results due to system issue"
-                
+                context["services"] = services
+                context["has_services"] = services.exists()
+                context["show_alert"] = "Showing limited results due to system issue"
+
         else:
             try:
-                craftsmen = CraftsmanProfile.objects.filter().order_by('-rating')[:12]
+                craftsmen = CraftsmanProfile.objects.filter().order_by("-rating")[:12]
                 services = Service.objects.filter(service_status="Active")
-                
-                context['craftsmen'] = craftsmen
-                context['has_services'] = services.exists()
+
+                context["craftsmen"] = craftsmen
+                context["has_services"] = services.exists()
             except Exception as e:
                 logger.error(f"Default view error: {e}")
-                context['craftsmen'] = []
-                context['has_services'] = False
-                context['show_alert'] = "Unable to load results at this time"
-        
+                context["craftsmen"] = []
+                context["has_services"] = False
+                context["show_alert"] = "Unable to load results at this time"
+
         # Get results count
         if filters_active:
             results_count = services.count()
         else:
             results_count = craftsmen.count()
-        
-        context['results_count'] = results_count
-        
+
+        context["results_count"] = results_count
+
         # Pagination
-        page = request.GET.get('page', 1)
-        
+        page = request.GET.get("page", 1)
+
         if filters_active:
             items = services
         else:
             items = craftsmen
-        
+
         if items.exists():
             paginator = Paginator(items, 12)
-            
+
             try:
                 page_obj = paginator.page(page)
             except:
                 page_obj = paginator.page(1)
-            
-            context['page_obj'] = page_obj
+
+            context["page_obj"] = page_obj
         else:
-            
+
             paginator = Paginator([], 12)
             page_obj = Page([], 1, paginator)
-            context['page_obj'] = page_obj
-        
+            context["page_obj"] = page_obj
+
         # HTMX response
         if is_htmx:
             if filters_active:
                 return render(request, "partials/filtered_results.html", context)
             else:
                 return render(request, "partials/default_results.html", context)
-        
+
         return render(request, "home.html", context)
-        
+
     except Exception as e:
         # Log error but show simple alert to user
         logger.error(f"Home view error: {e}")
-        
+
         # Simple context for error
         context = {
-            'Service': Service,
-            'filters_active': False,
-            'results_count': 0,
-            'has_services': False,
-            'show_alert': "We're working on fixing this issue. Please try again later.",
+            "Service": Service,
+            "filters_active": False,
+            "results_count": 0,
+            "has_services": False,
+            "show_alert": "We're working on fixing this issue. Please try again later.",
         }
-        
+
         return render(request, "home.html", context)
 
+
 def apply_service_sorting(queryset, sort_by):
-    
+
     if sort_by == "relevance":
-        
-        return queryset.order_by('-craftsman__rating', '-created_at')
-    
+
+        return queryset.order_by("-craftsman__rating", "-created_at")
+
     elif sort_by == "rating":
-        return queryset.order_by('-craftsman__rating')
-    
+        return queryset.order_by("-craftsman__rating")
+
     elif sort_by == "price_low":
-        
+
         return queryset.order_by(
             models.Case(
-                models.When(hourly_rate__isnull=False, then='hourly_rate'),
-                models.When(fixed_price__isnull=False, then='fixed_price'),
+                models.When(hourly_rate__isnull=False, then="hourly_rate"),
+                models.When(fixed_price__isnull=False, then="fixed_price"),
                 default=999999,
-                output_field=models.DecimalField()
+                output_field=models.DecimalField(),
             )
         )
-    
+
     elif sort_by == "price_high":
-        
+
         return queryset.order_by(
             models.Case(
-                models.When(hourly_rate__isnull=False, then=-models.F('hourly_rate')),
-                models.When(fixed_price__isnull=False, then=-models.F('fixed_price')),
+                models.When(hourly_rate__isnull=False, then=-models.F("hourly_rate")),
+                models.When(fixed_price__isnull=False, then=-models.F("fixed_price")),
                 default=999999,
-                output_field=models.DecimalField()
+                output_field=models.DecimalField(),
             )
         )
-    
+
     elif sort_by == "distance":
-        
-        return queryset.order_by('-craftsman__rating')
-    
-    
-    return queryset.order_by('-craftsman__rating')
+
+        return queryset.order_by("-craftsman__rating")
+
+    return queryset.order_by("-craftsman__rating")
+
 
 def add_to_waiting_list(request):
     if request.method == "POST":
         try:
-            
+
             logger.info(f"Form data: {dict(request.POST)}")
-            
+
             waiting_list_entry = WaitingList.objects.create(
                 name=request.POST.get("fullname"),
                 email=request.POST.get("email"),
@@ -273,27 +280,30 @@ def add_to_waiting_list(request):
                 location=request.POST.get("location"),
                 notes=request.POST.get("notes"),
             )
-            
-            logger.info(f"Created: {waiting_list_entry.name} - {waiting_list_entry.service_needed}")
-            
-            if request.headers.get('HX-Request'):
+
+            logger.info(
+                f"Created: {waiting_list_entry.name} - {waiting_list_entry.service_needed}"
+            )
+
+            if request.headers.get("HX-Request"):
                 return HttpResponse("Success! Added to waiting list.")
             else:
                 messages.success(request, "Success! Added to waiting list.")
                 return redirect(request.META.get("HTTP_REFERER", "home"))
-                
+
         except Exception as e:
             logger.error(f"Error: {str(e)}")
-            
-            if request.headers.get('HX-Request'):
+
+            if request.headers.get("HX-Request"):
                 return HttpResponse(f"Error: {str(e)}", status=400)
             else:
                 messages.error(request, f"Error: {str(e)}")
                 return redirect(request.META.get("HTTP_REFERER", "home"))
-    
+
     return redirect("home")
 
 
+###############AUTHETHICATION##################
 @csrf_protect
 def register(request):
 
@@ -324,11 +334,9 @@ def register(request):
                 if user.email:
                     send_welcome_email_async(
                         user_email=user.email,
-                        
                         is_craftsman=False,
                     )
 
-                
                 return redirect("customer_dashboard")
 
             except ValidationError as e:
@@ -429,9 +437,9 @@ def register_craftsman(request):
                     except Exception as e:
                         logger.error(f"Failed to queue welcome email: {str(e)}")
                 else:
-                    logger.warning(f"Cannot send welcome email - missing email or first_name. Email: {user.email}")
-
-                                
+                    logger.warning(
+                        f"Cannot send welcome email - missing email or first_name. Email: {user.email}"
+                    )
 
                 return redirect("craftsman_dashboard")
 
@@ -508,21 +516,25 @@ def register_craftsman(request):
     return render(request, "register_craftsman.html", context)
 
 
-
-
 @csrf_protect
 @require_http_methods(["GET", "POST"])
 def signin(request):
     if request.user.is_authenticated:
-        logger.debug(f"Already authenticated user accessed signin: {request.user.username}")
-        
+        logger.debug(
+            f"Already authenticated user accessed signin: {request.user.username}"
+        )
+
         if hasattr(request.user, "userprofile"):
             try:
                 request.user.userprofile.craftsmanprofile
-                logger.debug(f"Redirecting craftsman to dashboard: {request.user.username}")
+                logger.debug(
+                    f"Redirecting craftsman to dashboard: {request.user.username}"
+                )
                 return redirect("craftsman_dashboard")
             except Exception as e:
-                logger.debug(f"Redirecting customer to dashboard: {request.user.username}")
+                logger.debug(
+                    f"Redirecting customer to dashboard: {request.user.username}"
+                )
                 return redirect("customer_dashboard")
         return redirect("customer_dashboard")
 
@@ -537,101 +549,109 @@ def signin(request):
             messages.error(request, "Please enter both username/email and password.")
             return render(request, "signin.html", {"username_value": username_or_email})
 
-        
         user = authenticate(request, username=username_or_email, password=password)
-        
-        
+
         if not user:
             try:
                 user_by_email = User.objects.get(email=username_or_email)
-                user = authenticate(request, username=user_by_email.username, password=password)
+                user = authenticate(
+                    request, username=user_by_email.username, password=password
+                )
             except User.DoesNotExist:
                 user = None
 
         if user:
             if not user.is_active:
-                logger.warning(f"Login attempt for inactive account: {username_or_email}")
+                logger.warning(
+                    f"Login attempt for inactive account: {username_or_email}"
+                )
                 messages.error(request, "This account is inactive.")
-                return render(request, "signin.html", {"username_value": username_or_email})
+                return render(
+                    request, "signin.html", {"username_value": username_or_email}
+                )
 
             login(request, user)
-            logger.info(f"User logged in successfully: {user.username} ({user.email}) - IP: {request.META.get('REMOTE_ADDR')}")
+            logger.info(
+                f"User logged in successfully: {user.username} ({user.email}) - IP: {request.META.get('REMOTE_ADDR')}"
+            )
 
             if hasattr(user, "userprofile"):
                 try:
                     user.userprofile.craftsmanprofile
-                    logger.debug(f"Redirecting craftsman to dashboard after login: {user.username}")
+                    logger.debug(
+                        f"Redirecting craftsman to dashboard after login: {user.username}"
+                    )
                     return redirect("craftsman_dashboard")
                 except Exception as e:
-                    logger.debug(f"Redirecting customer to dashboard after login: {user.username}")
+                    logger.debug(
+                        f"Redirecting customer to dashboard after login: {user.username}"
+                    )
                     return redirect("customer_dashboard")
-            logger.debug(f"Redirecting user without profile to dashboard: {user.username}")
+            logger.debug(
+                f"Redirecting user without profile to dashboard: {user.username}"
+            )
             return redirect("customer_dashboard")
         else:
             logger.warning(f"Failed login attempt for: {username_or_email}")
-            
+
             user_exists = (
                 User.objects.filter(username=username_or_email).exists()
                 or User.objects.filter(email=username_or_email).exists()
             )
 
             if user_exists:
-                logger.debug(f"Username/email exists but password incorrect: {username_or_email}")
+                logger.debug(
+                    f"Username/email exists but password incorrect: {username_or_email}"
+                )
                 messages.error(request, "Incorrect password.")
             else:
                 logger.debug(f"Username/email not found: {username_or_email}")
                 messages.error(request, "No account found with this username/email.")
-            
+
             return render(request, "signin.html", {"username_value": username_or_email})
 
     return render(request, "signin.html", {"username_value": ""})
 
 
-
 @login_required
 def change_password(request):
-    if request.method == 'POST':
-        current = request.POST.get('current_password')
-        new = request.POST.get('new_password')
-        confirm = request.POST.get('confirm_password')
-        
-        
+    if request.method == "POST":
+        current = request.POST.get("current_password")
+        new = request.POST.get("new_password")
+        confirm = request.POST.get("confirm_password")
+
         if not request.user.check_password(current):
             messages.error(request, "Current password is incorrect")
-            return redirect('customer_profile')
-        
-        
+            return redirect("customer_profile")
+
         if len(new) < 6:
             messages.error(request, "New password must be at least 6 characters")
-            return redirect('customer_profile')
-        
-        
+            return redirect("customer_profile")
+
         if new != confirm:
             messages.error(request, "New passwords do not match")
-            return redirect('customer_profile')
-        
-        
+            return redirect("customer_profile")
+
         request.user.set_password(new)
         request.user.save()
-        
-        
+
         update_session_auth_hash(request, request.user)
         messages.success(request, "Password updated successfully")
-    
-    return redirect('customer_profile')
+
+    return redirect("customer_profile")
 
 
-########################### Dashboard ####################
+def user_logout(request):
+    auth_logout(request)
+    return redirect("home")
 
-# views.py - Customer Dashboard View
+
+########################### CUSTOMER ####################
+
 
 def customer_dashboard(request):
-    """
-    Customer dashboard view with service filtering
-    Shows all active services by default, filtered results when filters applied
-    """
-    is_htmx = request.headers.get('HX-Request') == 'true'
-    
+    is_htmx = request.headers.get("HX-Request") == "true"
+
     try:
         # Get filter parameters
         category_filter = request.GET.get("category", "")
@@ -644,74 +664,82 @@ def customer_dashboard(request):
         features = request.GET.getlist("features", [])
         job_sizes = request.GET.getlist("job_size", [])
         sort_by = request.GET.get("sort", "relevance")
-        
+
         # Check if filters are active
-        filters_active = any([
-            category_filter, region_filter, search_query,
-            price_min, price_max, rating,
-            availability, job_sizes, features
-        ])
-        
+        filters_active = any(
+            [
+                category_filter,
+                region_filter,
+                search_query,
+                price_min,
+                price_max,
+                rating,
+                availability,
+                job_sizes,
+                features,
+            ]
+        )
+
         # Base context
         context = {
-            'Service': Service,
-            'selected_category': category_filter,
-            'selected_region': region_filter,
-            'search_query': search_query,
-            'filters_active': filters_active,
-            'price_min': price_min,
-            'price_max': price_max,
-            'rating': rating,
-            'availability': availability,
-            'job_sizes': job_sizes,
-            'features': features,
-            'sort_by': sort_by,
+            "Service": Service,
+            "selected_category": category_filter,
+            "selected_region": region_filter,
+            "search_query": search_query,
+            "filters_active": filters_active,
+            "price_min": price_min,
+            "price_max": price_max,
+            "rating": rating,
+            "availability": availability,
+            "job_sizes": job_sizes,
+            "features": features,
+            "sort_by": sort_by,
         }
-        
+
         # Initialize variables
         services = Service.objects.none()
         page_obj = None
-        
+
         # Always query services - either filtered or all active
         try:
             services = Service.objects.filter(service_status="Active")
-            
+
             # Apply filters only if they exist
             if category_filter:
                 services = services.filter(category=category_filter)
-            
+
             if region_filter:
                 services = services.filter(region=region_filter)
-            
+
             if search_query and len(search_query.strip()) >= 2:
                 services = services.filter(
-                    Q(title__icontains=search_query) |
-                    Q(description__icontains=search_query) |
-                    Q(craftsman__business_name__icontains=search_query)
+                    Q(title__icontains=search_query)
+                    | Q(description__icontains=search_query)
+                    | Q(craftsman__business_name__icontains=search_query)
                 )
-            
+
             if price_min:
                 try:
                     price_min_val = float(price_min)
                     if price_min_val >= 0:
                         services = services.filter(
-                            Q(hourly_rate__gte=price_min_val) |
-                            Q(fixed_price__gte=price_min_val)
+                            Q(hourly_rate__gte=price_min_val)
+                            | Q(fixed_price__gte=price_min_val)
                         )
                 except:
                     pass
-                    
+
             if price_max:
                 try:
                     price_max_val = float(price_max)
                     if price_max_val >= 0:
                         services = services.filter(
-                            Q(hourly_rate__lte=price_max_val) |
-                            Q(fixed_price__lte=price_max_val)
+                            Q(hourly_rate__lte=price_max_val)
+                            | Q(fixed_price__lte=price_max_val)
                         )
                 except:
                     pass
-                    
+
             if rating:
                 try:
                     rating_val = float(rating)
@@ -719,201 +747,268 @@ def customer_dashboard(request):
                         services = services.filter(craftsman__rating__gte=rating_val)
                 except:
                     pass
-            
+
             if availability:
                 services = services.filter(availability__in=availability)
-            
+
             if job_sizes:
                 services = services.filter(job_size__in=job_sizes)
-            
+
             if features:
                 for feature in features:
                     services = services.filter(features__contains=[feature])
-            
+
             # Apply sorting
             services = apply_service_sorting(services, sort_by)
-            
-            context['services'] = services
-            context['has_services'] = services.exists()
-            
+
+            context["services"] = services
+            context["has_services"] = services.exists()
+
         except Exception as e:
             logger.error(f"Filter error: {e}")
             services = Service.objects.filter(service_status="Active")[:50]
-            context['services'] = services
-            context['has_services'] = services.exists()
-            context['show_alert'] = "Showing limited results due to system issue"
-        
+            context["services"] = services
+            context["has_services"] = services.exists()
+            context["show_alert"] = "Showing limited results due to system issue"
+
         # Get results count
         results_count = services.count()
-        context['results_count'] = results_count
-        
-        # Pagination
-        page = request.GET.get('page', 1)
-        
-        if services.exists():
-            paginator = Paginator(services, 12)
-            
-            try:
-                page_obj = paginator.page(page)
-            except:
-                page_obj = paginator.page(1)
-            
-            context['page_obj'] = page_obj
-        else:
-            # Empty paginator for no results
-            paginator = Paginator([], 12)
-            page_obj = Page([], 1, paginator)
-            context['page_obj'] = page_obj
-        
-        # HTMX response
-        if is_htmx:
-            return render(request, "partials/dashboard_results.html", context)
-        
-        return render(request, "customer_dashboard.html", context)
-        
-    except Exception as e:
-        logger.error(f"Customer dashboard error: {e}")
-        
-        # Simple context for error
-        context = {
-            'Service': Service,
-            'filters_active': False,
-            'results_count': 0,
-            'has_services': False,
-            'show_alert': "We're working on fixing this issue. Please try again later.",
-        }
-        
-        return render(request, "customer_dashboard.html", context)
-        
+        context["results_count"] = results_count
+
         # Pagination (only if we have results)
-        if filters_active and services.exists():
-            page = request.GET.get('page', 1)
+        if services.exists():
+            page = request.GET.get("page", 1)
             paginator = Paginator(services, 12)
-            
+
             try:
                 page_obj = paginator.page(page)
             except:
                 page_obj = paginator.page(1)
-            
-            context['page_obj'] = page_obj
+
+            context["page_obj"] = page_obj
         else:
             # Empty paginator for no results
             paginator = Paginator([], 12)
             page_obj = Page([], 1, paginator)
-            context['page_obj'] = page_obj
-        
+            context["page_obj"] = page_obj
+
         # HTMX response
         if is_htmx:
             return render(request, "partials/dashboard_results.html", context)
-        
+
         return render(request, "customer_dashboard.html", context)
-        
+
     except Exception as e:
         logger.error(f"Customer dashboard error: {e}")
-        
+
         # Simple context for error
         context = {
-            'Service': Service,
-            'filters_active': False,
-            'results_count': 0,
-            'has_services': False,
-            'show_alert': "We're working on fixing this issue. Please try again later.",
+            "Service": Service,
+            "filters_active": False,
+            "results_count": 0,
+            "has_services": False,
+            "show_alert": "We're working on fixing this issue. Please try again later.",
         }
-        
+
         return render(request, "customer_dashboard.html", context)
 
 
 def apply_service_sorting(queryset, sort_by):
-    """
-    Apply sorting to service queryset
-    """
+
     if sort_by == "relevance":
-        return queryset.order_by('-craftsman__rating', '-created_at')
-    
+        return queryset.order_by("-craftsman__rating", "-created_at")
+
     elif sort_by == "rating":
-        return queryset.order_by('-craftsman__rating')
-    
+        return queryset.order_by("-craftsman__rating")
+
     elif sort_by == "price_low":
         return queryset.order_by(
             models.Case(
-                models.When(hourly_rate__isnull=False, then='hourly_rate'),
-                models.When(fixed_price__isnull=False, then='fixed_price'),
+                models.When(hourly_rate__isnull=False, then="hourly_rate"),
+                models.When(fixed_price__isnull=False, then="fixed_price"),
                 default=999999,
-                output_field=models.DecimalField()
+                output_field=models.DecimalField(),
             )
         )
-    
+
     elif sort_by == "price_high":
         return queryset.order_by(
             models.Case(
-                models.When(hourly_rate__isnull=False, then=-models.F('hourly_rate')),
-                models.When(fixed_price__isnull=False, then=-models.F('fixed_price')),
+                models.When(hourly_rate__isnull=False, then=-models.F("hourly_rate")),
+                models.When(fixed_price__isnull=False, then=-models.F("fixed_price")),
                 default=999999,
-                output_field=models.DecimalField()
+                output_field=models.DecimalField(),
             )
         )
-    
+
     elif sort_by == "distance":
-        
-        return queryset.order_by('-craftsman__rating')
-    
-    return queryset.order_by('-craftsman__rating')
+
+        return queryset.order_by("-craftsman__rating")
+
+    return queryset.order_by("-craftsman__rating")
 
 
+def service_detail(request, service_id):
 
-
-
-
-
-def service_detail(request, service_id):  
-    
     try:
-        
-        
-        service = get_object_or_404(Service, pk=service_id, service_status='Active')
-        
-        
+
+        service = get_object_or_404(Service, pk=service_id, service_status="Active")
+
         craftsman = service.craftsman
-        
-        
-        reviews = service.reviews.all().order_by('-created_at')[:5]
-        
-        
-        avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] if reviews.exists() else craftsman.rating
-        
+
+        reviews = service.reviews.all().order_by("-created_at")[:5]
+
+        avg_rating = (
+            reviews.aggregate(Avg("rating"))["rating__avg"]
+            if reviews.exists()
+            else craftsman.rating
+        )
+
         context = {
-            'service': service,
-            'craftsman': craftsman,
-            'reviews': reviews,
-            'reviews_count': reviews.count(),
-            'avg_rating': avg_rating or 0,
+            "service": service,
+            "craftsman": craftsman,
+            "reviews": reviews,
+            "reviews_count": reviews.count(),
+            "avg_rating": avg_rating or 0,
         }
-        
-        return render(request, 'service_detail.html', context)
-        
+
+        return render(request, "service_detail.html", context)
+
     except Exception as e:
-        
+
         print(f"Error in service_detail view: {e}")
-        
-        
-        return render(request, 'service_detail.html', {
-            'error': 'Service not found or unavailable'
-        })
+
+        return render(
+            request,
+            "service_detail.html",
+            {"error": "Service not found or unavailable"},
+        )
 
 
-def get_rating_distribution(reviews):
+@login_required
+def customer_profile(request):
+    user = request.user
+    try:
+        customer_profile = user.userprofile.customerprofile
+    except:
 
-    distribution = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0}
-    total = reviews.count()
+        customer_profile = CustomerProfile.objects.create(user_profile=user.userprofile)
 
-    for review in reviews:
-        distribution[review.rating] += 1
+    if request.method == "POST":
 
-    if total > 0:
-        for rating in distribution:
-            distribution[rating] = (distribution[rating] / total) * 100
+        user.first_name = request.POST.get("first_name")
+        user.last_name = request.POST.get("last_name")
+        user.email = request.POST.get("email")
+        user.save()
 
-    return distribution
+        user.userprofile.phone = request.POST.get("phone")
+        user.userprofile.save()
+
+        messages.success(request, "Profile updated successfully")
+        return redirect("customer_profile")
+
+    context = {
+        "user": user,
+        "profile": user.userprofile,
+    }
+    return render(request, "customer_profile.html", context)
+
+
+@login_required
+def saved_services(request):
+    try:
+        customer_profile = request.user.userprofile.customerprofile
+        saved_services = customer_profile.saved_services.all()
+        saved_count = saved_services.count()
+    except:
+        saved_services = []
+        saved_count = 0
+
+    context = {
+        "saved_services": saved_services,
+        "saved_count": saved_count,
+    }
+    return render(request, "saved_services.html", context)
+
+
+@login_required(login_url="home")
+def save_service(request, service_id):
+
+    service = get_object_or_404(Service, id=service_id)
+
+    try:
+
+        customer_profile = request.user.userprofile.customerprofile
+
+        if customer_profile.saved_services.filter(id=service_id).exists():
+
+            customer_profile.saved_services.remove(service)
+            is_saved = False
+        else:
+
+            customer_profile.saved_services.add(service)
+            is_saved = True
+
+        context = {
+            "service": service,
+            "is_saved": is_saved,
+        }
+        return render(request, "partials/save_button.html", context)
+
+    except CustomerProfile.DoesNotExist:
+
+        is_saved = request.user.userprofile.customerprofile.saved_services.filter(
+            id=service.id
+        ).exists()
+
+        context = {
+            "service": service,
+            "is_saved": is_saved,
+            "error": "Only customers can save services",
+        }
+        return render(request, "partials/save_button.html", context)
+
+
+def create_review(request, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    form = ReviewForm()
+
+    context = {"service": service, "form": form}
+    return render(request, "partials/review_form.html", context)
+
+
+def submit_review(request, service_id):
+    service = get_object_or_404(Service, id=service_id)
+
+    if request.method == "POST":
+        try:
+
+            customer_profile = request.user.userprofile.customerprofile
+        except:
+
+            customer_profile = CustomerProfile.objects.create(
+                user_profile=request.user.userprofile
+            )
+
+        if Review.objects.filter(service=service, customer=customer_profile).exists():
+
+            return redirect("service_detail", service_id=service_id)
+
+        # Create the review
+        Review.objects.create(
+            service=service,
+            customer=customer_profile,
+            rating=request.POST.get("rating"),
+            title=request.POST.get("title"),
+            comment=request.POST.get("comment"),
+        )
+
+        return redirect("service_detail", service_id=service_id)
+
+    return redirect("service_detail", service_id=service_id)
+
+
+################### CRAFTSMAN ###################
 
 
 @login_required(login_url="home")
@@ -1020,41 +1115,38 @@ def craftsman_profile(request):
         craftsman_profile = request.user.userprofile.craftsmanprofile
     except:
         messages.error(request, "You need to complete provider onboarding first")
-        return redirect('provider_onboarding')
-    
-    if request.method == 'POST':
-        
-        request.user.first_name = request.POST.get('first_name')
-        request.user.last_name = request.POST.get('last_name')
-        request.user.email = request.POST.get('email')
+        return redirect("provider_onboarding")
+
+    if request.method == "POST":
+
+        request.user.first_name = request.POST.get("first_name")
+        request.user.last_name = request.POST.get("last_name")
+        request.user.email = request.POST.get("email")
         request.user.save()
-        
-        
-        request.user.userprofile.phone = request.POST.get('phone')
+
+        request.user.userprofile.phone = request.POST.get("phone")
         request.user.userprofile.save()
-        
-        
-        craftsman_profile.business_name = request.POST.get('business_name')
-        craftsman_profile.years_of_experience = request.POST.get('years_of_experience')
-        craftsman_profile.license_number = request.POST.get('license_number')
-        craftsman_profile.has_license = bool(request.POST.get('license_number'))
-        craftsman_profile.phone = request.POST.get('phone')
-        
-        
-        if 'profile_photo' in request.FILES:
-            craftsman_profile.profile_photo = request.FILES['profile_photo']
-        
+
+        craftsman_profile.business_name = request.POST.get("business_name")
+        craftsman_profile.years_of_experience = request.POST.get("years_of_experience")
+        craftsman_profile.license_number = request.POST.get("license_number")
+        craftsman_profile.has_license = bool(request.POST.get("license_number"))
+        craftsman_profile.phone = request.POST.get("phone")
+
+        if "profile_photo" in request.FILES:
+            craftsman_profile.profile_photo = request.FILES["profile_photo"]
+
         craftsman_profile.save()
-        
+
         messages.success(request, "Profile updated successfully")
-        return redirect('craftsman_profile')
-    
+        return redirect("craftsman_profile")
+
     context = {
-        'user': request.user,
-        'profile': request.user.userprofile,
-        'craftsman': craftsman_profile,
+        "user": request.user,
+        "profile": request.user.userprofile,
+        "craftsman": craftsman_profile,
     }
-    return render(request, 'craftsman_profile.html', context)
+    return render(request, "craftsman_profile.html", context)
 
 
 @login_required(login_url="home")
@@ -1154,141 +1246,3 @@ def craftsman_public_profile(request, craftsman_id):
     }
 
     return render(request, "craftsman_public_profile.html", context)
-
-
-@login_required
-def customer_profile(request):
-    user = request.user
-    try:
-        customer_profile = user.userprofile.customerprofile
-    except:
-        
-        customer_profile = CustomerProfile.objects.create(user_profile=user.userprofile)
-    
-    if request.method == 'POST':
-        
-        user.first_name = request.POST.get('first_name')
-        user.last_name = request.POST.get('last_name')
-        user.email = request.POST.get('email')
-        user.save()
-        
-        
-        user.userprofile.phone = request.POST.get('phone')
-        user.userprofile.save()
-        
-        messages.success(request, "Profile updated successfully")
-        return redirect('customer_profile')
-    
-    context = {
-        'user': user,
-        'profile': user.userprofile,
-    }
-    return render(request, 'customer_profile.html', context)
-
-
-@login_required
-def saved_services(request):
-    try:
-        customer_profile = request.user.userprofile.customerprofile
-        saved_services = customer_profile.saved_services.all()
-        saved_count = saved_services.count()
-    except:
-        saved_services = []
-        saved_count = 0
-    
-    context = {
-        'saved_services': saved_services,
-        'saved_count': saved_count,
-    }
-    return render(request, 'saved_services.html', context)
-
-
-
-@login_required(login_url="home")
-def save_service(request, service_id):
-    """Handle save/unsave service via GET request"""
-    service = get_object_or_404(Service, id=service_id)
-    
-    try:
-       
-        customer_profile = request.user.userprofile.customerprofile
-        
-        
-        if customer_profile.saved_services.filter(id=service_id).exists():
-            
-            customer_profile.saved_services.remove(service)
-            is_saved = False
-        else:
-            
-            customer_profile.saved_services.add(service)
-            is_saved = True
-        
-        context = {
-            'service': service,
-            'is_saved': is_saved,
-        }
-        return render(request, 'partials/save_button.html', context)
-        
-    except CustomerProfile.DoesNotExist:
-
-        is_saved = request.user.userprofile.customerprofile.saved_services.filter(id=service.id).exists()
-        
-        context = {
-            'service': service,
-            'is_saved': is_saved,
-            'error': 'Only customers can save services'
-        }
-        return render(request, 'partials/save_button.html', context)
-
-def create_review(request, service_id):
-    service = get_object_or_404(Service, id=service_id)
-    form = ReviewForm()
-    
-    context = {
-        'service': service,
-        'form': form
-    }
-    return render(request, 'partials/review_form.html', context)
-
-def submit_review(request, service_id):
-    service = get_object_or_404(Service, id=service_id)
-    
-    if request.method == 'POST':
-        try:
-            
-            customer_profile = request.user.userprofile.customerprofile
-        except:
-            
-            customer_profile = CustomerProfile.objects.create(
-                user_profile=request.user.userprofile
-            )
-        
-        
-        if Review.objects.filter(service=service, customer=customer_profile).exists():
-            
-            return redirect('service_detail', service_id=service_id)
-        
-        # Create the review
-        Review.objects.create(
-            service=service,
-            customer=customer_profile,
-            rating=request.POST.get('rating'),
-            title=request.POST.get('title'),
-            comment=request.POST.get('comment')
-        )
-        
-        
-        return redirect('service_detail', service_id=service_id)
-    
-    return redirect('service_detail', service_id=service_id)
-
-
-
-@login_required(login_url="home")
-def craftsman_ad_boost(request):
-    return render(request, "craftsman_ad_boost.html")
-
-
-def user_logout(request):
-    auth_logout(request)
-    return redirect("home")

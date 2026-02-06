@@ -12,20 +12,24 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
+try:
+    import dj_database_url
+except ImportError:
+    import dj_database_url as dj_database_url
 import cloudinary 
-import cloudinary.uploader
-import cloudinary.api
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv()
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-f&j@k27sckgco^2=$^xpahw86j1%8q#5jtb%9yq7+f!8hhm)84'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -87,7 +91,7 @@ WSGI_APPLICATION = 'handyman_project.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://neondb_owner:npg_coCLus0lj7kZ@ep-nameless-queen-agsezkq9-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+        default=os.getenv('DATABASE_URL'),
         conn_max_age=60,  
         ssl_require=True
     )
@@ -147,16 +151,15 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 cloudinary.config( 
-  	cloud_name = "dg77rrkf3",
-  	api_key = "469899675456271",
-  	api_secret = "CmLy_lOp7kODeT3qwLtU9qhZsqI"
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET')
 )
 
-
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dg77rrkf3',
-    'API_KEY': '469899675456271',
-    'API_SECRET': 'CmLy_lOp7kODeT3qwLtU9qhZsqI'
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET')
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

@@ -6,13 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0002_remove_userprofile_phone_and_more'),
+        ("findus", "0002_remove_userprofile_phone_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='craftsmanprofile',
-            name='service_category',
-            field=models.CharField(choices=[('plumbing', 'Plumbing'), ('electrical', 'Electrical'), ('cleaning', 'Cleaning'), ('carpentry', 'Carpentry'), ('painting', 'Painting'), ('masonry', 'Masonry'), ('roofing', 'Roofing'), ('landscaping', 'Landscaping'), ('appliance', 'Appliance Repair'), ('hvac', 'HVAC Services'), ('other', 'Other')], max_length=100),
+            model_name="craftsmanprofile",
+            name="service_category",
+            field=models.CharField(
+                choices=[
+                    ("plumbing", "Plumbing"),
+                    ("electrical", "Electrical"),
+                    ("cleaning", "Cleaning"),
+                    ("carpentry", "Carpentry"),
+                    ("painting", "Painting"),
+                    ("masonry", "Masonry"),
+                    ("roofing", "Roofing"),
+                    ("landscaping", "Landscaping"),
+                    ("appliance", "Appliance Repair"),
+                    ("hvac", "HVAC Services"),
+                    ("other", "Other"),
+                ],
+                max_length=100,
+            ),
         ),
     ]

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0004_service_serviceimage'),
+        ("findus", "0004_service_serviceimage"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customerprofile',
-            name='phone',
+            model_name="customerprofile",
+            name="phone",
             field=models.CharField(blank=True, max_length=20, null=True),
         ),
     ]

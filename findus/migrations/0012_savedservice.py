@@ -7,21 +7,43 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0011_review'),
+        ("findus", "0011_review"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SavedService',
+            name="SavedService",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='saved_services', to='findus.customerprofile')),
-                ('service', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='saved_by', to='findus.service')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "customer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="saved_services",
+                        to="findus.customerprofile",
+                    ),
+                ),
+                (
+                    "service",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="saved_by",
+                        to="findus.service",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-created_at'],
-                'unique_together': {('customer', 'service')},
+                "ordering": ["-created_at"],
+                "unique_together": {("customer", "service")},
             },
         ),
     ]

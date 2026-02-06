@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0007_service_availability_service_features_and_more'),
+        ("findus", "0007_service_availability_service_features_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='service',
-            name='travel_fee',
-            field=models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True),
+            model_name="service",
+            name="travel_fee",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, max_digits=6, null=True
+            ),
         ),
     ]

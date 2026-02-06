@@ -7,39 +7,97 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0003_alter_craftsmanprofile_service_category'),
+        ("findus", "0003_alter_craftsmanprofile_service_category"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Service',
+            name="Service",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('category', models.CharField(choices=[('plumbing', 'Plumbing'), ('electrical', 'Electrical'), ('cleaning', 'Cleaning'), ('carpentry', 'Carpentry'), ('painting', 'Painting'), ('other', 'Other')], max_length=50)),
-                ('description', models.TextField()),
-                ('price_type', models.CharField(choices=[('hourly', 'Hourly Rate'), ('fixed', 'Fixed Price')], max_length=10)),
-                ('hourly_rate', models.DecimalField(blank=True, decimal_places=2, max_digits=8, null=True)),
-                ('fixed_price', models.DecimalField(blank=True, decimal_places=2, max_digits=8, null=True)),
-                ('estimated_duration', models.CharField(max_length=100)),
-                ('min_hours', models.CharField(blank=True, max_length=100)),
-                ('service_status', models.CharField(max_length=100)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('craftsman', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='findus.craftsmanprofile')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                (
+                    "category",
+                    models.CharField(
+                        choices=[
+                            ("plumbing", "Plumbing"),
+                            ("electrical", "Electrical"),
+                            ("cleaning", "Cleaning"),
+                            ("carpentry", "Carpentry"),
+                            ("painting", "Painting"),
+                            ("other", "Other"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
+                ("description", models.TextField()),
+                (
+                    "price_type",
+                    models.CharField(
+                        choices=[("hourly", "Hourly Rate"), ("fixed", "Fixed Price")],
+                        max_length=10,
+                    ),
+                ),
+                (
+                    "hourly_rate",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=8, null=True
+                    ),
+                ),
+                (
+                    "fixed_price",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=8, null=True
+                    ),
+                ),
+                ("estimated_duration", models.CharField(max_length=100)),
+                ("min_hours", models.CharField(blank=True, max_length=100)),
+                ("service_status", models.CharField(max_length=100)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "craftsman",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="findus.craftsmanprofile",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ServiceImage',
+            name="ServiceImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='service_images/')),
-                ('uploaded_at', models.DateTimeField(auto_now_add=True)),
-                ('service', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='findus.service')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="service_images/")),
+                ("uploaded_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "service",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="findus.service",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Service Image',
-                'verbose_name_plural': 'Service Images',
+                "verbose_name": "Service Image",
+                "verbose_name_plural": "Service Images",
             },
         ),
     ]

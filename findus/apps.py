@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class FindusConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'findus'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "findus"

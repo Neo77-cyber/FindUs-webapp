@@ -6,36 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0018_remove_craftsmanprofile_city_and_more'),
+        ("findus", "0018_remove_craftsmanprofile_city_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='customerprofile',
-            name='address',
+            model_name="customerprofile",
+            name="address",
         ),
         migrations.RemoveField(
-            model_name='customerprofile',
-            name='city',
+            model_name="customerprofile",
+            name="city",
         ),
         migrations.RemoveField(
-            model_name='customerprofile',
-            name='country',
+            model_name="customerprofile",
+            name="country",
         ),
         migrations.RemoveField(
-            model_name='customerprofile',
-            name='postal_code',
+            model_name="customerprofile",
+            name="postal_code",
         ),
         migrations.RemoveField(
-            model_name='customerprofile',
-            name='state',
+            model_name="customerprofile",
+            name="state",
         ),
         migrations.AddField(
-            model_name='customerprofile',
-            name='saved_services',
-            field=models.ManyToManyField(blank=True, related_name='saved_by_customers', to='findus.service'),
+            model_name="customerprofile",
+            name="saved_services",
+            field=models.ManyToManyField(
+                blank=True, related_name="saved_by_customers", to="findus.service"
+            ),
         ),
         migrations.DeleteModel(
-            name='SavedService',
+            name="SavedService",
         ),
     ]

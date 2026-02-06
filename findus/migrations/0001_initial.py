@@ -15,50 +15,120 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='UserProfile',
+            name="UserProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user_type', models.CharField(choices=[('customer', 'Customer'), ('craftsman', 'Craftsman')], max_length=10)),
-                ('phone', models.CharField(max_length=15)),
-                ('profile_picture', models.ImageField(blank=True, null=True, upload_to='profile_pics/')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "user_type",
+                    models.CharField(
+                        choices=[("customer", "Customer"), ("craftsman", "Craftsman")],
+                        max_length=10,
+                    ),
+                ),
+                ("phone", models.CharField(max_length=15)),
+                (
+                    "profile_picture",
+                    models.ImageField(blank=True, null=True, upload_to="profile_pics/"),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='CustomerProfile',
+            name="CustomerProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('address', models.TextField(blank=True, null=True)),
-                ('city', models.CharField(blank=True, max_length=100, null=True)),
-                ('state', models.CharField(blank=True, max_length=100, null=True)),
-                ('country', models.CharField(blank=True, max_length=100, null=True)),
-                ('postal_code', models.CharField(blank=True, max_length=20, null=True)),
-                ('user_profile', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='findus.userprofile')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("address", models.TextField(blank=True, null=True)),
+                ("city", models.CharField(blank=True, max_length=100, null=True)),
+                ("state", models.CharField(blank=True, max_length=100, null=True)),
+                ("country", models.CharField(blank=True, max_length=100, null=True)),
+                ("postal_code", models.CharField(blank=True, max_length=20, null=True)),
+                (
+                    "user_profile",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="findus.userprofile",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='CraftsmanProfile',
+            name="CraftsmanProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('business_name', models.CharField(max_length=255)),
-                ('service_category', models.CharField(max_length=100)),
-                ('services_offered', models.TextField()),
-                ('service_area', models.CharField(max_length=255)),
-                ('phone', models.CharField(max_length=20)),
-                ('years_of_experience', models.CharField(choices=[('0-1', '0-1 years'), ('1-3', '1-3 years'), ('3-5', '3-5 years'), ('5+', '5+ years')], max_length=20)),
-                ('profile_photo', models.ImageField(blank=True, null=True, upload_to='craftsman_profiles/')),
-                ('license_number', models.CharField(blank=True, max_length=100, null=True)),
-                ('description', models.TextField()),
-                ('is_verified', models.BooleanField(default=False)),
-                ('rating', models.FloatField(default=0.0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('address', models.TextField()),
-                ('city', models.CharField(max_length=100)),
-                ('state', models.CharField(max_length=100)),
-                ('country', models.CharField(max_length=100)),
-                ('postal_code', models.CharField(max_length=20)),
-                ('user_profile', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='findus.userprofile')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("business_name", models.CharField(max_length=255)),
+                ("service_category", models.CharField(max_length=100)),
+                ("services_offered", models.TextField()),
+                ("service_area", models.CharField(max_length=255)),
+                ("phone", models.CharField(max_length=20)),
+                (
+                    "years_of_experience",
+                    models.CharField(
+                        choices=[
+                            ("0-1", "0-1 years"),
+                            ("1-3", "1-3 years"),
+                            ("3-5", "3-5 years"),
+                            ("5+", "5+ years"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "profile_photo",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="craftsman_profiles/"
+                    ),
+                ),
+                (
+                    "license_number",
+                    models.CharField(blank=True, max_length=100, null=True),
+                ),
+                ("description", models.TextField()),
+                ("is_verified", models.BooleanField(default=False)),
+                ("rating", models.FloatField(default=0.0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("address", models.TextField()),
+                ("city", models.CharField(max_length=100)),
+                ("state", models.CharField(max_length=100)),
+                ("country", models.CharField(max_length=100)),
+                ("postal_code", models.CharField(max_length=20)),
+                (
+                    "user_profile",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="findus.userprofile",
+                    ),
+                ),
             ],
         ),
     ]

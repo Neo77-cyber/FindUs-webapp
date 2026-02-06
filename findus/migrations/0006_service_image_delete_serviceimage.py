@@ -6,16 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0005_customerprofile_phone'),
+        ("findus", "0005_customerprofile_phone"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='service',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to='service_images/'),
+            model_name="service",
+            name="image",
+            field=models.ImageField(blank=True, null=True, upload_to="service_images/"),
         ),
         migrations.DeleteModel(
-            name='ServiceImage',
+            name="ServiceImage",
         ),
     ]

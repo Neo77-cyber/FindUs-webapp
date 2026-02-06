@@ -6,28 +6,46 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0006_service_image_delete_serviceimage'),
+        ("findus", "0006_service_image_delete_serviceimage"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='service',
-            name='availability',
-            field=models.CharField(choices=[('immediate', 'Immediately Available'), ('24_hours', 'Within 24 Hours'), ('48_hours', 'Within 48 Hours'), ('scheduled', 'By Appointment Only')], default='immediate', max_length=20),
+            model_name="service",
+            name="availability",
+            field=models.CharField(
+                choices=[
+                    ("immediate", "Immediately Available"),
+                    ("24_hours", "Within 24 Hours"),
+                    ("48_hours", "Within 48 Hours"),
+                    ("scheduled", "By Appointment Only"),
+                ],
+                default="immediate",
+                max_length=20,
+            ),
         ),
         migrations.AddField(
-            model_name='service',
-            name='features',
+            model_name="service",
+            name="features",
             field=models.JSONField(blank=True, default=list),
         ),
         migrations.AddField(
-            model_name='service',
-            name='job_size',
-            field=models.CharField(choices=[('small', 'Small Job (1-2 hours)'), ('medium', 'Medium Job (Half day)'), ('large', 'Large Job (Full day+)'), ('project', 'Multi-day Project')], default='medium', max_length=20),
+            model_name="service",
+            name="job_size",
+            field=models.CharField(
+                choices=[
+                    ("small", "Small Job (1-2 hours)"),
+                    ("medium", "Medium Job (Half day)"),
+                    ("large", "Large Job (Full day+)"),
+                    ("project", "Multi-day Project"),
+                ],
+                default="medium",
+                max_length=20,
+            ),
         ),
         migrations.AddField(
-            model_name='service',
-            name='materials_included',
+            model_name="service",
+            name="materials_included",
             field=models.BooleanField(default=False),
         ),
     ]

@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0015_boostrequest'),
+        ("findus", "0015_boostrequest"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='waitinglist',
-            name='notify_updates',
+            model_name="waitinglist",
+            name="notify_updates",
         ),
     ]

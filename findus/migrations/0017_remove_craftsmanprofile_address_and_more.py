@@ -6,46 +6,76 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('findus', '0016_remove_waitinglist_notify_updates'),
+        ("findus", "0016_remove_waitinglist_notify_updates"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='craftsmanprofile',
-            name='address',
+            model_name="craftsmanprofile",
+            name="address",
         ),
         migrations.RemoveField(
-            model_name='craftsmanprofile',
-            name='country',
+            model_name="craftsmanprofile",
+            name="country",
         ),
         migrations.RemoveField(
-            model_name='craftsmanprofile',
-            name='description',
+            model_name="craftsmanprofile",
+            name="description",
         ),
         migrations.RemoveField(
-            model_name='craftsmanprofile',
-            name='postal_code',
+            model_name="craftsmanprofile",
+            name="postal_code",
         ),
         migrations.RemoveField(
-            model_name='craftsmanprofile',
-            name='service_area',
+            model_name="craftsmanprofile",
+            name="service_area",
         ),
         migrations.RemoveField(
-            model_name='craftsmanprofile',
-            name='services_offered',
+            model_name="craftsmanprofile",
+            name="services_offered",
         ),
         migrations.RemoveField(
-            model_name='craftsmanprofile',
-            name='state',
+            model_name="craftsmanprofile",
+            name="state",
         ),
         migrations.AddField(
-            model_name='craftsmanprofile',
-            name='has_license',
+            model_name="craftsmanprofile",
+            name="has_license",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='craftsmanprofile',
-            name='city',
-            field=models.CharField(blank=True, choices=[('abruzzo', 'Abruzzo'), ('aosta_valley', "Aosta Valley (Valle d'Aosta)"), ('apulia', 'Apulia (Puglia)'), ('basilicata', 'Basilicata'), ('calabria', 'Calabria'), ('campania', 'Campania'), ('emilia_romagna', 'Emilia-Romagna'), ('friuli_venezia_giulia', 'Friuli-Venezia Giulia'), ('lazio', 'Lazio'), ('liguria', 'Liguria'), ('lombardy', 'Lombardy (Lombardia)'), ('marche', 'Marche'), ('molise', 'Molise'), ('piedmont', 'Piedmont (Piemonte)'), ('sardinia', 'Sardinia (Sardegna)'), ('sicily', 'Sicily (Sicilia)'), ('trentino_south_tyrol', 'Trentino-South Tyrol (Trentino-Alto Adige)'), ('tuscany', 'Tuscany (Toscana)'), ('umbria', 'Umbria'), ('veneto', 'Veneto')], help_text='Select the region where you provide your service', max_length=30, null=True),
+            model_name="craftsmanprofile",
+            name="city",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("abruzzo", "Abruzzo"),
+                    ("aosta_valley", "Aosta Valley (Valle d'Aosta)"),
+                    ("apulia", "Apulia (Puglia)"),
+                    ("basilicata", "Basilicata"),
+                    ("calabria", "Calabria"),
+                    ("campania", "Campania"),
+                    ("emilia_romagna", "Emilia-Romagna"),
+                    ("friuli_venezia_giulia", "Friuli-Venezia Giulia"),
+                    ("lazio", "Lazio"),
+                    ("liguria", "Liguria"),
+                    ("lombardy", "Lombardy (Lombardia)"),
+                    ("marche", "Marche"),
+                    ("molise", "Molise"),
+                    ("piedmont", "Piedmont (Piemonte)"),
+                    ("sardinia", "Sardinia (Sardegna)"),
+                    ("sicily", "Sicily (Sicilia)"),
+                    (
+                        "trentino_south_tyrol",
+                        "Trentino-South Tyrol (Trentino-Alto Adige)",
+                    ),
+                    ("tuscany", "Tuscany (Toscana)"),
+                    ("umbria", "Umbria"),
+                    ("veneto", "Veneto"),
+                ],
+                help_text="Select the region where you provide your service",
+                max_length=30,
+                null=True,
+            ),
         ),
     ]

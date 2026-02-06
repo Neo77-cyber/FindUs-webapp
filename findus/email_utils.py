@@ -1,4 +1,3 @@
-
 import requests
 import logging
 from threading import Thread
@@ -6,15 +5,16 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
+
 def send_customer_welcome_email(user_email):
     """
     Send welcome email to customer after registration
     """
     try:
-        RESEND_API_KEY = 're_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ'
-        
+        RESEND_API_KEY = "re_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ"
+
         subject = "Find the right pro for the job!"
-        
+
         html_message = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -74,7 +74,7 @@ def send_customer_welcome_email(user_email):
     </div>
 </body>
 </html>"""
-        
+
         plain_message = f"""Hey there!,
 
 Welcome to Find Us. Whether you have a leaking pipe, need a new roof, or want to redesign your living room, the right expert is just a phone call away.
@@ -96,26 +96,26 @@ Find a Craftsman Near Me: https://yourdomain.com/customer-dashboard/
 
 Happy building,
 The Find Us Team"""
-        
+
         email_data = {
             "from": "Find Us <support@retechloans.com>",
             "to": [user_email],
             "subject": subject,
             "html": html_message,
             "text": plain_message,
-            "reply_to": "support@retechloans.com"
+            "reply_to": "support@retechloans.com",
         }
-        
+
         response = requests.post(
             "https://api.resend.com/emails",
             headers={
                 "Authorization": f"Bearer {RESEND_API_KEY}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             json=email_data,
-            timeout=5  
+            timeout=5,
         )
-        
+
         if response.status_code == 200:
             print(f"DEBUG: ✅ Craftsman email sent to {user_email}")
             logger.info(f"Customer welcome email sent to {user_email}")
@@ -123,23 +123,26 @@ The Find Us Team"""
         else:
             logger.error(f"Email API error for {user_email}: {response.text}")
             return False
-            
+
     except Exception as e:
         print(f"DEBUG ERROR: Exception in send_craftsman_welcome_email: {str(e)}")
         logger.error(f"Error sending customer welcome email to {user_email}: {str(e)}")
         return False
 
-def send_craftsman_welcome_email(user_email,):
+
+def send_craftsman_welcome_email(
+    user_email,
+):
     """
     Send welcome email to craftsman after registration
     """
     try:
         print(f"DEBUG: Starting craftsman email to {user_email}")
 
-        RESEND_API_KEY = 're_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ'
-        
+        RESEND_API_KEY = "re_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ"
+
         subject = "You're open for business! Let's get your first lead."
-        
+
         html_message = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -196,7 +199,7 @@ def send_craftsman_welcome_email(user_email,):
     </div>
 </body>
 </html>"""
-        
+
         plain_message = f"""Hey there!,
 
 Welcome to Find Us! You've just joined a community of the best hands in the business—from Plumbers and Masons to Interior Designers.
@@ -215,28 +218,26 @@ Post Your Service Now: https://yourdomain.com/craftsman-dashboard/
 
 To your success,
 The Find Us Team"""
-        
+
         email_data = {
             "from": "Find Us <support@retechloans.com>",
             "to": [user_email],
             "subject": subject,
             "html": html_message,
             "text": plain_message,
-            "reply_to": "support@retechloans.com"
+            "reply_to": "support@retechloans.com",
         }
-        
+
         response = requests.post(
             "https://api.resend.com/emails",
             headers={
                 "Authorization": f"Bearer {RESEND_API_KEY}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             json=email_data,
-            timeout=5  
+            timeout=5,
         )
 
-        
-        
         if response.status_code == 200:
             print(f"DEBUG: ✅ Craftsman email sent to {user_email}")
             logger.info(f"Craftsman welcome email sent to {user_email}")
@@ -244,20 +245,21 @@ The Find Us Team"""
         else:
             logger.error(f"Email API error for {user_email}: {response.text}")
             return False
-            
+
     except Exception as e:
         print(f"DEBUG ERROR: Exception in send_craftsman_welcome_email: {str(e)}")
         logger.error(f"Error sending craftsman welcome email to {user_email}: {str(e)}")
         return False
 
+
 def send_welcome_email_async(user_email, is_craftsman=False):
-   
+
     def send_email():
         if is_craftsman:
-            send_craftsman_welcome_email(user_email )
+            send_craftsman_welcome_email(user_email)
         else:
-            send_customer_welcome_email(user_email )
-    
+            send_customer_welcome_email(user_email)
+
     email_thread = Thread(target=send_email)
     email_thread.daemon = True
     email_thread.start()
