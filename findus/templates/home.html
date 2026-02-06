@@ -1314,103 +1314,65 @@ document.getElementById('modal-login-form').onsubmit = async function(e) {
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
-    <script>
-      
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register("{% static 'service-worker.js' %}")
-            .then(function(registration) {
-              console.log('✅ Service Worker registered:', registration.scope);
-            })
-            .catch(function(err) {
-              console.log('❌ Service Worker registration failed:', err);
-            });
-        });
-      }
-      
-      // ===== SIMPLE "ADD TO HOMESCREEN" PROMPT =====
-      let deferredPrompt;
-      
-      // Listen for the install prompt (Android/Chrome)
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        
-        // Show a simple toast/notification after 5 seconds
-        setTimeout(() => {
-          showSimpleInstallPrompt();
-        }, 5000);
-      });
-      
-      function showSimpleInstallPrompt() {
-        // Create a simple notification
-        const prompt = document.createElement('div');
-        prompt.innerHTML = `
-          <div style="
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #077f46;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            max-width: 90%;
-          ">
-            <span>📱 Install FindUs App for better experience</span>
-            <button style="
-              background: white;
-              color: #077f46;
-              border: none;
-              padding: 5px 15px;
-              border-radius: 5px;
-              font-weight: bold;
-              cursor: pointer;
-            ">Install</button>
-            <button style="
-              background: transparent;
-              color: white;
-              border: none;
-              font-size: 20px;
-              cursor: pointer;
-              margin-left: 5px;
-            ">×</button>
-          </div>
-        `;
-        
-        document.body.appendChild(prompt);
-        
-        // Install button click
-        prompt.querySelector('button:nth-child(2)').addEventListener('click', () => {
-          if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-              if (choiceResult.outcome === 'accepted') {
-                console.log('User installed the app');
-              }
-              deferredPrompt = null;
-            });
-          }
-          prompt.remove();
-        });
-        
-        // Close button click
-        prompt.querySelector('button:nth-child(3)').addEventListener('click', () => {
-          prompt.remove();
-        });
-        
-        // Auto-remove after 10 seconds
-        setTimeout(() => {
-          if (document.body.contains(prompt)) {
-            prompt.remove();
-          }
-        }, 10000);
-      }
-      </script>
+    <div id="ios-install-banner" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #077f46;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    z-index: 1000;
+    display: none;
+    border-top: 3px solid white;
+">
+    <span>📱 Install FindUs App → </span>
+    <a href="#" style="
+        color: white;
+        text-decoration: underline;
+        font-weight: bold;
+        margin-left: 10px;
+    ">Tap here for instructions</a>
+    <button onclick="document.getElementById('ios-install-banner').style.display='none'" style="
+        background: transparent;
+        color: white;
+        border: none;
+        font-size: 20px;
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        cursor: pointer;
+    ">×</button>
+</div>
+
+<script>
+// Show iOS banner
+if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+    if (!('standalone' in window.navigator) || !window.navigator.standalone) {
+        document.getElementById('ios-install-banner').style.display = 'block';
+    }
+}
+
+// Make the link show instructions
+document.querySelector('#ios-install-banner a').addEventListener('click', (e) => {
+    e.preventDefault();
+    alert('To install:\n1. Tap the Share button (📤)\n2. Scroll down\n3. Tap "Add to Home Screen"\n4. Tap "Add"');
+});
+</script>
+
+<!-- SIMPLE SERVICE WORKER REGISTRATION -->
+<script>
+  // Check if browser supports Service Workers
+  if ('serviceWorker' in navigator) {
+    // Wait for page to load
+    window.addEventListener('load', () => {
+      // Register the service worker
+      navigator.serviceWorker.register('/static/service-worker.js')
+        .then(() => console.log('✅ Service Worker Registered'))
+        .catch(err => console.log('❌ Registration Failed:', err));
+    });
+  }
+  </script>
   </body>
 </html>

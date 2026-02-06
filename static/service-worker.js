@@ -1,83 +1,56 @@
-// service-worker.js - SIMPLE VERSION
-const CACHE_NAME = 'findus-v1';
-const OFFLINE_URL = '/offline/';  // Your offline page URL
-
-// Files to cache immediately
-const urlsToCache = [
-  '/',
-  '/static/assets/css/colors.css',
-  '/static/assets/css/style.css',
-  '/static/assets/css/search.css',
-  '/static/assets/css/results.css',
-  '/static/icons/192.png',
-  '/static/icons/512.png',
-  OFFLINE_URL  // Cache the offline page itself
-];
-
-// INSTALL: Cache essential files
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-      .then(() => self.skipWaiting())
-  );
-});
-
-// ACTIVATE: Clean up old caches
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys()
-      .then(cacheNames => {
-        return Promise.all(
-          cacheNames.map(cacheName => {
-            if (cacheName !== CACHE_NAME) {
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-      .then(() => self.clients.claim())
-  );
-});
-
-// FETCH: Serve from cache, network, or show offline page
+// IMPROVED SIMPLE SERVICE WORKER
 self.addEventListener('fetch', event => {
-  // Only handle GET requests
-  if (event.request.method !== 'GET') return;
-
-  event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => {
-        // If in cache, return it
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-
-        // Otherwise fetch from network
-        return fetch(event.request)
-          .then(networkResponse => {
-            // Cache successful responses (optional)
-            if (networkResponse.ok) {
-              const clone = networkResponse.clone();
-              caches.open(CACHE_NAME)
-                .then(cache => cache.put(event.request, clone));
-            }
-            return networkResponse;
-          })
-          .catch(() => {
-            // NETWORK FAILED
-            // If it's a page navigation, show offline page
-            if (event.request.mode === 'navigate') {
-              return caches.match(OFFLINE_URL)
-                .then(offlinePage => offlinePage || new Response('You are offline'));
-            }
-            
-            // For other requests (images, CSS, etc.), return error
-            return new Response('Offline', {
-              status: 408,
-              headers: { 'Content-Type': 'text/plain' }
-            });
-          });
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        // Return a nicer offline page
+        return new Response(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Offline - FindUs</title>
+            <style>
+              body {
+                font-family: -apple-system, sans-serif;
+                background: #077f46;
+                color: white;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 20px;
+              }
+              h1 { font-size: 28px; margin-bottom: 20px; }
+              p { font-size: 18px; margin-bottom: 30px; }
+              button {
+                background: white;
+                color: #077f46;
+                border: none;
+                padding: 12px 30px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>📶 You're Offline</h1>
+            <p>Please check your internet connection.</p>
+            <button onclick="window.location.reload()">Try Again</button>
+            <script>
+              window.addEventListener('online', () => {
+                window.location.reload();
+              });
+            </script>
+          </body>
+          </html>
+        `, { headers: {'Content-Type': 'text/html'} });
       })
-  );
+    );
+  }
 });
