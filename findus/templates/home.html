@@ -19,11 +19,17 @@
     <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/results.css' %}">
 
-    <!-- ESSENTIAL PWA TAGS -->
+<!-- ===== ESSENTIAL PWA TAGS ===== -->
+<!-- iOS Status Bar -->
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-<!-- Apple Touch Icons - Use your existing 180x180, 167x167, etc. -->
+<!-- Standard Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'icons/16.png' %}">
+<link rel="shortcut icon" href="{% static 'icons/find-su-logo.png' %}">
+
+<!-- Apple Touch Icons (iOS Home Screen) -->
 <link rel="apple-touch-icon" href="{% static 'icons/180.png' %}">
 <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/180.png' %}">
 <link rel="apple-touch-icon" sizes="167x167" href="{% static 'icons/167.png' %}">
@@ -31,26 +37,26 @@
 <link rel="apple-touch-icon" sizes="120x120" href="{% static 'icons/120.png' %}">
 <link rel="apple-touch-icon" sizes="114x114" href="{% static 'icons/114.png' %}">
 
-
-
-<!-- Theme Color -->
+<!-- Theme Colors -->
 <meta name="theme-color" content="#077f46">
-<meta name="apple-mobile-web-app-status-bar-style" content="#077f46">
 
 <!-- Web App Manifest -->
 <link rel="manifest" href="{% static 'manifest.json' %}">
 
-<!-- Universal splash screen (use your 1024.png if it's large enough) -->
-<link rel="apple-touch-startup-image" href="{% static 'icons/1024.png' %}">
+<!-- ===== SPLASH SCREENS ===== -->
+<!-- Universal splash screen -->
+<link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}">
+
+<!-- Optional: Additional iOS splash screens -->
+<link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
 
 <style>
+    /* Simple background color for splash screen compatibility */
     @media screen and (max-width: 1024px) {
         body {
             background-color: #077f46;
-            background-image: url("{% static 'icons/1024.png' %}");
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
         }
     }
 </style>
@@ -1309,115 +1315,101 @@ document.getElementById('modal-login-form').onsubmit = async function(e) {
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
     <script>
-      // Register Service Worker
+      
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register("{% static 'service-worker.js' %}")
             .then(function(registration) {
-              console.log('ServiceWorker registration successful with scope: ', registration.scope);
+              console.log('✅ Service Worker registered:', registration.scope);
             })
             .catch(function(err) {
-              console.log('ServiceWorker registration failed: ', err);
+              console.log('❌ Service Worker registration failed:', err);
             });
         });
       }
       
-      // iOS Add to Home Screen Prompt
+      // ===== SIMPLE "ADD TO HOMESCREEN" PROMPT =====
       let deferredPrompt;
-      const addToHomeScreenBtn = document.getElementById('addToHomeScreen');
       
+      // Listen for the install prompt (Android/Chrome)
       window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
-        // Stash the event so it can be triggered later
         deferredPrompt = e;
         
-        // Show your custom "Add to Home Screen" button
-        if (addToHomeScreenBtn) {
-          addToHomeScreenBtn.style.display = 'block';
-          
-          addToHomeScreenBtn.addEventListener('click', (e) => {
-            // Hide our custom button
-            addToHomeScreenBtn.style.display = 'none';
-            // Show the install prompt
-            deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
-            deferredPrompt.userChoice.then((choiceResult) => {
-              if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-              } else {
-                console.log('User dismissed the install prompt');
-              }
-              deferredPrompt = null;
-            });
-          });
-        }
+        // Show a simple toast/notification after 5 seconds
+        setTimeout(() => {
+          showSimpleInstallPrompt();
+        }, 5000);
       });
       
-      // iOS specific detection (since iOS doesn't support beforeinstallprompt)
-      function isIos() {
-        const userAgent = window.navigator.userAgent.toLowerCase();
-        return /iphone|ipad|ipod/.test(userAgent);
-      }
-      
-      function isInStandaloneMode() {
-        return ('standalone' in window.navigator) && (window.navigator.standalone);
-      }
-      
-      // Show iOS install instructions
-      if (isIos() && !isInStandaloneMode()) {
-        // Show iOS install instructions modal
-        setTimeout(() => {
-          if (!localStorage.getItem('iosInstallShown')) {
-            showIosInstallModal();
-            localStorage.setItem('iosInstallShown', 'true');
-          }
-        }, 3000);
-      }
-      
-      function showIosInstallModal() {
-        // Create iOS install instructions modal
-        const modalHTML = `
-          <div class="modal fade" id="iosInstallModal" tabindex="-1">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Add to Home Screen</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center">
-                  <i class="bi bi-phone display-4 text-primary mb-3"></i>
-                  <h5>Install FindUs App</h5>
-                  <p>For the best experience, add FindUs to your home screen:</p>
-                  <div class="ios-instructions text-start">
-                    <div class="step mb-3">
-                      <strong>1.</strong> Tap the <i class="bi bi-share"></i> Share button
-                    </div>
-                    <div class="step mb-3">
-                      <strong>2.</strong> Scroll down and tap "Add to Home Screen"
-                    </div>
-                    <div class="step mb-3">
-                      <strong>3.</strong> Tap "Add" in the top right corner
-                    </div>
-                  </div>
-                  <div class="mt-4">
-                    <img src="{% static 'ios-install-demo.png' %}" alt="iOS Install Demo" class="img-fluid rounded">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
-                </div>
-              </div>
-            </div>
+      function showSimpleInstallPrompt() {
+        // Create a simple notification
+        const prompt = document.createElement('div');
+        prompt.innerHTML = `
+          <div style="
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #077f46;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 90%;
+          ">
+            <span>📱 Install FindUs App for better experience</span>
+            <button style="
+              background: white;
+              color: #077f46;
+              border: none;
+              padding: 5px 15px;
+              border-radius: 5px;
+              font-weight: bold;
+              cursor: pointer;
+            ">Install</button>
+            <button style="
+              background: transparent;
+              color: white;
+              border: none;
+              font-size: 20px;
+              cursor: pointer;
+              margin-left: 5px;
+            ">×</button>
           </div>
         `;
         
-        // Add modal to page
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        document.body.appendChild(prompt);
         
-        // Show modal
-        const modal = new bootstrap.Modal(document.getElementById('iosInstallModal'));
-        modal.show();
+        // Install button click
+        prompt.querySelector('button:nth-child(2)').addEventListener('click', () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User installed the app');
+              }
+              deferredPrompt = null;
+            });
+          }
+          prompt.remove();
+        });
+        
+        // Close button click
+        prompt.querySelector('button:nth-child(3)').addEventListener('click', () => {
+          prompt.remove();
+        });
+        
+        // Auto-remove after 10 seconds
+        setTimeout(() => {
+          if (document.body.contains(prompt)) {
+            prompt.remove();
+          }
+        }, 10000);
       }
       </script>
   </body>

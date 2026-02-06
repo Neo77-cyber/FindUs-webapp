@@ -1,104 +1,83 @@
-// Cache name
-const CACHE_NAME = 'findus-cache-v1';
+// service-worker.js - SIMPLE VERSION
+const CACHE_NAME = 'findus-v1';
+const OFFLINE_URL = '/offline/';  // Your offline page URL
 
-// Files to cache on install
+// Files to cache immediately
 const urlsToCache = [
   '/',
-  '/static/css/main.css',
-  '/static/js/main.js',
-  '/static/icons/icon-192x192.png',
-  '/static/icons/icon-512x512.png',
-  // Add other important static files
+  '/static/assets/css/colors.css',
+  '/static/assets/css/style.css',
+  '/static/assets/css/search.css',
+  '/static/assets/css/results.css',
+  '/static/icons/192.png',
+  '/static/icons/512.png',
+  OFFLINE_URL  // Cache the offline page itself
 ];
 
-// Install event - cache files
+// INSTALL: Cache essential files
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+      .then(cache => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting())
   );
 });
 
-// Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        return fetch(event.request).then(
-          response => {
-            // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
+// ACTIVATE: Clean up old caches
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheName !== CACHE_NAME) {
+              return caches.delete(cacheName);
             }
-
-            // Clone the response
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          }
+          })
         );
       })
+      .then(() => self.clients.claim())
   );
 });
 
-// Activate event - clean up old caches
-self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
-
+// FETCH: Serve from cache, network, or show offline page
 self.addEventListener('fetch', event => {
-    event.respondWith(
-      caches.match(event.request)
-        .then(response => {
-          if (response) {
-            return response;
-          }
-          
-          return fetch(event.request)
-            .then(response => {
-              // Cache successful responses
-              if (response.status === 200) {
-                const responseClone = response.clone();
-                caches.open(CACHE_NAME)
-                  .then(cache => {
-                    cache.put(event.request, responseClone);
-                  });
-              }
-              return response;
-            })
-            .catch(() => {
-              // If network fails and it's a navigation request, show offline page
-              if (event.request.mode === 'navigate') {
-                return caches.match('/offline/');
-              }
-              return new Response('Network error occurred', {
-                status: 408,
-                headers: { 'Content-Type': 'text/plain' }
-              });
+  // Only handle GET requests
+  if (event.request.method !== 'GET') return;
+
+  event.respondWith(
+    caches.match(event.request)
+      .then(cachedResponse => {
+        // If in cache, return it
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        // Otherwise fetch from network
+        return fetch(event.request)
+          .then(networkResponse => {
+            // Cache successful responses (optional)
+            if (networkResponse.ok) {
+              const clone = networkResponse.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => cache.put(event.request, clone));
+            }
+            return networkResponse;
+          })
+          .catch(() => {
+            // NETWORK FAILED
+            // If it's a page navigation, show offline page
+            if (event.request.mode === 'navigate') {
+              return caches.match(OFFLINE_URL)
+                .then(offlinePage => offlinePage || new Response('You are offline'));
+            }
+            
+            // For other requests (images, CSS, etc.), return error
+            return new Response('Offline', {
+              status: 408,
+              headers: { 'Content-Type': 'text/plain' }
             });
-        })
-    );
-  });
+          });
+      })
+  );
+});

@@ -42,7 +42,5 @@ urlpatterns = [
     path("logout", views.user_logout, name="logout"),
     path("manifest.json", never_cache(serve), {"path": "manifest.json"}),
     path("service-worker.js", never_cache(serve), {"path": "service-worker.js"}),
-    path(
-        "offline/", TemplateView.as_view(template_name="offline.html"), name="offline"
-    ),
+    path('offline/', views.offline_page, name='offline'),
 ]

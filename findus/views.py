@@ -1246,3 +1246,6 @@ def craftsman_public_profile(request, craftsman_id):
     }
 
     return render(request, "craftsman_public_profile.html", context)
+
+def offline_page(request):
+    return render(request, 'offline.html')
