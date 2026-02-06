@@ -1,0 +1,173 @@
+{% load static %}
+
+<section class="waitlist-section" id="waitlist" >
+    <div class="waitlist-container">
+        <div class="waitlist-empty-state">
+            <div class="empty-illustration">
+                <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="200" cy="150" r="120" fill="var(--secondary)" opacity="0.5"/>
+                    <circle cx="200" cy="150" r="80" fill="var(--secondary)" opacity="0.8"/>
+                    
+                    <g transform="translate(140, 80)">
+                        <rect x="0" y="60" width="120" height="80" rx="8" fill="var(--bg-primary)" stroke="var(--border-default)" stroke-width="2"/>
+                        <path d="M10 80 L40 80 M50 80 L70 80 M80 80 L110 80" stroke="var(--border-default)" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M15 95 L45 95 M55 95 L85 95" stroke="var(--border-default)" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 110 L50 110 M60 110 L90 110" stroke="var(--border-default)" stroke-width="2" stroke-linecap="round"/>
+                        
+                        <g transform="translate(60, 0)">
+                            <path d="M0 45 C0 25 -20 0 -20 -15 C-20 -30 -35 -45 0 -45 C35 -45 20 -30 20 -15 C20 0 0 25 0 45" fill="var(--primary)" opacity="0.9"/>
+                            <circle cx="0" cy="-15" r="10" fill="white"/>
+                        </g>
+                        
+                        <circle cx="60" cy="100" r="25" fill="var(--primary)" opacity="0.15"/>
+                        <text x="60" y="108" text-anchor="middle" font-size="24" font-weight="bold" fill="var(--primary)">?</text>
+                    </g>
+                    
+                    <circle cx="100" cy="100" r="4" fill="var(--primary)" opacity="0.3"/>
+                    <circle cx="300" cy="80" r="6" fill="var(--primary)" opacity="0.2"/>
+                    <circle cx="320" cy="200" r="5" fill="var(--primary)" opacity="0.25"/>
+                    <circle cx="80" cy="200" r="5" fill="var(--primary)" opacity="0.2"/>
+                    
+                    <g transform="translate(70, 140)" opacity="0.6">
+                        <circle cx="0" cy="0" r="18" fill="var(--bg-primary)" stroke="var(--border-default)" stroke-width="1.5"/>
+                        <path d="M-6 -2 L6 -2 M-4 2 L4 2 M0 -6 L0 6" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+                    </g>
+                    <g transform="translate(330, 130)" opacity="0.6">
+                        <circle cx="0" cy="0" r="18" fill="var(--bg-primary)" stroke="var(--border-default)" stroke-width="1.5"/>
+                        <path d="M-5 0 L5 0 M0 -5 L0 5" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="empty-message">
+                
+                <h2 class="empty-title">No services found for your filters. Try different categories or regions.</h2>
+                <p class="empty-description">
+                    We're expanding! Join our waiting list to be the first to know
+                    when FindUs launches in your neighborhood.
+                </p>
+            </div>
+        </div>
+
+        <div class="waitlist-form-wrapper">
+            <div class="waitlist-form-header">
+                <h3>Join the Waiting List</h3>
+                <p>Be among the first to access verified professionals when we launch.</p>
+            </div>
+
+            <form
+                class="waitlist-form"
+                id="waitlist-form"
+                action="{% url 'add_to_waiting_list' %}"
+                method="POST"
+                hx-post="{% url 'add_to_waiting_list' %}"
+                hx-target="#form-message"
+                hx-swap="innerHTML"
+                hx-on:htmx:after-request="if(event.detail.successful) this.reset()"
+            >
+                {% csrf_token %}
+                <div id="form-message" class="form-message"></div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="waitlist-name">Full Name <span class="required">*</span></label>
+                        <input type="text" id="waitlist-name" name="fullname" placeholder="John Doe" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="waitlist-email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="waitlist-email" name="email" placeholder="john@example.com" required/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="waitlist-location">Location <span class="required">*</span></label>
+                        <input type="text" id="waitlist-location" name="location" placeholder="Your city" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="waitlist-phone">Phone Number</label>
+                        <input type="tel" id="waitlist-phone" name="phone" placeholder="+1 (555) 123-4567"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="waitlist-service">Service Needed <span class="required">*</span></label>
+                        <select id="waitlist-service" name="service" required>
+                            <option value="" disabled selected>Select a service</option>
+                            <option value="plumbing">Plumber</option>
+                            <option value="electrical">Electrician</option>
+                            <option value="ac_technician">AC Technician</option>
+                            <option value="carpentry">Carpenter</option>
+                            <option value="tiling">Tiler</option>
+                            <option value="painting">Painter</option>
+                            <option value="furniture_maker">Furniture Maker</option>
+                            <option value="fumigation">Fumigator</option>
+                            <option value="dstv_technician">DSTV Technician</option>
+                            <option value="gas_appliance">Gas Appliance Technician</option>
+                            <option value="pop_worker">POP Worker</option>
+                            <option value="cleaning">Cleaner</option>
+                            <option value="aluminium_worker">Aluminium Worker</option>
+                            <option value="welding">Welder</option>
+                            <option value="roofing">Roof Technician</option>
+                            <option value="solar_power">Solar Power Technician</option>
+                            <option value="masonry">Mason</option>
+                            <option value="glass_partitioning">Glass/Partitioning Worker</option>
+                            <option value="bricklayer">Bricklayer / Plasterer</option>
+                            <option value="foreman">Foreman</option>
+                            <option value="landscaping">Landscaping</option>
+                            <option value="appliance_repair">Appliance Repair</option>
+                            <option value="hvac">HVAC Services</option>
+                            <option value="security_installation">CCTV / Security System Technician</option>
+                            <option value="generator_technician">Generator Technician</option>
+                            <option value="interior_design">Interior Designer</option>
+                            <option value="flooring">Flooring / Epoxy Work</option>
+                            <option value="metal_fabrication">Metal Fabrication</option>
+                            <option value="waterproofing">Waterproofing Specialist</option>
+                            <option value="pest_control">Pest Control</option>
+                            <option value="scaffolding">Scaffolding Worker</option>
+                            <option value="site_supervisor">Site Supervisor</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-full">
+                    <label for="waitlist-notes">Additional Notes</label>
+                    <textarea
+                        id="waitlist-notes"
+                        name="notes"
+                        rows="3"
+                        placeholder="Tell us more about what you're looking for..."
+                    ></textarea>
+                </div>
+
+                <div class="form-group form-group-full">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="updates" id="waitlist-updates" checked/>
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">
+                            I agree to receive updates about FindUs launch and exclusive early access offers.
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" class="waitlist-submit">
+                    <span>Join Waiting List</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+                <p class="form-privacy">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Your information is secure and will never be shared.
+                </p>
+            </form>
+        </div>
+
+        
+    </div>
+</section>

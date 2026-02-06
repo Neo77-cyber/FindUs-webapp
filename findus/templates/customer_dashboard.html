@@ -1,0 +1,488 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Your FindUs Dashboard - Find and manage trusted professionals"
+    />
+    <title>Dashboard | FindUs</title>
+    <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/dashboard-results.css' %}" />
+    <link 
+    rel="icon" 
+    href="{% static 'assets/icons/find-su-logo.png' %}" 
+    type="image/png"
+  >
+  <link
+    href="{% static 'assets/icons/find-su-logo.png' %}"
+    rel="apple-touch-icon"
+  />
+
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+  </head>
+  <body>
+    <header class="dashboard-header">
+      <div class="dashboard-header-content">
+        <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FindUs Home">
+          <span class="logo-text">FindUs</span>
+        </a>
+
+        <div class="dashboard-search">
+          <svg
+            class="dashboard-search-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="search"
+            class="dashboard-search-input"
+            placeholder="Search for services..."
+            aria-label="Search services"
+          />
+        </div>
+
+        <nav class="dashboard-nav">
+          <a
+            href="{% url 'saved_services' %}"
+            class="nav-icon-link"
+            data-tooltip="Saved"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+              ></path>
+            </svg>
+          </a>
+
+          <a href="#" class="nav-icon-link" data-tooltip="My Messages">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              ></path>
+            </svg>
+            <span class="notification-badge"></span>
+          </a>
+
+          <a href="#" class="nav-icon-link" data-tooltip="Alerts">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+          </a>
+
+          
+
+          <a
+            href="{% url 'customer_profile' %}"
+            class="nav-icon-link"
+            data-tooltip="Profile"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </a>
+          <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="My Adverts">
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </a>
+        </nav>
+
+        <a href="#" class="dashboard-cta" onclick="event.preventDefault(); document.getElementById('logout-to-craftsman-form').submit();">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+            <span>Become a Provider</span>
+          </a>
+          
+          
+          <form id="logout-to-craftsman-form" method="POST" action="{% url 'logout' %}" style="display: none;">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'register_as_a_craftsman' %}">
+          </form>
+      </div>
+    </header>
+
+  
+    <main class="dashboard-main">
+        <div class="search-layout">
+            <!-- Sidebar Filters -->
+            <aside class="search-sidebar" id="search-sidebar">
+                <form 
+                    class="filter-form" 
+                    method="GET" 
+                    action="."
+                    hx-get="."
+                    hx-target="#dashboard-results"
+                    hx-swap="innerHTML"
+                    hx-push-url="true"
+                    hx-trigger="change"
+                    hx-indicator="#loading-indicator"
+                >
+                    <header class="sidebar-header">
+                        <div class="sidebar-header-left">
+                            <button type="button" class="btn-close-filters" id="btn-close-filters">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                            <h2 class="sidebar-title">Filters</h2>
+                        </div>
+                        <div class="sidebar-actions">
+                            <button 
+                                type="button"
+                                class="btn-clear-filters"
+                                onclick="window.location.href='{% url 'customer_dashboard' %}';"
+                            >
+                                Clear All
+                            </button>
+                        </div>
+                    </header>
+
+                    <!-- Region Filter -->
+                    <fieldset class="filter-group">
+                        <legend class="filter-group-title">Region</legend>
+                        {% for value, label in Service.REGION_CHOICES %}
+                        <label class="filter-checkbox">
+                            <input 
+                                type="checkbox" 
+                                name="region" 
+                                value="{{ value }}" 
+                                {% if value == selected_region %}checked{% endif %}
+                            />
+                            <span class="checkbox-custom"></span>
+                            <span>{{ label }}</span>
+                        </label>
+                        {% endfor %}
+                    </fieldset>
+
+                    <!-- Service Category -->
+                    <fieldset class="filter-group">
+                        <legend class="filter-group-title">Service Category</legend>
+                        {% for value, label in Service.CATEGORY_CHOICES %}
+                        <label class="filter-checkbox">
+                            <input 
+                                type="checkbox" 
+                                name="category" 
+                                value="{{ value }}" 
+                                {% if value == selected_category %}checked{% endif %}
+                            />
+                            <span class="checkbox-custom"></span>
+                            <span>{{ label }}</span>
+                        </label>
+                        {% endfor %}
+                    </fieldset>
+
+                    <!-- Price Range -->
+                    <fieldset class="filter-group">
+                        <legend class="filter-group-title">Price Range</legend>
+                        <div class="filter-range-inputs">
+                            <input
+                                type="number"
+                                name="price_min"
+                                class="filter-input filter-input-sm"
+                                placeholder="Min"
+                                min="0"
+                                value="{{ price_min }}"
+                            />
+                            <span class="filter-range-sep">to</span>
+                            <input
+                                type="number"
+                                name="price_max"
+                                class="filter-input filter-input-sm"
+                                placeholder="Max"
+                                min="0"
+                                value="{{ price_max }}"
+                            />
+                        </div>
+                    </fieldset>
+
+                    <!-- Rating -->
+                    <fieldset class="filter-group">
+                        <legend class="filter-group-title">Rating</legend>
+                        <label class="filter-radio">
+                            <input 
+                                type="radio" 
+                                name="rating" 
+                                value="5" 
+                                {% if rating == "5" %}checked{% endif %}
+                            />
+                            <span class="radio-custom"></span>
+                            <span class="rating-option">★★★★★ 5 stars</span>
+                        </label>
+                        <label class="filter-radio">
+                            <input 
+                                type="radio" 
+                                name="rating" 
+                                value="4" 
+                                {% if rating == "4" %}checked{% endif %}
+                            />
+                            <span class="radio-custom"></span>
+                            <span class="rating-option">★★★★☆ 4+ stars</span>
+                        </label>
+                        <label class="filter-radio">
+                            <input 
+                                type="radio" 
+                                name="rating" 
+                                value="3" 
+                                {% if rating == "3" %}checked{% endif %}
+                            />
+                            <span class="radio-custom"></span>
+                            <span class="rating-option">★★★☆☆ 3+ stars</span>
+                        </label>
+                        <label class="filter-radio">
+                            <input 
+                                type="radio" 
+                                name="rating" 
+                                value="" 
+                                {% if not rating %}checked{% endif %}
+                            />
+                            <span class="radio-custom"></span>
+                            <span class="rating-option">Any rating</span>
+                        </label>
+                    </fieldset>
+
+                    <!-- Availability -->
+                    <fieldset class="filter-group">
+                        <legend class="filter-group-title">Availability</legend>
+                        {% for value, label in Service.AVAILABILITY_CHOICES %}
+                        <label class="filter-checkbox">
+                            <input 
+                                type="checkbox" 
+                                name="availability" 
+                                value="{{ value }}" 
+                                {% if value in availability %}checked{% endif %}
+                            />
+                            <span class="checkbox-custom"></span>
+                            <span>{{ label }}</span>
+                        </label>
+                        {% endfor %}
+                    </fieldset>
+                    
+                    <!-- Job Size -->
+                    <fieldset class="filter-group">
+                        <legend class="filter-group-title">Job Size</legend>
+                        {% for value, label in Service.SERVICE_SCOPE_CHOICES %}
+                        <label class="filter-checkbox">
+                            <input 
+                                type="checkbox" 
+                                name="job_size" 
+                                value="{{ value }}" 
+                                {% if value in job_sizes %}checked{% endif %}
+                            />
+                            <span class="checkbox-custom"></span>
+                            <span>{{ label }}</span>
+                        </label>
+                        {% endfor %}
+                    </fieldset>
+
+                    <!-- Features -->
+                    <fieldset class="filter-group">
+                        <legend class="filter-group-title">Features</legend>
+                        <label class="filter-checkbox">
+                            <input 
+                                type="checkbox" 
+                                name="features" 
+                                value="verified" 
+                                {% if "verified" in features %}checked{% endif %}
+                            />
+                            <span class="checkbox-custom"></span>
+                            <span>Verified Pro</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input 
+                                type="checkbox" 
+                                name="features" 
+                                value="licensed" 
+                                {% if "licensed" in features %}checked{% endif %}
+                            />
+                            <span class="checkbox-custom"></span>
+                            <span>Licensed</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input 
+                                type="checkbox" 
+                                name="features" 
+                                value="insured" 
+                                {% if "insured" in features %}checked{% endif %}
+                            />
+                            <span class="checkbox-custom"></span>
+                            <span>Insured</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input 
+                                type="checkbox" 
+                                name="features" 
+                                value="warranty" 
+                                {% if "warranty" in features %}checked{% endif %}
+                            />
+                            <span class="checkbox-custom"></span>
+                            <span>Offers Warranty</span>
+                        </label>
+                    </fieldset>
+                    
+                    <!-- Loading indicator -->
+                    <div id="loading-indicator" class="htmx-indicator" style="display: none;">
+                        <div style="text-align: center; padding: 1rem;">
+                            Loading...
+                        </div>
+                    </div>
+                </form>
+
+                <div class="sidebar-footer-mobile">
+                    <button type="button" class="btn-cancel-mobile" id="btn-cancel-filters">
+                        Cancel
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Mobile Filter Button -->
+            <button
+                type="button"
+                class="btn-mobile-filters"
+                id="btn-mobile-filters"
+                aria-controls="search-sidebar"
+            >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+                Filters
+            </button>
+
+            <!-- Results Section -->
+            <div id="dashboard-results">
+                {% include 'partials/dashboard_results.html' %}
+            </div>
+        </div>
+    </main>
+
+    <nav class="mobile-bottom-nav">
+      <a href="{% url 'saved_services' %}" class="bottom-nav-item">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span>Saved</span>
+      </a>
+      <a href="#" class="bottom-nav-item">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          ></path>
+        </svg>
+        <span>Messages</span>
+        <span class="bottom-nav-badge"></span>
+      </a>
+      <a href="#" class="bottom-nav-item">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span>Alerts</span>
+      </a>
+      
+      <a href="{% url 'customer_profile' %}" class="bottom-nav-item active">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>Profile</span>
+      </a>
+      <a href="{% url 'logout' %}" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+      </svg>
+        <span>Logout</span>
+      </a>
+    </nav>
+
+    <footer class="site-footer">
+      <div class="footer-container">
+        <p class="footer-copyright">&copy; 2026 FindUs. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="{% static 'assets/js/filter-constants.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+  </body>
+</html>

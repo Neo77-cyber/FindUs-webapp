@@ -1,0 +1,732 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="{{ service.title }} - Find trusted professionals"
+    />
+    <title>{{ service.title }} | FindUs</title>
+    <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/service-details.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/services-details-2.css' %}" />
+    <link 
+    rel="icon" 
+    href="{% static 'assets/icons/find-su-logo.png' %}" 
+    type="image/png"
+  >
+  <link
+    href="{% static 'assets/icons/find-su-logo.png' %}"
+    rel="apple-touch-icon"
+  />
+
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  </head>
+  <body>
+    <header class="main-header">
+      <div class="header-content">
+        <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FindUs Home">
+          <span class="logo-text">FindUs</span>
+        </a>
+
+        {% if request.user.is_authenticated %}
+    <!-- Authenticated user navigation -->
+    <nav class="dashboard-nav">
+        <a href="{% url 'saved_services' %}" class="nav-icon-link" data-tooltip="Saved">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+        </a>
+
+        <a href="#" class="nav-icon-link" data-tooltip="My Messages">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="notification-badge"></span>
+        </a>
+
+        <a href="#" class="nav-icon-link" data-tooltip="Alerts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+        </a>
+
+        <a href="{% url 'customer_profile' %}" class="nav-icon-link" data-tooltip="Profile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </a>
+        
+        <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="Logout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+        </a>
+    </nav>
+{% else %}
+    <!-- Non-authenticated user navigation -->
+    <nav class="nav-menu" id="nav-menu">
+        <a href="{% url 'register' %}" class="nav-link">Register</a>
+        <a href="{% url 'register_as_a_craftsman' %}" class="nav-link">Join as a service provider</a>
+        <button type="button" class="btn-primary" id="open-signin" onclick="window.location.href='{% url 'signin' %}'">
+            Sign In
+        </button>
+    </nav>
+{% endif %}
+
+        <button
+          class="mobile-menu-toggle"
+          id="mobile-menu-toggle"
+          aria-label="Toggle navigation"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+    <div class="menu-overlay" id="menu-overlay"></div>
+
+    <main class="service-details-container">
+      
+      <div class="service-layout">
+        <!-- Main Content Column -->
+        <div class="service-main">
+          <!-- Hero Section -->
+          <div class="service-hero">
+            <div class="service-image-container">
+              {% if service.image %}
+                <img
+                  src="{{ service.image.url }}"
+                  alt="{{ service.title }}"
+                  class="service-main-image"
+                />
+              {% else %}
+                <img
+                  src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop"
+                  alt="{{ service.title }}"
+                  class="service-main-image"
+                />
+              {% endif %}
+              
+              <div class="service-price-badge">
+                {% if service.price_type == 'hourly' %}
+                  <span class="currency">$</span>{{ service.hourly_rate }}
+                  <span class="unit">/hour</span>
+                {% elif service.price_type == 'fixed' %}
+                  <span class="currency">$</span>{{ service.fixed_price }}
+                  <span class="unit">fixed price</span>
+                {% else %}
+                  <span class="currency">Contact</span>
+                  <span class="unit">for price</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="service-header">
+              <div class="service-badges">
+                {% if craftsman.is_verified %}
+                <span class="service-verified">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                    ></path>
+                  </svg>
+                  Verified Pro
+                </span>
+                {% endif %}
+                
+                {% if craftsman.license_number %}
+                <span class="service-license licensed">Licensed</span>
+                {% else %}
+                <span class="service-license not-licensed">Not Licensed</span>
+                {% endif %}
+              </div>
+              <h1 class="service-title">{{ service.title }}</h1>
+              <div class="service-tags">
+                <span class="tag tag-blue">{{ service.get_category_display }}</span>
+                <span class="tag tag-green">{{ service.get_availability_display }}</span>
+                <span class="tag tag-cyan">{{ service.get_job_size_display }}</span>
+                <span class="tag tag-yellow">{{ service.price_type|title }} Rate</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mobile Provider Card (Mobile Only) -->
+          <div class="provider-card-mobile">
+            <div class="provider-mobile-header">
+              <div class="provider-mobile-avatar">
+                {% if craftsman.profile_photo %}
+                  <img src="{{ craftsman.profile_photo.url }}" alt="{{ craftsman.business_name }}" />
+                {% else %}
+                  <img
+                    src="https://ui-avatars.com/api/?name={{ craftsman.business_name|urlencode }}&background=EBFAF0&color=00B67A"
+                    alt="{{ craftsman.business_name }}"
+                  />
+                {% endif %}
+                
+                {% if craftsman.is_verified %}
+                <div class="verified-badge-mobile" title="Verified Provider">
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    stroke="none"
+                  >
+                    <path
+                      d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                    ></path>
+                  </svg>
+                </div>
+                {% endif %}
+              </div>
+              <div class="provider-mobile-info">
+                <h3 class="provider-mobile-name">{{ craftsman.business_name }}</h3>
+                <div class="provider-mobile-rating">
+                  <div class="stars-mobile">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= avg_rating|floatformat:0|add:"0" %}
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                      {% else %}
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#E0E0E0">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  <span class="rating-text-mobile">{{ avg_rating|floatformat:1 }} ({{ reviews_count }})</span>
+                </div>
+                <div class="provider-mobile-meta">
+                  <span class="meta-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    {{ service.get_region_display|default:"Not specified" }}
+                  </span>
+                  <span class="meta-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="8" x2="12" y2="12"></line>
+                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    {{ craftsman.years_of_experience }} experience
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="provider-mobile-actions">
+              {% if request.user.is_authenticated %}
+              <button class="btn-mobile-primary" onclick="window.location.href='tel:{{ craftsman.phone }}'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                Call
+              </button>
+              {% else %}
+              <button class="btn-mobile-primary" onclick="window.location.href='{% url 'signin' %}'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Register to Call
+              </button>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Description Section -->
+          <section class="service-section section-description">
+            <h2 class="section-title">Service Description</h2>
+            <div class="service-description">
+              <p>{{ service.description }}</p>
+              {% if craftsman.description %}
+              <p style="margin-top: 1rem">{{ craftsman.description }}</p>
+              {% endif %}
+            </div>
+          </section>
+
+          <!-- Features Section -->
+          <section class="service-section section-features">
+            <h2 class="section-title">Key Features</h2>
+            <ul class="feature-list">
+              {% if 'verified' in service.features %}
+              <li class="feature-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                Verified Pro
+              </li>
+              {% endif %}
+              
+              {% if 'licensed' in service.features %}
+              <li class="feature-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Licensed
+              </li>
+              {% endif %}
+              
+              {% if 'insured' in service.features %}
+              <li class="feature-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v20M2 12h20"></path>
+                </svg>
+                Insured
+              </li>
+              {% endif %}
+              
+              {% if 'warranty' in service.features %}
+              <li class="feature-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Warranty on Work
+              </li>
+              {% endif %}
+              
+              {% if service.materials_included %}
+              <li class="feature-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 12v8H4v-8"></path>
+                  <path d="M12 4v16"></path>
+                  <path d="M8 12h8"></path>
+                </svg>
+                Materials Included
+              </li>
+              {% endif %}
+            </ul>
+          </section>
+
+          <!-- Details Grid -->
+          <section class="service-section section-details">
+            <h2 class="section-title">Service Details</h2>
+            <div class="details-grid">
+              <div class="detail-item">
+                <div class="detail-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+                <div class="detail-content">
+                  <span class="detail-label">Estimated Duration</span>
+                  <span class="detail-value">{{ service.estimated_duration }}</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                </div>
+                <div class="detail-content">
+                  <span class="detail-label">Price Type</span>
+                  <span class="detail-value">{{ service.get_price_type_display }}</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </div>
+                <div class="detail-content">
+                  <span class="detail-label">Availability</span>
+                  <span class="detail-value">{{ service.get_availability_display }}</span>
+                </div>
+              </div>
+              {% if service.travel_fee %}
+              <div class="detail-item">
+                <div class="detail-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div class="detail-content">
+                  <span class="detail-label">Travel Fee</span>
+                  <span class="detail-value">${{ service.travel_fee }}</span>
+                </div>
+              </div>
+              {% endif %}
+              <div class="detail-item">
+                <div class="detail-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                  </svg>
+                </div>
+                <div class="detail-content">
+                  <span class="detail-label">Job Size</span>
+                  <span class="detail-value">{{ service.get_job_size_display }}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Reviews Stats -->
+          <div class="stats-container">
+            <div class="stat-box">
+              <span class="stat-value text-primary">{{ avg_rating|floatformat:1 }}</span>
+              <span class="stat-label">Rating</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-value">{{ reviews_count }}</span>
+              <span class="stat-label">Reviews</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-value">{{ craftsman.years_of_experience }}</span>
+              <span class="stat-label">Years Exp</span>
+            </div>
+          </div>
+
+          <!-- Reviews Section -->
+          <section class="service-section section-reviews">
+            <div class="section-header-row">
+              <h2 class="section-title">Customer Reviews ({{ reviews_count }})</h2>
+              
+              {% if request.user.is_authenticated %}
+                  <button 
+                      class="btn btn-primary btn-write-review"
+                      onclick="document.getElementById('reviewModal').style.display='flex'"
+                  >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                      Write a Review
+                  </button>
+              {% endif %}
+              <div id="reviewModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4>Write a Review</h4>
+                        <span class="close" onclick="document.getElementById('reviewModal').style.display='none'">&times;</span>
+                    </div>
+                    
+                    <form method="POST" 
+                          action="{% url 'submit_review' service.id %}"
+                          class="review-form">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label>Rating</label>
+                            <div class="rating-stars">
+                                {% for i in "54321" %}
+                                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" required>
+                                <label for="star{{ i }}">★</label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" class="form-control" placeholder="Brief summary" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Your Review</label>
+                            <textarea name="comment" class="form-control" rows="4" placeholder="Share details..." required></textarea>
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">Submit Review</button>
+                            <button type="button" 
+                                    class="btn btn-outline" 
+                                    onclick="document.getElementById('reviewModal').style.display='none'">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            
+
+
+            </div>
+
+            {% if reviews %}
+            <div class="reviews-list">
+              {% for review in reviews %}
+              <div class="review-card">
+                <div class="review-header">
+                  <div class="review-author">
+                    <img
+                      src="https://ui-avatars.com/api/?name={{ review.customer.user_profile.user.get_full_name|urlencode }}&background=random"
+                      alt="{{ review.customer.user_profile.user.get_full_name }}"
+                      class="review-avatar"
+                    />
+                    <div class="review-meta">
+                      <span class="review-name">{{ review.customer.user_profile.user.get_full_name }}</span>
+                      <span class="review-date">{{ review.created_at|date:"M d, Y" }}</span>
+                    </div>
+                  </div>
+                  <div class="review-rating">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= review.rating %}
+                        <svg width="16" height="16" fill="#FFC107" viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                      {% else %}
+                        <svg width="16" height="16" fill="#E0E0E0" viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+                <p class="review-text">{{ review.comment }}</p>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="reviews-empty-state">
+              <div class="empty-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+              </div>
+              <p class="empty-text">
+                No reviews yet. Be the first to review this service!
+              </p>
+            </div>
+            {% endif %}
+          </section>
+        </div>
+
+        <!-- Sidebar Column -->
+        <aside class="service-sidebar">
+          <div class="provider-card">
+            <div class="provider-header">
+              <div class="provider-avatar">
+                {% if craftsman.profile_photo %}
+                  <img src="{{ craftsman.profile_photo.url }}" alt="{{ craftsman.business_name }}" />
+                {% else %}
+                  <img
+                    src="https://ui-avatars.com/api/?name={{ craftsman.business_name|urlencode }}&background=EBFAF0&color=00B67A"
+                    alt="{{ craftsman.business_name }}"
+                  />
+                {% endif %}
+                
+                {% if craftsman.is_verified %}
+                <div class="verified-badge" title="Verified Provider">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                  </svg>
+                </div>
+                {% endif %}
+              </div>
+              <div class="provider-info">
+                <h3 class="provider-name">{{ craftsman.business_name }}</h3>
+                <div class="provider-rating">
+                  <div class="stars">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= avg_rating|floatformat:0|add:"0" %}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                      {% else %}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#E0E0E0" stroke="none">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  <span class="rating-count">({{ reviews_count }} reviews)</span>
+                </div>
+                <p class="member-since">Member since {{ craftsman.created_at|date:"M Y" }}</p>
+              </div>
+            </div>
+
+            <div class="provider-contact">
+              <div class="contact-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <span>{{ craftsman.phone }}</span>
+              </div>
+              <div class="contact-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>{{ service.get_region_display|default:"Not specified" }}</span>
+              </div>
+              <div class="contact-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>{{ craftsman.years_of_experience }} years experience</span>
+              </div>
+            </div>
+
+            <div class="provider-actions">
+              {% if request.user.is_authenticated %}
+              <button class="btn-primary btn-full dropdown-btn" onclick="window.location.href='tel:{{ craftsman.phone }}'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                Call Now
+              </button>
+              {% else %}
+              <button class="btn-primary btn-full" onclick="window.location.href='{% url 'signin' %}'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Register to Contact
+              </button>
+              {% endif %}
+              
+              {% include 'partials/save_button.html' %}
+
+          
+              
+              <!-- Share Button -->
+<button 
+class="btn-outline btn-full"
+onclick="document.getElementById('shareModal').style.display='flex'">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="18" cy="5" r="3"></circle>
+    <circle cx="6" cy="12" r="3"></circle>
+    <circle cx="18" cy="19" r="3"></circle>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+</svg>
+Share Service
+</button>
+
+<!-- Share Modal -->
+<div id="shareModal" class="modal" style="display:none;">
+<div class="modal-content">
+    <div class="modal-header">
+        <h4>Share Service</h4>
+        <span class="close" onclick="document.getElementById('shareModal').style.display='none'">&times;</span>
+    </div>
+    
+    <div class="share-options">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+           target="_blank" 
+           class="share-btn facebook">
+            Facebook
+        </a>
+        
+        <!-- Twitter -->
+        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text=Check out this service: {{ service.title }}" 
+           target="_blank" 
+           class="share-btn twitter">
+            Twitter
+        </a>
+        
+        <!-- WhatsApp -->
+        <a href="https://wa.me/?text=Check out this service: {{ request.build_absolute_uri }}" 
+           target="_blank" 
+           class="share-btn whatsapp">
+            WhatsApp
+        </a>
+        
+        <!-- Copy Link -->
+        <button onclick="copyToClipboard()" class="share-btn copy-link">
+            Copy Link
+        </button>
+    </div>
+</div>
+</div>
+
+
+
+<script>
+function copyToClipboard() {
+navigator.clipboard.writeText(window.location.href)
+    .then(() => alert('Link copied to clipboard!'))
+    .catch(err => alert('Failed to copy'));
+}
+</script>
+            </div>
+          </div>
+
+          <!-- Safety Tips -->
+          <div class="safety-card">
+            <h3 class="safety-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              Safety Tips
+            </h3>
+            <ul class="safety-list">
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Always meet in public first
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Check craftsman's ratings and reviews
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Don't pay large amounts upfront
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Get a written agreement for large jobs
+              </li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+      
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-container">
+        <p class="footer-copyright">&copy; 2026 FindUs. All rights reserved.</p>
+      </div>
+    </footer>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Sign in to FindUs - Access your account"
+    />
+    <title>Sign In | FindUs</title>
+    <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/auth.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/signin.css' %}" />
+    <link 
+    rel="icon" 
+    href="{% static 'assets/icons/find-su-logo.png' %}" 
+    type="image/png"
+  >
+  <link
+    href="{% static 'assets/icons/find-su-logo.png' %}"
+    rel="apple-touch-icon"
+  />
+
+  </head>
+  <body class="auth-page">
+    <div class="auth-container">
+      <div class="auth-card">
+        <a href="{% url 'home' %}" class="auth-logo">FindUs</a>
+
+        <header class="auth-header">
+          <h1>Welcome back</h1>
+          <p>Sign in to your account</p>
+        </header>
+
+        <form class="auth-form" id="login-form" method="POST" action="{% url 'signin' %}">
+          {% csrf_token %}
+          
+          {% if messages %}
+          <div class="auth-messages">
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags|default:'error' }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+          
+          <div class="auth-form-group">
+            <label for="login-email">Username or Email</label>
+            <input
+              type="text"
+              id="login-email"
+              name="username"
+              placeholder="Enter your username or email"
+              required
+              autocomplete="username"
+              value="{{ username_value|default:'' }}"
+            />
+          </div>
+        
+          <div class="auth-form-group">
+            <label for="login-password">Password</label>
+            <div class="password-input-wrapper">
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                placeholder="Enter your password"
+                required
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                class="toggle-password"
+                aria-label="Show password"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        
+          <button type="submit" class="auth-submit" id="submit-btn">
+            <span class="btn-text">Sign In</span>
+            <span class="spinner-container" style="display: none;">
+              <svg class="spinner" width="20" height="20" viewBox="0 0 50 50">
+                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+              </svg>
+              Signing in...
+            </span>
+          </button>
+        </form>
+        
+        
+
+        <footer class="auth-footer">
+          <p>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
+          <p class="auth-footer-alt">
+            Want to offer services?
+            <a href="{% url 'register_as_a_craftsman' %}">Join as provider</a>
+          </p>
+        </footer>
+      </div>
+    </div>
+
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/js/signin.js' %}"></script>
+
+  </body>
+</html>
