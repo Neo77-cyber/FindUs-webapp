@@ -14,6 +14,7 @@ from django.db import DatabaseError, IntegrityError
 from django.db.models import Avg, Count, Q, Value
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
+from findus.models import AVAILABILITY_CHOICES, SERVICE_SCOPE_CHOICES
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
@@ -80,6 +81,8 @@ def home(request):
             "job_sizes": job_sizes,
             "features": features,
             "sort_by": sort_by,
+            "AVAILABILITY_CHOICES": AVAILABILITY_CHOICES,
+            "SERVICE_SCOPE_CHOICES": SERVICE_SCOPE_CHOICES,
         }
 
         # Initialize variables
