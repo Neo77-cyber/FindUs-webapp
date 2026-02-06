@@ -19,31 +19,24 @@
     <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/results.css' %}">
 
-      <!-- PWA Meta Tags for iOS -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="FindUs">
-<link rel="apple-touch-icon" href="{% static 'icons/152.png' %}">
-<link rel="apple-touch-icon" sizes="152x152" href="{% static 'icons/152.png' %}">
-<link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/80.png' %}">
-<link rel="apple-touch-icon" sizes="167x167" href="{% static 'icons/167.png' %}">
+      
 
-<!-- PWA Meta Tags for Android/General -->
-<link rel="manifest" href="{% static 'manifest.json' %}">
-<meta name="theme-color" content="#077f46">
-<meta name="mobile-web-app-capable" content="yes">
+<!-- Universal splash screen that works on all devices -->
+<link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}">
 
-<!-- PWA Splash Screens for iOS -->
-<link rel="apple-touch-startup-image" href="{% static 'splash/iphone5_splash.png' %}" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="{% static 'splash/iphone6_splash.png' %}" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="{% static 'splash/iphoneplus_splash.png' %}" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)">
-<link rel="apple-touch-startup-image" href="{% static 'splash/iphonex_splash.png' %}" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
-<link rel="apple-touch-startup-image" href="{% static 'splash/iphonexr_splash.png' %}" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="{% static 'splash/iphonexsmax_splash.png' %}" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
-<link rel="apple-touch-startup-image" href="{% static 'splash/ipad_splash.png' %}" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="{% static 'splash/ipadpro1_splash.png' %}" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="{% static 'splash/ipadpro3_splash.png' %}" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="{% static 'splash/ipadpro2_splash.png' %}" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+
+<style>
+    
+    @media screen and (max-width: 1024px) {
+        body {
+            background-color: #077f46; 
+            background-image: url("{% static 'splash/universal_splash.png' %}");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+</style>
   </head>
   <body>
     <header class="main-header">
