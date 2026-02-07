@@ -120,7 +120,7 @@
                     <button type="button" class="category-trigger region-trigger" id="region-trigger">
                         <span class="category-text region-text">
                             {% if selected_region %}
-                                {% for value, label in Service.REGION_CHOICES %}
+                                {% for value, label in REGION_CHOICES %}
                                     {% if value == selected_region %}{{ label }}{% endif %}
                                 {% endfor %}
                             {% else %}
@@ -153,7 +153,7 @@
                             All Regions
                         </button>
         
-                        {% for value, label in Service.REGION_CHOICES %}
+                        {% for value, label in REGION_CHOICES %}
                         <button
                             type="button"
                             class="category-option {% if selected_region == value %}active{% endif %}"
@@ -174,7 +174,7 @@
                     <button type="button" class="category-trigger" id="category-trigger">
                         <span class="category-text">
                             {% if selected_category %}
-                                {% for value, label in Service.CATEGORY_CHOICES %}
+                                {% for value, label in CATEGORY_CHOICES %}
                                     {% if value == selected_category %}{{ label }}{% endif %}
                                 {% endfor %}
                             {% else %}
@@ -207,7 +207,7 @@
                             All Categories
                         </button>
         
-                        {% for value, label in Service.CATEGORY_CHOICES %}
+                        {% for value, label in CATEGORY_CHOICES %}
                         <button
                             type="button"
                             class="category-option {% if selected_category == value %}active{% endif %}"
@@ -904,13 +904,10 @@
             </div>
           </header>
 
-          {% if filters_active %}
+          
           
           {% include 'partials/filtered_results.html' %}
-        {% else %}
-          
-          {% include 'partials/default_results.html' %}
-        {% endif %}
+        
 
           
         </section>
@@ -989,7 +986,11 @@
               <footer class="form-footer">
                   <p>
                       Don't have an account?
-                      <a href="#" id="switch-to-signup">Sign up</a>
+                      <a href="{% url 'register' %}" id="switch-to-signup">Sign up</a>
+                  </p>
+                  <p class="auth-footer-alt">
+                    Want to offer services?
+                    <a href="{% url 'register_as_a_craftsman' %}">Join as provider</a>
                   </p>
               </footer>
           </div>

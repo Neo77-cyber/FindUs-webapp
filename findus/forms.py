@@ -46,18 +46,35 @@ class CustomerSignUpForm(UserCreationForm):
         return email
 
     def clean_phone(self):
-        phone = self.cleaned_data.get("phone")
-
-        if phone:
-            phone = re.sub(r"[^\d+]", "", phone)
-
-            if CustomerProfile.objects.filter(phone=phone).exists():
-                raise ValidationError("This phone number is already registered.")
-
-            if not re.match(r"^(\+39)?[0-9]{9,13}$", phone):
-                raise ValidationError(
-                    "Enter valid Italian phone number (e.g., +39 1234567890)"
-                )
+        
+        phone = self.cleaned_data.get("phone", "")
+        
+        # Make sure it's a string
+        phone = str(phone).strip()
+        
+        # Remove everything except digits and +
+        phone = re.sub(r'[^\d+]', '', phone)
+        
+        # Check if empty after cleaning
+        if not phone:
+            raise ValidationError("Please enter a phone number.")
+        
+        # Check if already exists
+        if CustomerProfile.objects.filter(phone=phone).exists():
+            raise ValidationError("This phone number is already registered.")
+        
+        # Store in +39XXXXXXXXXX format
+        if phone.startswith('+39'):
+            # Already has +39
+            pass
+        elif phone.startswith('39'):
+            # Has 39 without +
+            phone = '+' + phone
+        elif phone.startswith('3') or phone.startswith('0'):
+            # Italian mobile (3) or landline (0)
+            phone = '+39' + phone
+        
+        
 
         return phone
 
@@ -102,16 +119,35 @@ class CraftsmanSignUpForm(UserCreationForm):
         return email
 
     def clean_phone(self):
-        phone = self.cleaned_data["phone"]
-        phone = re.sub(r"[^\d+]", "", phone)
-
-        if CraftsmanProfile.objects.filter(phone=phone).exists():
-            raise ValidationError("Phone number already registered")
-
-        if not re.match(r"^(\+39)?[0-9]{9,13}$", phone):
-            raise ValidationError(
-                "Enter valid Italian phone number (e.g., +39 1234567890)"
-            )
+        
+        phone = self.cleaned_data.get("phone", "")
+        
+        # Make sure it's a string
+        phone = str(phone).strip()
+        
+        # Remove everything except digits and +
+        phone = re.sub(r'[^\d+]', '', phone)
+        
+        # Check if empty after cleaning
+        if not phone:
+            raise ValidationError("Please enter a phone number.")
+        
+        # Check if already exists
+        if CustomerProfile.objects.filter(phone=phone).exists():
+            raise ValidationError("This phone number is already registered.")
+        
+        # Store in +39XXXXXXXXXX format
+        if phone.startswith('+39'):
+            # Already has +39
+            pass
+        elif phone.startswith('39'):
+            # Has 39 without +
+            phone = '+' + phone
+        elif phone.startswith('3') or phone.startswith('0'):
+            # Italian mobile (3) or landline (0)
+            phone = '+39' + phone
+        
+        
 
         return phone
 

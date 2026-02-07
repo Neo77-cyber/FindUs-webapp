@@ -14,7 +14,7 @@ from django.db import DatabaseError, IntegrityError
 from django.db.models import Avg, Count, Q, Value
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
-from findus.models import AVAILABILITY_CHOICES, SERVICE_SCOPE_CHOICES
+from findus.models import AVAILABILITY_CHOICES, SERVICE_SCOPE_CHOICES, CATEGORY_CHOICES, REGION_CHOICES
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
@@ -40,29 +40,29 @@ def home(request):
 
     try:
         # Get filter parameters
-        category_filter = request.GET.get("category", "")
-        region_filter = request.GET.get("region", "")
-        search_query = request.GET.get("search", "")
-        price_min = request.GET.get("price_min", "")
-        price_max = request.GET.get("price_max", "")
-        rating = request.GET.get("rating", "")
+        category_filter = request.GET.get("category", "").strip()
+        region_filter = request.GET.get("region", "").strip()
+        search_query = request.GET.get("search", "").strip()
+        price_min = request.GET.get("price_min", "").strip()
+        price_max = request.GET.get("price_max", "").strip()
+        rating = request.GET.get("rating", "").strip()
         availability = request.GET.getlist("availability", [])
         features = request.GET.getlist("features", [])
         job_sizes = request.GET.getlist("job_size", [])
-        sort_by = request.GET.get("sort", "relevance")
+        sort_by = request.GET.get("sort", "relevance").strip()
 
-        # Check if filters are active
+        # Check if filters are active (meaningful filters only)
         filters_active = any(
             [
-                category_filter,
-                region_filter,
-                search_query,
-                price_min,
-                price_max,
-                rating,
-                availability,
-                job_sizes,
-                features,
+                category_filter,  # Not empty
+                region_filter,    # Not empty  
+                search_query and len(search_query) >= 2,  # Meaningful search
+                price_min,        # Not empty
+                price_max,        # Not empty
+                rating,           # Not empty
+                availability,     # Has items
+                job_sizes,        # Has items
+                features,         # Has items
                 sort_by != "relevance",
             ]
         )
@@ -83,116 +83,102 @@ def home(request):
             "sort_by": sort_by,
             "AVAILABILITY_CHOICES": AVAILABILITY_CHOICES,
             "SERVICE_SCOPE_CHOICES": SERVICE_SCOPE_CHOICES,
+            "REGION_CHOICES": REGION_CHOICES,
+            "CATEGORY_CHOICES": CATEGORY_CHOICES,
         }
 
         # Initialize variables
         services = Service.objects.none()
-        craftsmen = CraftsmanProfile.objects.none()
         page_obj = None
 
-        if filters_active:
-            try:
-                services = Service.objects.filter(service_status="Active")
+        # ALWAYS work with services (ignore craftsmen)
+        try:
+            # Start with all active services
+            services = Service.objects.filter(service_status="Active")
+            
+            # Apply filters if they exist
+            if category_filter:
+                services = services.filter(category=category_filter)
 
-                if category_filter:
-                    services = services.filter(category=category_filter)
+            if region_filter:
+                services = services.filter(region=region_filter)
 
-                if region_filter:
-                    services = services.filter(region=region_filter)
+            if search_query and len(search_query) >= 2:
+                services = services.filter(
+                    Q(title__icontains=search_query)
+                    | Q(description__icontains=search_query)
+                    | Q(craftsman__business_name__icontains=search_query)
+                )
 
-                if search_query and len(search_query.strip()) >= 2:
-                    services = services.filter(
-                        Q(title__icontains=search_query)
-                        | Q(description__icontains=search_query)
-                        | Q(craftsman__business_name__icontains=search_query)
-                    )
+            if price_min:
+                try:
+                    price_min_val = float(price_min)
+                    if price_min_val >= 0:
+                        services = services.filter(
+                            Q(hourly_rate__gte=price_min_val)
+                            | Q(fixed_price__gte=price_min_val)
+                        )
+                except:
+                    pass
 
-                if price_min:
-                    try:
-                        price_min_val = float(price_min)
-                        if price_min_val >= 0:
-                            services = services.filter(
-                                Q(hourly_rate__gte=price_min_val)
-                                | Q(fixed_price__gte=price_min_val)
-                            )
-                    except:
-                        pass
+            if price_max:
+                try:
+                    price_max_val = float(price_max)
+                    if price_max_val >= 0:
+                        services = services.filter(
+                            Q(hourly_rate__lte=price_max_val)
+                            | Q(fixed_price__lte=price_max_val)
+                        )
+                except:
+                    pass
 
-                if price_max:
-                    try:
-                        price_max_val = float(price_max)
-                        if price_max_val >= 0:
-                            services = services.filter(
-                                Q(hourly_rate__lte=price_max_val)
-                                | Q(fixed_price__lte=price_max_val)
-                            )
-                    except:
-                        pass
+            if rating:
+                try:
+                    rating_val = float(rating)
+                    if 0 <= rating_val <= 5:
+                        services = services.filter(
+                            craftsman__rating__gte=rating_val
+                        )
+                except:
+                    pass
 
-                if rating:
-                    try:
-                        rating_val = float(rating)
-                        if 0 <= rating_val <= 5:
-                            services = services.filter(
-                                craftsman__rating__gte=rating_val
-                            )
-                    except:
-                        pass
+            if availability:
+                services = services.filter(availability__in=availability)
 
-                if availability:
-                    services = services.filter(availability__in=availability)
+            if job_sizes:
+                services = services.filter(job_size__in=job_sizes)
 
-                if job_sizes:
-                    services = services.filter(job_size__in=job_sizes)
+            if features:
+                for feature in features:
+                    services = services.filter(features__contains=[feature])
 
-                if features:
-                    for feature in features:
-                        services = services.filter(features__contains=[feature])
+            # Apply sorting
+            services = apply_service_sorting(services, sort_by)
+            
+            # If no sorting applied, use default
+            if not services.ordered:
+                services = services.order_by("-craftsman__rating", "-created_at")
 
-                # Apply sorting
-                services = apply_service_sorting(services, sort_by)
+            context["services"] = services
+            context["has_services"] = services.exists()
 
-                context["services"] = services
-                context["has_services"] = services.exists()
-
-            except Exception as e:
-                logger.error(f"Filter error: {e}")
-                services = Service.objects.filter(service_status="Active")[:50]
-                context["services"] = services
-                context["has_services"] = services.exists()
-                context["show_alert"] = "Showing limited results due to system issue"
-
-        else:
-            try:
-                craftsmen = CraftsmanProfile.objects.filter().order_by("-rating")[:12]
-                services = Service.objects.filter(service_status="Active")
-
-                context["craftsmen"] = craftsmen
-                context["has_services"] = services.exists()
-            except Exception as e:
-                logger.error(f"Default view error: {e}")
-                context["craftsmen"] = []
-                context["has_services"] = False
-                context["show_alert"] = "Unable to load results at this time"
+        except Exception as e:
+            logger.error(f"Database error: {e}")
+            # Fallback to simple query
+            services = Service.objects.filter(service_status="Active")[:50]
+            context["services"] = services
+            context["has_services"] = services.exists()
+            context["show_alert"] = "Showing limited results due to system issue"
 
         # Get results count
-        if filters_active:
-            results_count = services.count()
-        else:
-            results_count = craftsmen.count()
-
+        results_count = services.count()
         context["results_count"] = results_count
 
         # Pagination
         page = request.GET.get("page", 1)
 
-        if filters_active:
-            items = services
-        else:
-            items = craftsmen
-
-        if items.exists():
-            paginator = Paginator(items, 12)
+        if services.exists():
+            paginator = Paginator(services, 12)
 
             try:
                 page_obj = paginator.page(page)
@@ -201,22 +187,17 @@ def home(request):
 
             context["page_obj"] = page_obj
         else:
-
             paginator = Paginator([], 12)
             page_obj = Page([], 1, paginator)
             context["page_obj"] = page_obj
 
-        # HTMX response
+        # HTMX response - ALWAYS use filtered_results.html
         if is_htmx:
-            if filters_active:
-                return render(request, "partials/filtered_results.html", context)
-            else:
-                return render(request, "partials/default_results.html", context)
+            return render(request, "partials/filtered_results.html", context)
 
         return render(request, "home.html", context)
 
     except Exception as e:
-        # Log error but show simple alert to user
         logger.error(f"Home view error: {e}")
 
         # Simple context for error
@@ -697,6 +678,10 @@ def customer_dashboard(request):
             "job_sizes": job_sizes,
             "features": features,
             "sort_by": sort_by,
+            "AVAILABILITY_CHOICES": AVAILABILITY_CHOICES,
+            "SERVICE_SCOPE_CHOICES": SERVICE_SCOPE_CHOICES,
+            "REGION_CHOICES": REGION_CHOICES,
+            "CATEGORY_CHOICES": CATEGORY_CHOICES,
         }
 
         # Initialize variables

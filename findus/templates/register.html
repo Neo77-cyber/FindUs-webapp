@@ -94,6 +94,9 @@
       autocomplete="tel"
       value="{{ form.phone.value|default:'' }}"
     />
+    <small class="form-text">
+      Enter Italian mobile (starts with 3) or landline (starts with 0)
+    </small>
     {% if form.phone.errors %}
       <div class="error-feedback">{{ form.phone.errors.0 }}</div>
     {% endif %}
