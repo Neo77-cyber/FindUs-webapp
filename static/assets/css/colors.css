@@ -1,12 +1,8 @@
 :root {
-  
-
-  
-  
   --color-slate-950: #020617;
-  --color-slate-900: #0f172a; 
+  --color-slate-900: #0f172a;
   --color-slate-800: #1e293b;
-  --color-slate-700: #334155; 
+  --color-slate-700: #334155;
   --color-slate-600: #475569;
   --color-slate-500: #64748b;
   --color-slate-400: #94a3b8;
@@ -14,26 +10,19 @@
   --color-slate-50: #f8fafc;
   --color-white: #ffffff;
 
-  
   --color-primary-600: #16a34a;
   --color-primary-700: #15803d;
   --color-primary-400: #4ade80;
-  --color-primary-50: #f0fdf4; 
-  --color-primary-900: #14532d; 
+  --color-primary-50: #f0fdf4;
+  --color-primary-900: #14532d;
 
-  
-  
   --color-amber-500: #f59e0b;
   --color-amber-600: #d97706;
 
-  
-  --color-emerald: #10b981; 
-  --color-rose: #ef4444; 
-  --color-sky: #0ea5e9; 
+  --color-emerald: #10b981;
+  --color-rose: #ef4444;
+  --color-sky: #0ea5e9;
 
-  
-
-  
   --primary: var(--color-primary-600);
   --primary-hover: var(--color-primary-700);
   --primary-light: var(--color-primary-400);
@@ -42,26 +31,22 @@
   --secondary-hover: var(--color-slate-100);
   --accent: var(--color-amber-500);
 
-  
-  --bg-primary: var(--color-white); 
-  --bg-secondary: var(--color-slate-50); 
-  --bg-tertiary: var(--color-primary-50); 
+  --bg-primary: var(--color-white);
+  --bg-secondary: var(--color-slate-50);
+  --bg-tertiary: var(--color-primary-50);
   --bg-dark: var(--color-slate-800);
   --bg-inverse: var(--color-slate-900);
 
-  
-  --text-primary: var(--color-slate-900); 
-  --text-secondary: var(--color-slate-600); 
-  --text-muted: var(--color-slate-400); 
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-600);
+  --text-muted: var(--color-slate-400);
   --text-light: var(--color-slate-100);
   --text-inverse: var(--color-white);
 
-  
   --border-light: var(--color-slate-100);
-  --border-default: #e2e8f0; 
+  --border-default: #e2e8f0;
   --border-dark: var(--color-slate-400);
 
-  
   --cta-primary: var(--color-primary-600);
   --cta-primary-text: var(--color-white);
   --cta-primary-hover: var(--color-primary-700);
@@ -70,44 +55,38 @@
   --cta-secondary-text: var(--color-slate-900);
   --cta-secondary-hover: var(--color-slate-200);
 
-  
   --card-bg: var(--color-white);
   --card-border: var(--border-default);
-  
+
   --card-shadow:
     0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -1px rgba(15, 23, 42, 0.06);
   --card-hover-shadow:
     0 10px 15px -3px rgba(15, 23, 42, 0.1),
     0 4px 6px -2px rgba(15, 23, 42, 0.05);
 
-  
   --nav-bg: var(--color-white);
   --nav-border: var(--border-default);
   --nav-text: var(--color-slate-800);
   --nav-hover: var(--color-primary-600);
   --nav-active: var(--color-primary-700);
 
-  
   --footer-bg: var(--color-slate-900);
   --footer-text: var(--color-slate-400);
   --footer-link: var(--color-white);
   --footer-link-hover: var(--color-amber-500);
 
-  
   --input-bg: var(--color-white);
   --input-border: var(--border-default);
   --input-border-focus: var(--color-primary-600);
   --input-placeholder: var(--color-slate-400);
   --input-text: var(--color-slate-900);
 
-  
   --price-color: var(--color-slate-900);
   --badge-new-bg: var(--color-primary-50);
   --badge-new-text: var(--color-primary-600);
   --badge-sale: var(--color-rose);
   --badge-bestseller: var(--color-amber-500);
 
-  
   --success: var(--color-emerald);
   --success-bg: #d1fae5;
   --warning: var(--color-amber-500);
@@ -117,134 +96,15 @@
   --info: var(--color-sky);
   --info-bg: #e0f2fe;
 
-  
   --gradient-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   --gradient-hero: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
   --gradient-card: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
 }
 
-
-
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    
-    --bg-primary: var(--color-slate-950);
-    --bg-secondary: var(--color-slate-900);
-    --bg-tertiary: var(--color-slate-800);
-    --bg-inverse: var(--color-white);
-
-    
-    --text-primary: var(--color-slate-50); 
-    --text-secondary: var(--color-slate-400); 
-    --text-muted: var(--color-slate-500);
-    --text-inverse: var(--color-slate-900);
-
-    
-    --border-light: var(--color-slate-800);
-    --border-default: var(--color-slate-800);
-    --border-dark: var(--color-slate-600);
-
-    
-    --card-bg: var(--color-slate-900);
-    --card-border: var(--color-slate-800);
-    
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
-
-    
-    --nav-bg: var(--color-slate-950); 
-    --nav-border: var(--color-slate-800);
-    --nav-text: var(--color-slate-100);
-    --nav-hover: var(
-      --color-primary-400
-    ); 
-
-    
-    --input-bg: var(--color-slate-900);
-    --input-border: var(--color-slate-700);
-    --input-border-focus: var(--color-primary-400);
-    --input-placeholder: var(--color-slate-500);
-    --input-text: var(--color-slate-100);
-
-    
-    --cta-secondary: var(--color-slate-800);
-    --cta-secondary-text: var(--color-slate-100);
-    --cta-secondary-hover: var(--color-slate-700);
-
-    
-    --price-color: var(--color-white);
-    --badge-new-bg: var(--color-primary-900); 
-    --badge-new-text: var(--color-primary-400); 
-
-    
-    --success-bg: rgba(16, 185, 129, 0.2);
-    --warning-bg: rgba(245, 158, 11, 0.2);
-    --error-bg: rgba(239, 68, 68, 0.2);
-    --info-bg: rgba(14, 165, 233, 0.2);
-
-    
-    --gradient-hero: linear-gradient(180deg, #0f172a 0%, #020617 100%);
-    --gradient-card: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-  }
-}
-
-
-.dark-mode {
-  --bg-primary: var(--color-slate-950);
-  --bg-secondary: var(--color-slate-900);
-  --bg-tertiary: var(--color-slate-800);
-  --bg-inverse: var(--color-white);
-
-  --text-primary: var(--color-slate-50);
-  --text-secondary: var(--color-slate-400);
-  --text-muted: var(--color-slate-500);
-  --text-inverse: var(--color-slate-900);
-
-  --border-light: var(--color-slate-800);
-  --border-default: var(--color-slate-800);
-  --border-dark: var(--color-slate-600);
-
-  --card-bg: var(--color-slate-900);
-  --card-border: var(--color-slate-800);
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-  --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
-
-  --nav-bg: var(--color-slate-950);
-  --nav-border: var(--color-slate-800);
-  --nav-text: var(--color-slate-100);
-  --nav-hover: var(--color-primary-400);
-
-  --input-bg: var(--color-slate-900);
-  --input-border: var(--color-slate-700);
-  --input-border-focus: var(--color-primary-400);
-  --input-placeholder: var(--color-slate-500);
-  --input-text: var(--color-slate-100);
-
-  --cta-secondary: var(--color-slate-800);
-  --cta-secondary-text: var(--color-slate-100);
-  --cta-secondary-hover: var(--color-slate-700);
-
-  --price-color: var(--color-white);
-  --badge-new-bg: var(--color-primary-900);
-  --badge-new-text: var(--color-primary-400);
-
-  --success-bg: rgba(16, 185, 129, 0.2);
-  --warning-bg: rgba(245, 158, 11, 0.2);
-  --error-bg: rgba(239, 68, 68, 0.2);
-  --info-bg: rgba(14, 165, 233, 0.2);
-
-  --gradient-hero: linear-gradient(180deg, #0f172a 0%, #020617 100%);
-  --gradient-card: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-}
-
-
-
-
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  
+
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -273,7 +133,6 @@ body {
   color: var(--accent);
 }
 
-
 .service-card {
   background-color: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -288,10 +147,9 @@ body {
   border-color: var(--primary-light);
 }
 
-
 .btn-primary {
-  background: var(--gradient-primary); 
-  background-color: var(--cta-primary); 
+  background: var(--gradient-primary);
+  background-color: var(--cta-primary);
   color: var(--cta-primary-text);
 }
 

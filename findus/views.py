@@ -1016,99 +1016,10 @@ def submit_review(request, service_id):
 
 @login_required(login_url="home")
 def craftsman_dashboard(request):
-    try:
-        craftsman = request.user.userprofile.craftsmanprofile
-    except Exception as e:
-        messages.error(request, "You need to be a registered craftsman")
-        return redirect("home")
-
-    service_id = request.GET.get("edit")
-    delete_id = request.GET.get("delete")
-    editing_service = None
-
-    if delete_id:
-        try:
-            service_to_delete = Service.objects.get(id=delete_id, craftsman=craftsman)
-            service_title = service_to_delete.title
-            service_to_delete.delete()
-            messages.success(
-                request, f"Service '{service_title}' has been deleted successfully!"
-            )
-            return redirect("craftsman_dashboard")
-        except Service.DoesNotExist:
-            messages.error(request, "Service not found")
-            return redirect("craftsman_dashboard")
-
-    if service_id:
-        try:
-            editing_service = Service.objects.get(id=service_id, craftsman=craftsman)
-        except Service.DoesNotExist:
-            messages.error(request, "Service not found")
-            return redirect("craftsman_dashboard")
-
-    if request.method == "POST":
-        if editing_service:
-            form = ServiceForm(request.POST, request.FILES, instance=editing_service)
-            action = "updated"
-        else:
-            form = ServiceForm(request.POST, request.FILES)
-            action = "created"
-
-        if form.is_valid():
-            try:
-                service = form.save(commit=False)
-                if not editing_service:
-                    service.craftsman = craftsman
-                    service.service_status = "Active"
-
-                service.save()
-                form.save_m2m()
-
-                messages.success(request, f"Service {action} successfully!")
-                return redirect("craftsman_dashboard")
-
-            except Exception as e:
-                messages.error(request, f"Error saving service: {str(e)}")
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-    else:
-        if editing_service:
-            form = ServiceForm(instance=editing_service)
-        else:
-            form = ServiceForm()
-
-    services_list = (
-        Service.objects.filter(craftsman=craftsman)
-        .annotate(
-            avg_rating=Coalesce(
-                Avg("reviews__rating"), Value(0.0), output_field=models.FloatField()
-            ),
-            review_count=Count("reviews", distinct=True),
-        )
-        .order_by("-created_at")
-    )
-
-    paginator = Paginator(services_list, 6)
-
-    page = request.GET.get("page")
-    try:
-        services = paginator.page(page)
-    except PageNotAnInteger:
-        services = paginator.page(1)
-    except EmptyPage:
-        services = paginator.page(paginator.num_pages)
 
     return render(
         request,
-        "craftsman_dasboard.html",
-        {
-            "form": form,
-            "services": services,
-            "craftsman": craftsman,
-            "editing_service": editing_service,
-        },
+        "craftsman_dasboard.html"
     )
 
 
