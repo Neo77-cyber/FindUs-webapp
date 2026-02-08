@@ -26,6 +26,7 @@ urlpatterns = [
         views.craftsman_public_profile,
         name="craftsman_public_profile",
     ),
+    
     path("saved-services/", views.saved_services, name="saved_services"),
     path("save-service/<int:service_id>/", views.save_service, name="save_service"),
     path(
@@ -33,6 +34,10 @@ urlpatterns = [
         views.create_review,
         name="create_review",
     ),
+    path('create-service/', views.create_service_start, name='create_service_start'),
+    path('create-service/step2/', views.create_service_step2, name='create_service_step2'),
+    path('create-service/step3/', views.create_service_step3, name='create_service_step3'),
+    path('create-service/finalize/', views.create_service_finalize, name='create_service_finalize'),
     path(
         "service/<int:service_id>/submit-review/",
         views.submit_review,

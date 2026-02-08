@@ -837,40 +837,31 @@ def apply_service_sorting(queryset, sort_by):
 
 
 def service_detail(request, service_id):
+    service = get_object_or_404(Service, pk=service_id)
+    
+    
+    craftsman = getattr(service, 'craftsman', None)
+    if not craftsman:
+        
+        craftsman = None
+    
+    reviews = service.reviews.all().order_by("-created_at")[:5]
 
-    try:
+    avg_rating = (
+        reviews.aggregate(Avg("rating"))["rating__avg"]
+        if reviews.exists() and craftsman
+        else 0
+    )
 
-        service = get_object_or_404(Service, pk=service_id, service_status="Active")
+    context = {
+        "service": service,
+        "craftsman": craftsman,
+        "reviews": reviews,
+        "reviews_count": reviews.count(),
+        "avg_rating": avg_rating or 0,
+    }
 
-        craftsman = service.craftsman
-
-        reviews = service.reviews.all().order_by("-created_at")[:5]
-
-        avg_rating = (
-            reviews.aggregate(Avg("rating"))["rating__avg"]
-            if reviews.exists()
-            else craftsman.rating
-        )
-
-        context = {
-            "service": service,
-            "craftsman": craftsman,
-            "reviews": reviews,
-            "reviews_count": reviews.count(),
-            "avg_rating": avg_rating or 0,
-        }
-
-        return render(request, "service_detail.html", context)
-
-    except Exception as e:
-
-        print(f"Error in service_detail view: {e}")
-
-        return render(
-            request,
-            "service_detail.html",
-            {"error": "Service not found or unavailable"},
-        )
+    return render(request, "service_detail.html", context)
 
 
 @login_required
@@ -919,42 +910,41 @@ def saved_services(request):
     return render(request, "saved_services.html", context)
 
 
-@login_required(login_url="home")
+@login_required
 def save_service(request, service_id):
-
+    """Toggle save/unsave a service"""
+    
+    # Get the service
     service = get_object_or_404(Service, id=service_id)
-
+    
     try:
-
+        # Get customer profile
         customer_profile = request.user.userprofile.customerprofile
-
-        if customer_profile.saved_services.filter(id=service_id).exists():
-
+        
+        # Check current status
+        is_saved = customer_profile.saved_services.filter(id=service_id).exists()
+        
+        # Toggle
+        if is_saved:
             customer_profile.saved_services.remove(service)
             is_saved = False
         else:
-
             customer_profile.saved_services.add(service)
             is_saved = True
-
-        context = {
+        
+        # Return updated button
+        return render(request, "partials/save_button.html", {
             "service": service,
-            "is_saved": is_saved,
-        }
-        return render(request, "partials/save_button.html", context)
-
-    except CustomerProfile.DoesNotExist:
-
-        is_saved = request.user.userprofile.customerprofile.saved_services.filter(
-            id=service.id
-        ).exists()
-
-        context = {
+            "is_saved": is_saved
+        })
+        
+    except (AttributeError, CustomerProfile.DoesNotExist):
+        # User is not a customer
+        return render(request, "partials/save_button.html", {
             "service": service,
-            "is_saved": is_saved,
-            "error": "Only customers can save services",
-        }
-        return render(request, "partials/save_button.html", context)
+            "is_saved": False,
+            "error": "Only customers can save services"
+        })
 
 
 def create_review(request, service_id):
@@ -1001,11 +991,220 @@ def submit_review(request, service_id):
 
 @login_required(login_url="home")
 def craftsman_dashboard(request):
+    """
+    Display the craftsman's dashboard with their services.
+    Shows empty state if no services, or service grid if services exist.
+    """
+    
+    try:
+        craftsman_profile = request.user.userprofile.craftsmanprofile
+        
+        # Get all services for this craftsman
+        services_list = Service.objects.filter(craftsman=craftsman_profile).order_by('-created_at')
+        
+        # Paginate - 8 items per page
+        paginator = Paginator(services_list, 8)
+        page_number = request.GET.get('page')
+        services = paginator.get_page(page_number)
+        
+        context = {
+            'craftsman': craftsman_profile,
+            'services': services,
+            'total_services': services_list.count(),
+            'has_services': services_list.exists(),
+            'active_count': services_list.filter(service_status='Active').count(),
+            'paused_count': services_list.filter(service_status='Paused').count(),
+        }
+        
+        return render(request, "craftsman_dasboard.html", context)
+        
+    except CraftsmanProfile.DoesNotExist:
+        messages.error(request, "Please complete your provider profile first")
+        return redirect("provider_onboarding")
+        
+    except Exception as e:
+        logger.error(f"Error in craftsman_dasboard: {e}")
+        messages.error(request, "Unable to load dashboard")
+        return render(request, "craftsman_dasboard.html", {
+            'has_services': False
+        })
+    
+@login_required
+def create_service_start(request):
+    """Start the service creation process - show the first step form"""
+    try:
+        craftsman_profile = request.user.userprofile.craftsmanprofile
+    except CraftsmanProfile.DoesNotExist:
+        messages.error(request, "Please complete your provider profile first")
+        return redirect("craftsman_profile")
+    
+    # Initialize empty form
+    form = ServiceForm()
+    
+    # Get available categories from your model
+    categories = CATEGORY_CHOICES
+    regions = REGION_CHOICES
+    
+    return render(request, "partials/service_form_step1.html", {
+        'form': form,
+        'categories': categories,
+        'regions': regions,
+        'step': 1,
+    })
 
-    return render(
-        request,
-        "craftsman_dasboard.html"
-    )
+
+@login_required
+def create_service_step2(request):
+    """Handle step 2 (media & details)"""
+    if request.method != 'POST':
+        return redirect('create_service_start')
+    
+    try:
+        # Get the data from step 1
+        step1_data = {
+            'title': request.POST.get('title'),
+            'category': request.POST.get('category'),
+            'price_type': request.POST.get('price_type'),
+            'hourly_rate': request.POST.get('hourly_rate'),
+            'fixed_price': request.POST.get('fixed_price'),
+        }
+        
+        # Validate required fields from step 1
+        if not step1_data['title'] or not step1_data['category']:
+            messages.error(request, "Please complete all required fields")
+            return redirect('create_service_start')
+        
+        # Store step 1 data in session for later
+        request.session['service_step1_data'] = step1_data
+        
+        return render(request, "partials/service_form_step2.html", {
+            'step1_data': step1_data,
+            'step': 2,
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in create_service_step2: {e}")
+        messages.error(request, "An error occurred. Please try again.")
+        return redirect('create_service_start')
+
+
+@login_required
+def create_service_step3(request):
+    """Handle step 3 (location & logistics)"""
+    if request.method != 'POST':
+        return redirect('create_service_start')
+    
+    try:
+        # Get step 1 data from session
+        step1_data = request.session.get('service_step1_data', {})
+        if not step1_data:
+            messages.error(request, "Session expired. Please start over.")
+            return redirect('create_service_start')
+        
+        # Get step 2 data
+        step2_data = {
+            'description': request.POST.get('description'),
+            'features': request.POST.getlist('features'),
+        }
+        
+        # Store step 2 data in session
+        request.session['service_step2_data'] = step2_data
+        
+        return render(request, "partials/service_form_step3.html", {
+            'step1_data': step1_data,
+            'step2_data': step2_data,
+            'step': 3,
+            'availability_choices': AVAILABILITY_CHOICES,
+            'regions': REGION_CHOICES,
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in create_service_step3: {e}")
+        messages.error(request, "An error occurred. Please try again.")
+        return redirect('create_service_start')
+
+
+@login_required
+def create_service_finalize(request):
+    """Final step - create the service in database"""
+    if request.method != 'POST':
+        return redirect('create_service_start')
+    
+    try:
+        craftsman_profile = request.user.userprofile.craftsmanprofile
+        
+        # Get all data from session
+        step1_data = request.session.get('service_step1_data', {})
+        step2_data = request.session.get('service_step2_data', {})
+        
+        if not step1_data or not step2_data:
+            messages.error(request, "Session expired. Please start over.")
+            return redirect('create_service_start')
+        
+        # Get step 3 data
+        step3_data = {
+            'availability': request.POST.get('availability'),
+            'region': request.POST.get('region'),
+            'travel_fee': request.POST.get('travel_fee') or 0,
+            'materials_included': bool(request.POST.get('materials_included')),
+        }
+        
+        # Combine all data
+        service_data = {**step1_data, **step2_data, **step3_data}
+        
+        # Handle image upload
+        if 'service_image' in request.FILES:
+            service_data['image'] = request.FILES['service_image']
+        
+        # Convert price fields
+        if service_data['price_type'] == 'hourly':
+            service_data['hourly_rate'] = float(service_data.get('hourly_rate', 0))
+            service_data['fixed_price'] = None
+        else:
+            service_data['fixed_price'] = float(service_data.get('fixed_price', 0))
+            service_data['hourly_rate'] = None
+        
+        # Create the service
+        service = Service.objects.create(
+            craftsman=craftsman_profile,
+            title=service_data['title'],
+            category=service_data['category'],
+            description=service_data['description'],
+            price_type=service_data['price_type'],
+            hourly_rate=service_data.get('hourly_rate'),
+            fixed_price=service_data.get('fixed_price'),
+            availability=service_data['availability'],
+            region=service_data['region'],
+            travel_fee=service_data['travel_fee'],
+            materials_included=service_data['materials_included'],
+            features=service_data.get('features', []),
+            service_status='Active',
+        )
+        
+        if 'image' in service_data:
+            service.image = service_data['image']
+            service.save()
+        
+        # Clear session data
+        request.session.pop('service_step1_data', None)
+        request.session.pop('service_step2_data', None)
+        
+        logger.info(f"Service created: {service.title} by {craftsman_profile.business_name}")
+        messages.success(request, f"Service '{service.title}' created successfully!")
+        
+        # Return success response for HTMX
+        if request.headers.get('HX-Request'):
+            return HttpResponse(
+                '<div class="success-message">Service created successfully! Redirecting...</div>'
+                '<script>setTimeout(() => window.location.href = "/craftsman-dashboard/", 1500)</script>'
+            )
+        
+        return redirect('craftsman_dashboard')
+        
+    except Exception as e:
+        logger.error(f"Error creating service: {e}", exc_info=True)
+        messages.error(request, f"Error creating service: {str(e)}")
+        return redirect('create_service_start')
 
 
 @login_required

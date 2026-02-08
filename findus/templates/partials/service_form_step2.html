@@ -1,0 +1,90 @@
+<form class="service-form-step" data-step="2">
+    {% csrf_token %}
+    
+    <!-- Step indicator -->
+    <div class="step-info">
+        <small>Step 2 of 3</small>
+        <h4>Media & Details</h4>
+        <p>Service: {{ step1_data.title }}</p>
+    </div>
+
+    <!-- Description -->
+    <div class="form-field">
+        <label for="id_description" class="form-label required">Description</label>
+        <textarea id="id_description" name="description" class="form-control" 
+                  rows="4" placeholder="Describe what you offer..." required></textarea>
+    </div>
+
+    <!-- Image Upload -->
+    <div class="form-field">
+        <label class="form-label">Service Image</label>
+        <div class="file-upload-compact">
+            <input type="file" id="id_service_image" name="service_image" 
+                   class="file-input-hidden" accept="image/*">
+            <label for="id_service_image" class="file-upload-label-compact">
+                <div class="file-upload-icon-compact">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                </div>
+                <div class="file-upload-text-compact">
+                    <span class="file-upload-main-compact">Upload service photo</span>
+                    <span class="file-upload-sub-compact">JPG, PNG up to 5MB</span>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="form-field">
+        <label class="form-label">Key Features</label>
+        <div class="feature-checklist">
+            <label class="feature-item">
+                <input type="checkbox" name="features" value="emergency" class="checkbox-input">
+                <span class="checkbox-custom"></span>
+                <span class="feature-text">24/7 Emergency</span>
+            </label>
+            <label class="feature-item">
+                <input type="checkbox" name="features" value="warranty" class="checkbox-input">
+                <span class="checkbox-custom"></span>
+                <span class="feature-text">Warranty Included</span>
+            </label>
+            <label class="feature-item">
+                <input type="checkbox" name="features" value="licensed" class="checkbox-input">
+                <span class="checkbox-custom"></span>
+                <span class="feature-text">Licensed Professional</span>
+            </label>
+            <label class="feature-item">
+                <input type="checkbox" name="features" value="free_estimate" class="checkbox-input">
+                <span class="checkbox-custom"></span>
+                <span class="feature-text">Free Estimate</span>
+            </label>
+        </div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="form-actions">
+        <button type="button" class="btn-prev-step"
+                hx-get="{% url 'create_service_start' %}"
+                hx-target="#service-modal-content"
+                hx-swap="innerHTML">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Back
+        </button>
+        
+        <button type="button" class="btn-next-step"
+                hx-post="{% url 'create_service_step3' %}"
+                hx-target="#service-modal-content"
+                hx-swap="innerHTML"
+                hx-include="[name='description'], [name='features']">
+            Next: Location & Availability
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
+</form>

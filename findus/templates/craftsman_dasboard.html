@@ -8,17 +8,30 @@
       name="description"
       content="Manage your FindUs services and grow your business"
     />
-    <title>Provider Dashboard | FindUs</title>
+    <title>Service Provider Dashboard | FindUs</title>
     <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/service-provider-dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/service-form-modal.css' %}" />
+    <link 
+    rel="icon" 
+    href="{% static 'assets/icons/find-su-logo.png' %}" 
+    type="image/png"
+  >
+  <link
+    href="{% static 'assets/icons/find-su-logo.png' %}"
+    rel="apple-touch-icon"
+  />
+
+  <!-- Add this in your head section -->
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
   </head>
   <body>
     <header class="dashboard-header">
       <div class="dashboard-header-content">
-        <a href="index.html" class="logo" aria-label="FindUs Home">
+        <a href="{% url 'craftsman_dashboard' %}" class="logo" aria-label="FindUs Home">
           <span class="logo-text">FindUs</span>
         </a>
 
@@ -45,7 +58,7 @@
 
         <nav class="dashboard-nav">
           <a
-            href="service-provider-dashboard.html"
+            href="{% url 'craftsman_dashboard' %}"
             class="nav-icon-link active"
             data-tooltip="Dashboard"
           >
@@ -62,7 +75,7 @@
           </a>
 
           <a
-            href="messages.html"
+            href="#"
             class="nav-icon-link"
             data-tooltip="My Messages"
           >
@@ -92,7 +105,7 @@
           </a>
 
           <a
-            href="service-provider-profile.html"
+            href="{% url 'customer_profile' %}"
             class="nav-icon-link"
             data-tooltip="Profile"
           >
@@ -108,7 +121,7 @@
           </a>
         </nav>
 
-        <a href="#add-service-form" class="dashboard-cta">
+        <button class="dashboard-cta" id="open-service-modal">
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -119,827 +132,12 @@
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
           <span>Add Service</span>
-        </a>
+        </button>
       </div>
     </header>
 
     <main class="dashboard-main">
       <div class="provider-dashboard-container">
-        <!-- My Services Section -->
-        <section class="provider-section">
-          <header class="provider-section-header">
-            <div>
-              <h1 class="provider-section-title">My Services</h1>
-              <p class="provider-section-subtitle">
-                Manage and track your service listings
-              </p>
-            </div>
-            <div class="provider-section-actions">
-              <select class="sort-select" name="service-filter">
-                <option value="all">All Services</option>
-                <option value="active">Active</option>
-                <option value="paused">Paused</option>
-                <option value="boosted">Boosted</option>
-              </select>
-            </div>
-          </header>
-
-          <!-- Services Grid -->
-
-          <!-- Services Grid - Filled State -->
-          <div class="provider-services-grid">
-            <!-- Service Card 1 -->
-            <article class="provider-service-card">
-              <div class="provider-card-image-wrapper">
-                <img
-                  src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=400"
-                  class="provider-card-image"
-                  alt="Plumbing Service"
-                />
-                <span class="provider-card-status active">Active</span>
-                <div class="provider-card-boost-badge" title="Boosted">
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <polygon
-                      points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
-                    ></polygon>
-                  </svg>
-                </div>
-              </div>
-              <div class="provider-card-content">
-                <h3 class="provider-card-title">Emergency Plumbing Repair</h3>
-                <p class="provider-card-category">Plumbing</p>
-                <div class="provider-card-stats">
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                      ></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span>245 views</span>
-                  </div>
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-                      ></path>
-                    </svg>
-                    <span>18 inquiries</span>
-                  </div>
-                </div>
-                <div class="provider-card-location">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-                    ></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span>Lagos, Ikeja</span>
-                </div>
-                <div class="provider-card-actions">
-                  <button
-                    type="button"
-                    class="provider-action-btn edit"
-                    title="Edit Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                      ></path>
-                      <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                      ></path>
-                    </svg>
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn boost"
-                    title="Boost Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polygon
-                        points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
-                      ></polygon>
-                    </svg>
-                    <span>Boost</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn delete"
-                    title="Delete Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path
-                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                      ></path>
-                      <line x1="10" y1="11" x2="10" y2="17"></line>
-                      <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Service Card 2 -->
-            <article class="provider-service-card">
-              <div class="provider-card-image-wrapper">
-                <img
-                  src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=400"
-                  class="provider-card-image"
-                  alt="Drain Cleaning Service"
-                />
-                <span class="provider-card-status active">Active</span>
-              </div>
-              <div class="provider-card-content">
-                <h3 class="provider-card-title">Drain Cleaning & Unclogging</h3>
-                <p class="provider-card-category">Plumbing</p>
-                <div class="provider-card-stats">
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                      ></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span>128 views</span>
-                  </div>
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-                      ></path>
-                    </svg>
-                    <span>9 inquiries</span>
-                  </div>
-                </div>
-                <div class="provider-card-location">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-                    ></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span>Lagos, Lekki</span>
-                </div>
-                <div class="provider-card-actions">
-                  <button
-                    type="button"
-                    class="provider-action-btn edit"
-                    title="Edit Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                      ></path>
-                      <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                      ></path>
-                    </svg>
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn boost"
-                    title="Boost Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polygon
-                        points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
-                      ></polygon>
-                    </svg>
-                    <span>Boost</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn delete"
-                    title="Delete Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path
-                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                      ></path>
-                      <line x1="10" y1="11" x2="10" y2="17"></line>
-                      <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Service Card 3 - Paused -->
-            <article class="provider-service-card paused">
-              <div class="provider-card-image-wrapper">
-                <img
-                  src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=400"
-                  class="provider-card-image"
-                  alt="Water Heater Installation"
-                />
-                <span class="provider-card-status paused">Paused</span>
-              </div>
-              <div class="provider-card-content">
-                <h3 class="provider-card-title">Water Heater Installation</h3>
-                <p class="provider-card-category">Plumbing</p>
-                <div class="provider-card-stats">
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                      ></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span>56 views</span>
-                  </div>
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-                      ></path>
-                    </svg>
-                    <span>3 inquiries</span>
-                  </div>
-                </div>
-                <div class="provider-card-location">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-                    ></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span>Lagos, Victoria Island</span>
-                </div>
-                <div class="provider-card-actions">
-                  <button
-                    type="button"
-                    class="provider-action-btn edit"
-                    title="Edit Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                      ></path>
-                      <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                      ></path>
-                    </svg>
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn boost"
-                    title="Boost Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polygon
-                        points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
-                      ></polygon>
-                    </svg>
-                    <span>Boost</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn delete"
-                    title="Delete Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path
-                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                      ></path>
-                      <line x1="10" y1="11" x2="10" y2="17"></line>
-                      <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Service Card 1 -->
-            <article class="provider-service-card">
-              <div class="provider-card-image-wrapper">
-                <img
-                  src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=400"
-                  class="provider-card-image"
-                  alt="Plumbing Service"
-                />
-                <span class="provider-card-status active">Active</span>
-                <div class="provider-card-boost-badge" title="Boosted">
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <polygon
-                      points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
-                    ></polygon>
-                  </svg>
-                </div>
-              </div>
-              <div class="provider-card-content">
-                <h3 class="provider-card-title">Emergency Plumbing Repair</h3>
-                <p class="provider-card-category">Plumbing</p>
-                <div class="provider-card-stats">
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                      ></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span>245 views</span>
-                  </div>
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-                      ></path>
-                    </svg>
-                    <span>18 inquiries</span>
-                  </div>
-                </div>
-                <div class="provider-card-location">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-                    ></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span>Lagos, Ikeja</span>
-                </div>
-                <div class="provider-card-actions">
-                  <button
-                    type="button"
-                    class="provider-action-btn edit"
-                    title="Edit Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                      ></path>
-                      <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                      ></path>
-                    </svg>
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn boost"
-                    title="Boost Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polygon
-                        points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
-                      ></polygon>
-                    </svg>
-                    <span>Boost</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn delete"
-                    title="Delete Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path
-                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                      ></path>
-                      <line x1="10" y1="11" x2="10" y2="17"></line>
-                      <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Service Card 2 -->
-            <article class="provider-service-card">
-              <div class="provider-card-image-wrapper">
-                <img
-                  src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=400"
-                  class="provider-card-image"
-                  alt="Drain Cleaning Service"
-                />
-                <span class="provider-card-status active">Active</span>
-              </div>
-              <div class="provider-card-content">
-                <h3 class="provider-card-title">Drain Cleaning & Unclogging</h3>
-                <p class="provider-card-category">Plumbing</p>
-                <div class="provider-card-stats">
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                      ></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span>128 views</span>
-                  </div>
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-                      ></path>
-                    </svg>
-                    <span>9 inquiries</span>
-                  </div>
-                </div>
-                <div class="provider-card-location">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-                    ></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span>Lagos, Lekki</span>
-                </div>
-                <div class="provider-card-actions">
-                  <button
-                    type="button"
-                    class="provider-action-btn edit"
-                    title="Edit Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                      ></path>
-                      <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                      ></path>
-                    </svg>
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn boost"
-                    title="Boost Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polygon
-                        points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
-                      ></polygon>
-                    </svg>
-                    <span>Boost</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn delete"
-                    title="Delete Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path
-                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                      ></path>
-                      <line x1="10" y1="11" x2="10" y2="17"></line>
-                      <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Service Card 3 - Paused -->
-            <article class="provider-service-card paused">
-              <div class="provider-card-image-wrapper">
-                <img
-                  src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=400"
-                  class="provider-card-image"
-                  alt="Water Heater Installation"
-                />
-                <span class="provider-card-status paused">Paused</span>
-              </div>
-              <div class="provider-card-content">
-                <h3 class="provider-card-title">Water Heater Installation</h3>
-                <p class="provider-card-category">Plumbing</p>
-                <div class="provider-card-stats">
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                      ></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span>56 views</span>
-                  </div>
-                  <div class="provider-stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-                      ></path>
-                    </svg>
-                    <span>3 inquiries</span>
-                  </div>
-                </div>
-                <div class="provider-card-location">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-                    ></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span>Lagos, Victoria Island</span>
-                </div>
-                <div class="provider-card-actions">
-                  <button
-                    type="button"
-                    class="provider-action-btn edit"
-                    title="Edit Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                      ></path>
-                      <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                      ></path>
-                    </svg>
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn boost"
-                    title="Boost Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polygon
-                        points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
-                      ></polygon>
-                    </svg>
-                    <span>Boost</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="provider-action-btn delete"
-                    title="Delete Service"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path
-                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                      ></path>
-                      <line x1="10" y1="11" x2="10" y2="17"></line>
-                      <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- Pagination -->
-          <nav
-            class="pagination"
-            aria-label="Service list pages"
-            style="margin-top: 2rem; justify-content: center"
-          >
-            <a href="#" class="pagination-link active" aria-current="page">1</a>
-            <a href="#" class="pagination-link">2</a>
-            <a href="#" class="pagination-link">3</a>
-            <span class="pagination-ellipsis">…</span>
-            <a href="#" class="pagination-link">8</a>
-            <a
-              href="#"
-              class="pagination-link pagination-next"
-              aria-label="Next page"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </a>
-          </nav>
-
-          <!-- Empty State (hidden by default, shown when no services) -->
-          <div class="provider-empty-state">
-            <div class="empty-state-icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                <polyline points="2 17 12 22 22 17"></polyline>
-                <polyline points="2 12 12 17 22 12"></polyline>
-              </svg>
-            </div>
-            <h3>No services yet</h3>
-            <p>
-              Start by adding your first service to reach customers in your
-              area.
-            </p>
-            <a
-              href="#add-service-form"
-              class="btn-primary btn-add-service-empty"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-              Add Your First Service
-            </a>
-          </div>
-        </section>
-
-        <!-- ========================================
-             CUSTOMER TESTIMONIALS SECTION
-             ======================================== -->
         <section class="provider-section testimonials-section">
           <header class="provider-section-header">
             <div>
@@ -949,937 +147,422 @@
               </p>
             </div>
             <div class="testimonial-nav">
-              <button
-                type="button"
-                class="testimonial-nav-btn testimonial-prev"
-                aria-label="Previous testimonial"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-              </button>
-              <button
-                type="button"
-                class="testimonial-nav-btn testimonial-next"
-                aria-label="Next testimonial"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-              </button>
             </div>
           </header>
 
-          <!-- Testimonials Grid -->
-          <div class="testimonials-grid">
-            <!-- Testimonial Card 1 -->
-            <article class="testimonial-card">
-              <div class="testimonial-rating">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-              </div>
-              <p class="testimonial-text">
-                "Absolutely fantastic service! They arrived on time, were
-                incredibly professional, and fixed our plumbing issue in no
-                time. Highly recommend to anyone in Lagos."
-              </p>
-              <div class="testimonial-footer">
-                <div class="testimonial-author">
-                  <img
-                    src="https://randomuser.me/api/portraits/women/44.jpg"
-                    alt="Adaeze O."
-                    class="testimonial-avatar"
-                  />
-                  <div class="testimonial-author-info">
-                    <span class="testimonial-name">Adaeze O.</span>
-                    <span class="testimonial-service"
-                      >Emergency Plumbing Repair</span
-                    >
-                  </div>
+          <div class="testimonials-layout-grid">
+            <!-- Left Column: Stats -->
+            <div class="testimonial-stats-sidebar">
+              <div class="testimonial-stat-card">
+                <span class="testimonial-stat-value">4.8</span>
+                <span class="testimonial-stat-label">Average Rating</span>
+                <div class="testimonial-stat-stars">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </div>
-                <span class="testimonial-date">2 days ago</span>
               </div>
-            </article>
+              
+              <div class="testimonial-stat-card">
+                <span class="testimonial-stat-value">127</span>
+                <span class="testimonial-stat-label">Total Reviews</span>
+              </div>
+              
+              <div class="testimonial-stat-card">
+                <span class="testimonial-stat-value">98%</span>
+                <span class="testimonial-stat-label">Would Recommend</span>
+              </div>
+            </div>
 
-            <!-- Testimonial Card 2 -->
-            <article class="testimonial-card">
-              <div class="testimonial-rating">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-              </div>
-              <p class="testimonial-text">
-                "Best electrician I've ever hired. Very knowledgeable, explained
-                everything clearly, and the pricing was very fair. Will
-                definitely use again!"
-              </p>
-              <div class="testimonial-footer">
-                <div class="testimonial-author">
-                  <img
-                    src="https://randomuser.me/api/portraits/men/32.jpg"
-                    alt="Chukwuemeka A."
-                    class="testimonial-avatar"
-                  />
-                  <div class="testimonial-author-info">
-                    <span class="testimonial-name">Chukwuemeka A.</span>
-                    <span class="testimonial-service"
-                      >Electrical Installation</span
-                    >
-                  </div>
-                </div>
-                <span class="testimonial-date">1 week ago</span>
-              </div>
-            </article>
+            <!-- Right Column: Scrolling Feed -->
+              <div class="testimonial-dual-columns">
+                
+                <!-- Column 1: Scrolls UP -->
+                <div class="testimonial-column testimonial-scroll-up">
+                  <div class="testimonial-track-vertical">
+                    <!-- Item 1 -->
+                    <article class="testimonial-card compact-card">
+                      <div class="testimonial-rating">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      </div>
+                      <p class="testimonial-text">"Absolutely fantastic service! They arrived on time and fixed our plumbing issue in no time."</p>
+                      <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Adaeze O." class="testimonial-avatar" />
+                          <div class="testimonial-author-info">
+                            <span class="testimonial-name">Adaeze O.</span>
+                            <span class="testimonial-service">Plumbing</span>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
 
-            <!-- Testimonial Card 3 -->
-            <article class="testimonial-card">
-              <div class="testimonial-rating">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1"
-                >
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-              </div>
-              <p class="testimonial-text">
-                "Very thorough cleaning service. My home has never looked
-                better! The team was respectful of my space and very efficient."
-              </p>
-              <div class="testimonial-footer">
-                <div class="testimonial-author">
-                  <img
-                    src="https://randomuser.me/api/portraits/women/68.jpg"
-                    alt="Funke B."
-                    class="testimonial-avatar"
-                  />
-                  <div class="testimonial-author-info">
-                    <span class="testimonial-name">Funke B.</span>
-                    <span class="testimonial-service">Deep Home Cleaning</span>
-                  </div>
-                </div>
-                <span class="testimonial-date">2 weeks ago</span>
-              </div>
-            </article>
+                    <!-- Item 2 -->
+                    <article class="testimonial-card compact-card">
+                      <div class="testimonial-rating">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      </div>
+                      <p class="testimonial-text">"Very thorough cleaning service. My home has never looked better! Respectful and efficient."</p>
+                      <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Funke B." class="testimonial-avatar" />
+                          <div class="testimonial-author-info">
+                            <span class="testimonial-name">Funke B.</span>
+                            <span class="testimonial-service">Cleaning</span>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
 
-            <!-- Testimonial Card 4 -->
-            <article class="testimonial-card">
-              <div class="testimonial-rating">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-              </div>
-              <p class="testimonial-text">
-                "Incredible HVAC service! Fixed my AC unit quickly and at a
-                reasonable price. Very knowledgeable technician who explained
-                everything."
-              </p>
-              <div class="testimonial-footer">
-                <div class="testimonial-author">
-                  <img
-                    src="https://randomuser.me/api/portraits/men/45.jpg"
-                    alt="Oluwaseun T."
-                    class="testimonial-avatar"
-                  />
-                  <div class="testimonial-author-info">
-                    <span class="testimonial-name">Oluwaseun T.</span>
-                    <span class="testimonial-service">HVAC Repair</span>
-                  </div>
-                </div>
-                <span class="testimonial-date">3 weeks ago</span>
-              </div>
-            </article>
+                    <!-- Duplicates for Loop (Item 1 & 2) -->
+                   <article class="testimonial-card compact-card">
+                      <div class="testimonial-rating">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      </div>
+                      <p class="testimonial-text">"Absolutely fantastic service! They arrived on time and fixed our plumbing issue in no time."</p>
+                      <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Adaeze O." class="testimonial-avatar" />
+                          <div class="testimonial-author-info">
+                            <span class="testimonial-name">Adaeze O.</span>
+                            <span class="testimonial-service">Plumbing</span>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
 
-            <!-- Testimonial Card 5 -->
-            <article class="testimonial-card">
-              <div class="testimonial-rating">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1"
-                >
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-              </div>
-              <p class="testimonial-text">
-                "Great painting job! The team was meticulous with every detail.
-                My living room looks absolutely stunning now. Highly recommend!"
-              </p>
-              <div class="testimonial-footer">
-                <div class="testimonial-author">
-                  <img
-                    src="https://randomuser.me/api/portraits/women/22.jpg"
-                    alt="Ngozi E."
-                    class="testimonial-avatar"
-                  />
-                  <div class="testimonial-author-info">
-                    <span class="testimonial-name">Ngozi E.</span>
-                    <span class="testimonial-service">Interior Painting</span>
+                    <article class="testimonial-card compact-card">
+                      <div class="testimonial-rating">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      </div>
+                      <p class="testimonial-text">"Very thorough cleaning service. My home has never looked better! Respectful and efficient."</p>
+                      <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Funke B." class="testimonial-avatar" />
+                          <div class="testimonial-author-info">
+                            <span class="testimonial-name">Funke B.</span>
+                            <span class="testimonial-service">Cleaning</span>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
                 </div>
-                <span class="testimonial-date">1 month ago</span>
-              </div>
-            </article>
 
-            <!-- Testimonial Card 6 -->
-            <article class="testimonial-card">
-              <div class="testimonial-rating">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
-                </svg>
-              </div>
-              <p class="testimonial-text">
-                "Moved my entire 3-bedroom house without a single scratch on my
-                furniture. The team was professional, fast, and careful. 10/10!"
-              </p>
-              <div class="testimonial-footer">
-                <div class="testimonial-author">
-                  <img
-                    src="https://randomuser.me/api/portraits/men/67.jpg"
-                    alt="Babajide M."
-                    class="testimonial-avatar"
-                  />
-                  <div class="testimonial-author-info">
-                    <span class="testimonial-name">Babajide M.</span>
-                    <span class="testimonial-service">Moving Services</span>
+                <!-- Column 2: Scrolls DOWN -->
+                <div class="testimonial-column testimonial-scroll-down">
+                  <div class="testimonial-track-vertical-reverse">
+                    <!-- Item 3 -->
+                    <article class="testimonial-card compact-card">
+                      <div class="testimonial-rating">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      </div>
+                      <p class="testimonial-text">"Incredible HVAC service! Fixed my AC unit quickly and at a reasonable price. Knowledgeable."</p>
+                      <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                          <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Oluwaseun T." class="testimonial-avatar" />
+                          <div class="testimonial-author-info">
+                            <span class="testimonial-name">Oluwaseun T.</span>
+                            <span class="testimonial-service">HVAC</span>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+
+                    <!-- Item 4 -->
+                    <article class="testimonial-card compact-card">
+                      <div class="testimonial-rating">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      </div>
+                      <p class="testimonial-text">"Moved my entire 3-bedroom house without a single scratch. Professional and careful. 10/10!"</p>
+                      <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                          <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Babajide M." class="testimonial-avatar" />
+                          <div class="testimonial-author-info">
+                            <span class="testimonial-name">Babajide M.</span>
+                            <span class="testimonial-service">Moving</span>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+
+                    <!-- Duplicates for Loop (Item 3 & 4) -->
+                    <article class="testimonial-card compact-card">
+                      <div class="testimonial-rating">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      </div>
+                      <p class="testimonial-text">"Incredible HVAC service! Fixed my AC unit quickly and at a reasonable price. Knowledgeable."</p>
+                      <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                          <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Oluwaseun T." class="testimonial-avatar" />
+                          <div class="testimonial-author-info">
+                            <span class="testimonial-name">Oluwaseun T.</span>
+                            <span class="testimonial-service">HVAC</span>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+
+                    <article class="testimonial-card compact-card">
+                      <div class="testimonial-rating">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      </div>
+                      <p class="testimonial-text">"Moved my entire 3-bedroom house without a single scratch. Professional and careful. 10/10!"</p>
+                      <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                          <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Babajide M." class="testimonial-avatar" />
+                          <div class="testimonial-author-info">
+                            <span class="testimonial-name">Babajide M.</span>
+                            <span class="testimonial-service">Moving</span>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
                 </div>
-                <span class="testimonial-date">1 month ago</span>
               </div>
-            </article>
+            <!-- End Feed -->
           </div>
+        </section>
+        <!-- My Services Section -->
+        <!-- My Services Section -->
+<section class="provider-section">
+  <header class="provider-section-header">
+      <div>
+          <h1 class="provider-section-title">My Services</h1>
+          <p class="provider-section-subtitle">
+              {% if has_services %}
+                  Manage and track your {{ total_services }} service{{ total_services|pluralize }}
+              {% else %}
+                  Add your first service to get started
+              {% endif %}
+          </p>
+      </div>
+      
+      {% if has_services %}
+      <div class="provider-section-actions">
+          <select class="sort-select" name="service-filter">
+              <option value="all">All Services</option>
+              <option value="active">Active</option>
+              <option value="paused">Paused</option>
+              <option value="boosted">Boosted</option>
+          </select>
+      </div>
+      {% endif %}
+  </header>
 
-          <!-- Testimonial Summary Stats -->
-          <div class="testimonial-stats">
-            <div class="testimonial-stat-item">
-              <span class="testimonial-stat-value">4.8</span>
-              <span class="testimonial-stat-label">Average Rating</span>
-            </div>
-            <div class="testimonial-stat-item">
-              <span class="testimonial-stat-value">127</span>
-              <span class="testimonial-stat-label">Total Reviews</span>
-            </div>
-            <div class="testimonial-stat-item">
-              <span class="testimonial-stat-value">98%</span>
-              <span class="testimonial-stat-label">Would Recommend</span>
-            </div>
-          </div>
-
-          <!-- Empty State (hidden when testimonials exist) -->
-          <div class="testimonials-empty-state">
-            <div class="testimonials-empty-icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <polygon
-                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                ></polygon>
+  <!-- Services Grid - Show only if has_services -->
+  {% if has_services %}
+      <div class="provider-services-grid">
+          {% for service in services %}
+          <article class="provider-service-card {% if service.service_status == 'Paused' %}paused{% endif %}">
+              <div class="provider-card-image-wrapper">
+                  {% if service.image %}
+                      <img src="{{ service.image.url }}" class="provider-card-image" alt="{{ service.title }}">
+                  {% else %}
+                      <img src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=400" 
+                           class="provider-card-image" alt="{{ service.title }}">
+                  {% endif %}
+                  
+                  <span class="provider-card-status {% if service.service_status == 'Active' %}active{% else %}paused{% endif %}">
+                      {{ service.service_status }}
+                  </span>
+                  
+                  {% if service.is_boosted %}
+                  <div class="provider-card-boost-badge" title="Boosted">
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                      </svg>
+                  </div>
+                  {% endif %}
+              </div>
+              
+              <div class="provider-card-content">
+                  <h3 class="provider-card-title">{{ service.title }}</h3>
+                  <p class="provider-card-category">{{ service.get_category_display }}</p>
+                  
+                  <div class="provider-card-stats">
+                      <div class="provider-stat">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                          </svg>
+                          <span>{{ service.view_count|default:"0" }} views</span>
+                      </div>
+                      <div class="provider-stat">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                          </svg>
+                          <span>{{ service.inquiry_count|default:"0" }} inquiries</span>
+                      </div>
+                  </div>
+                  
+                  <div class="provider-card-location">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                      <span>{{ service.region }}</span>
+                  </div>
+                  
+                  <div class="provider-card-actions">
+                      <button type="button" class="provider-action-btn edit" title="Edit Service">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                          </svg>
+                          <span>Edit</span>
+                      </button>
+                      
+                      <button type="button" class="provider-action-btn boost" title="Boost Service">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                          </svg>
+                          <span>Boost</span>
+                      </button>
+                      
+                      <button type="button" class="provider-action-btn delete" title="Delete Service">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <polyline points="3 6 5 6 21 6"></polyline>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                              <line x1="10" y1="11" x2="10" y2="17"></line>
+                              <line x1="14" y1="11" x2="14" y2="17"></line>
+                          </svg>
+                          <span>Delete</span>
+                      </button>
+                  </div>
+              </div>
+          </article>
+          {% endfor %}
+      </div>
+      
+      <!-- Pagination (if needed) -->
+      {% if services.paginator.num_pages > 1 %}
+      <nav class="pagination" aria-label="Service list pages">
+          {% if services.has_previous %}
+              <a href="?page={{ services.previous_page_number }}" class="pagination-link">Previous</a>
+          {% endif %}
+          
+          {% for num in services.paginator.page_range %}
+              {% if services.number == num %}
+                  <span class="pagination-link active">{{ num }}</span>
+              {% else %}
+                  <a href="?page={{ num }}" class="pagination-link">{{ num }}</a>
+              {% endif %}
+          {% endfor %}
+          
+          {% if services.has_next %}
+              <a href="?page={{ services.next_page_number }}" class="pagination-link">Next</a>
+          {% endif %}
+      </nav>
+      {% endif %}
+      
+  {% else %}
+      <!-- Empty State (shown when no services) -->
+      <div class="provider-empty-state">
+          <div class="empty-state-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
               </svg>
-            </div>
-            <h3 class="testimonials-empty-title">No Reviews Yet</h3>
-            <p class="testimonials-empty-text">
-              Once customers start leaving reviews, they'll appear here. Great
-              service leads to great reviews!
-            </p>
-            <div class="testimonials-empty-tips">
-              <p class="testimonials-empty-tip">
-                <strong>💡 Tip:</strong> Deliver quality work and ask satisfied
-                customers to leave a review.
-              </p>
-            </div>
           </div>
-        </section>
+          <h3>No services yet</h3>
+          <p>
+              Start by adding your first service to reach customers in your area.
+              Services help customers find and book your professional services.
+          </p>
+          <button type="button" class="dashboard-cta" id="open-service-modal" 
+          onclick="openServiceModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Add Service</span>
+        </button>
+      </div>
+  {% endif %}
+</section>
 
-        <!-- Add New Service Form - MOBILE OPTIMIZED -->
-        <section class="provider-section" id="add-service-form">
-          <header class="provider-section-header">
-            <div>
-              <h2 class="provider-section-title">Add New Service</h2>
-              <p class="provider-section-subtitle">
-                Create your service listing
-              </p>
-            </div>
-          </header>
+        <!-- ========================================
+             CUSTOMER TESTIMONIALS SECTION
+             ======================================== -->
+        
 
-          <form
-            class="service-form-mobile"
-            action=""
-            method="POST"
-            enctype="multipart/form-data"
-            novalidate
-          >
-            <div class="form-section-always">
-              <div class="form-row">
-                <div class="form-field">
-                  <label for="id_title" class="form-label required"
-                    >Service Title</label
-                  >
-                  <input
-                    type="text"
-                    id="id_title"
-                    name="title"
-                    class="form-control"
-                    placeholder="e.g., Emergency Plumbing Repair"
-                    required
-                    maxlength="200"
-                  />
-                </div>
-
-                <!-- Category -->
-                <div class="form-field">
-                  <label for="id_category" class="form-label required"
-                    >Category</label
-                  >
-                  <select
-                    id="id_category"
-                    name="category"
-                    class="form-control"
-                    required
-                  >
-                    <option value="">Choose a category</option>
-                    <option value="plumbing">Plumbing</option>
-                    <option value="electrical">Electrical</option>
-                    <option value="cleaning">Cleaning</option>
-                    <option value="hvac">HVAC</option>
-                    <option value="painting">Painting</option>
-                    <option value="carpentry">Carpentry</option>
-                    <option value="landscaping">Landscaping</option>
-                    <option value="moving">Moving & Delivery</option>
-                    <option value="handyman">Handyman</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Description -->
-              <div class="form-field">
-                <label for="id_description" class="form-label required"
-                  >Description</label
-                >
-                <textarea
-                  id="id_description"
-                  name="description"
-                  class="form-control"
-                  rows="4"
-                  placeholder="Describe what you offer and what makes your service unique"
-                  required
-                ></textarea>
-              </div>
-
-              <!-- Row 2: Regions & Availability -->
-              <div class="form-row">
-                <!-- Service Region (Multiselect) -->
-                <div class="form-field">
-                  <label for="id_regions" class="form-label required"
-                    >Service Regions</label
-                  >
-                  <div class="custom-multiselect">
-                    <button
-                      type="button"
-                      class="multiselect-trigger"
-                      id="regions-trigger"
-                      aria-haspopup="listbox"
-                      aria-expanded="false"
-                    >
-                      <span class="multiselect-placeholder"
-                        >Select regions you serve</span
-                      >
-                      <svg
-                        class="multiselect-arrow"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </button>
-                    <!-- Multiselect Dropdown Content -->
-                    <div class="multiselect-dropdown" id="regions-dropdown">
-                      <div class="multiselect-search">
-                        <svg
-                          class="multiselect-search-icon"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                        >
-                          <circle cx="11" cy="11" r="8"></circle>
-                          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <input
-                          type="text"
-                          class="multiselect-search-input"
-                          placeholder="Search regions..."
-                        />
-                      </div>
-                      <div class="multiselect-options">
-                        <label class="multiselect-option">
-                          <input
-                            type="checkbox"
-                            name="regions"
-                            value="lagos"
-                            class="multiselect-checkbox"
-                          />
-                          <span class="multiselect-checkbox-custom"></span>
-                          <span class="multiselect-option-text">Lagos</span>
-                        </label>
-                        <label class="multiselect-option">
-                          <input
-                            type="checkbox"
-                            name="regions"
-                            value="abuja"
-                            class="multiselect-checkbox"
-                          />
-                          <span class="multiselect-checkbox-custom"></span>
-                          <span class="multiselect-option-text">Abuja</span>
-                        </label>
-                        <!-- ... other options ... -->
-                        <label class="multiselect-option">
-                          <input
-                            type="checkbox"
-                            name="regions"
-                            value="port-harcourt"
-                            class="multiselect-checkbox"
-                          />
-                          <span class="multiselect-checkbox-custom"></span>
-                          <span class="multiselect-option-text"
-                            >Port Harcourt</span
-                          >
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Availability (Response Time) -->
-                <div class="form-field">
-                  <label for="id_availability" class="form-label required"
-                    >Availability</label
-                  >
-                  <select
-                    id="id_availability"
-                    name="availability"
-                    class="form-control"
-                    required
-                  >
-                    <option value="">Select response time</option>
-                    <option value="same-day">Same Day</option>
-                    <option value="24h">Within 24 Hours</option>
-                    <option value="48h">Within 48 Hours</option>
-                    <option value="week">Within a Week</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Row 3: Pricing Model & Price -->
-              <div class="form-row">
-                <!-- Price Type (Hourly/Fixed) -->
-                <div class="form-field">
-                  <label class="form-label required">Pricing Model</label>
-                  <div class="price-type-selector">
-                    <label class="price-type-option">
-                      <input
-                        type="radio"
-                        name="price_type"
-                        value="hourly"
-                        class="radio-input"
-                        checked
-                      />
-                      <span class="price-type-content">
-                        <span class="radio-custom"></span>
-                        <span class="price-type-text">Hourly Rate</span>
-                      </span>
-                    </label>
-                    <label class="price-type-option">
-                      <input
-                        type="radio"
-                        name="price_type"
-                        value="fixed"
-                        class="radio-input"
-                      />
-                      <span class="price-type-content">
-                        <span class="radio-custom"></span>
-                        <span class="price-type-text">Fixed Price</span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                <!-- Price -->
-                <div class="form-field">
-                  <label for="id_price" class="form-label required"
-                    >Price (₦)</label
-                  >
-                  <div class="input-with-icon">
-                    <span class="input-icon">₦</span>
-                    <input
-                      type="number"
-                      id="id_price"
-                      name="price"
-                      class="form-control has-icon"
-                      placeholder="0.00"
-                      min="0"
-                      step="0.01"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- COLLAPSIBLE: Additional Details -->
-            <details class="form-collapsible" open>
-              <summary class="form-collapsible-trigger">
-                <span class="form-collapsible-title">
-                  <svg
-                    class="form-collapsible-icon"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                  </svg>
-                  Additional Details
-                </span>
-
-                <svg
-                  class="form-collapsible-arrow"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </summary>
-
-              <div class="form-collapsible-content">
-                <!-- Row 4: Duration & Job Size -->
-                <div class="form-row">
-                  <!-- Estimated Duration -->
-                  <div class="form-field">
-                    <label for="id_estimated_duration" class="form-label"
-                      >Estimated Duration</label
-                    >
-                    <input
-                      type="text"
-                      id="id_estimated_duration"
-                      name="estimated_duration"
-                      class="form-control"
-                      placeholder="e.g., 2-3 hours"
-                    />
-                  </div>
-
-                  <!-- Job Size -->
-                  <div class="form-field">
-                    <label for="id_job_size" class="form-label">Job Size</label>
-                    <select
-                      id="id_job_size"
-                      name="job_size"
-                      class="form-control"
-                    >
-                      <option value="">Select job size</option>
-                      <option value="small">Small (1-2 hours)</option>
-                      <option value="medium">Medium (Half day)</option>
-                      <option value="large">Large (Full day+)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- Row 5: Min Hours & Travel Fee -->
-                <div class="form-row">
-                  <!-- Minimum Hours (for hourly pricing) -->
-                  <div class="form-field">
-                    <label for="id_minimum_hours" class="form-label"
-                      >Minimum Hours</label
-                    >
-                    <input
-                      type="number"
-                      id="id_minimum_hours"
-                      name="minimum_hours"
-                      class="form-control"
-                      placeholder="1"
-                      min="0"
-                      step="0.5"
-                    />
-                    <span class="form-hint">For hourly rates only</span>
-                  </div>
-
-                  <!-- Travel Fee -->
-                  <div class="form-field">
-                    <label for="id_travel_fee" class="form-label"
-                      >Travel Fee (₦)</label
-                    >
-                    <div class="input-with-icon">
-                      <span class="input-icon">₦</span>
-                      <input
-                        type="number"
-                        id="id_travel_fee"
-                        name="travel_fee"
-                        class="form-control has-icon"
-                        placeholder="0.00"
-                        min="0"
-                        step="0.01"
-                      />
-                    </div>
-                    <span class="form-hint">Leave blank if no charge</span>
-                  </div>
-                </div>
-
-                <!-- Materials Included -->
-                <div class="form-field">
-                  <label class="checkbox-card-simple">
-                    <input
-                      type="checkbox"
-                      name="materials_included"
-                      value="1"
-                      class="checkbox-input"
-                    />
-                    <span class="checkbox-custom"></span>
-                    <span class="checkbox-text"
-                      >Materials included in price</span
-                    >
-                  </label>
-                </div>
-              </div>
-            </details>
-            <!-- COLLAPSIBLE: Service Features -->
-            <details class="form-collapsible">
-              <summary class="form-collapsible-trigger">
-                <span class="form-collapsible-title">
-                  <svg
-                    class="form-collapsible-icon"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-                    ></path>
-                  </svg>
-                  Service Features
-                </span>
-
-                <svg
-                  class="form-collapsible-arrow"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </summary>
-
-              <div class="form-collapsible-content">
-                <div class="feature-checklist">
-                  <label class="feature-item">
-                    <input
-                      type="checkbox"
-                      name="features"
-                      value="emergency"
-                      class="checkbox-input"
-                    />
-                    <span class="checkbox-custom"></span>
-                    <span class="feature-text">24/7 Emergency Service</span>
-                  </label>
-
-                  <label class="feature-item">
-                    <input
-                      type="checkbox"
-                      name="features"
-                      value="warranty"
-                      class="checkbox-input"
-                    />
-                    <span class="checkbox-custom"></span>
-                    <span class="feature-text">Service Warranty Included</span>
-                  </label>
-
-                  <label class="feature-item">
-                    <input
-                      type="checkbox"
-                      name="features"
-                      value="licensed"
-                      class="checkbox-input"
-                    />
-                    <span class="checkbox-custom"></span>
-                    <span class="feature-text">Fully Licensed</span>
-                  </label>
-
-                  <label class="feature-item">
-                    <input
-                      type="checkbox"
-                      name="features"
-                      value="insured"
-                      class="checkbox-input"
-                    />
-                    <span class="checkbox-custom"></span>
-                    <span class="feature-text">Insured & Bonded</span>
-                  </label>
-
-                  <label class="feature-item">
-                    <input
-                      type="checkbox"
-                      name="features"
-                      value="free-estimate"
-                      class="checkbox-input"
-                    />
-                    <span class="checkbox-custom"></span>
-                    <span class="feature-text">Free Estimate</span>
-                  </label>
-
-                  <label class="feature-item">
-                    <input
-                      type="checkbox"
-                      name="features"
-                      value="senior-discount"
-                      class="checkbox-input"
-                    />
-                    <span class="checkbox-custom"></span>
-                    <span class="feature-text">Senior Discount</span>
-                  </label>
-                </div>
-              </div>
-            </details>
-
-            <!-- ALWAYS VISIBLE: Service Image -->
-            <div class="form-section-always" style="margin-top: 1rem">
-              <header class="form-section-header">
-                <div class="form-section-title-wrapper">
-                  <h3 class="form-section-header-title">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      style="width: 20px; height: 20px; color: var(--primary)"
-                    >
-                      <rect
-                        x="3"
-                        y="3"
-                        width="18"
-                        height="18"
-                        rx="2"
-                        ry="2"
-                      ></rect>
-                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                      <polyline points="21 15 16 10 5 21"></polyline>
-                    </svg>
-                    Service Image
-                  </h3>
-                  <p class="form-section-header-subtitle">
-                    Add a photo to showcase your service
-                  </p>
-                </div>
-              </header>
-
-              <div class="form-section-content">
-                <div class="form-field">
-                  <div class="file-upload-compact">
-                    <input
-                      type="file"
-                      id="id_service_image"
-                      name="service_image"
-                      class="file-input"
-                      accept="image/jpeg,image/png,image/jpg,image/webp"
-                    />
-                    <label
-                      for="id_service_image"
-                      class="file-upload-label-compact"
-                    >
-                      <svg
-                        class="file-upload-icon-compact"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <path
-                          d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
-                        ></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                      </svg>
-                      <span class="file-upload-text-compact">
-                        <span class="file-upload-main-compact"
-                          >Upload Image</span
-                        >
-                        <span class="file-upload-sub-compact"
-                          >PNG, JPG (max 5MB)</span
-                        >
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Form Actions - Sticky on Mobile -->
-            <div class="form-actions-sticky">
-              <button type="button" class="btn-secondary btn-full">
-                Cancel
-              </button>
-              <button type="submit" class="btn-primary btn-full">
-                Create Service
-              </button>
-            </div>
-          </form>
-        </section>
       </div>
     </main>
+
+    <!-- ========================================
+         SERVICE MODAL (3-STEP)
+         ======================================== -->
+    <!-- Service Modal -->
+<div class="service-modal-overlay" id="service-modal-overlay">
+  <div class="service-modal-container">
+      <header class="service-modal-header">
+          <h2 class="service-modal-title">Add New Service</h2>
+          <button class="service-modal-close" id="close-service-modal" aria-label="Close modal">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+          </button>
+      </header>
+
+      <div class="service-modal-body">
+          <!-- Step Indicator -->
+          <div class="service-form-steps-indicator">
+              <div class="step-indicator active" data-step="1">
+                  <span class="step-label">Basics & Pricing</span>
+              </div>
+              <div class="step-indicator" data-step="2">
+                  <span class="step-label">Media & Details</span>
+              </div>
+              <div class="step-indicator" data-step="3">
+                  <span class="step-label">Location</span>
+              </div>
+          </div>
+
+          <!-- Form content will be loaded here via HTMX -->
+          <div id="service-modal-content">
+              <!-- Initial content loaded via HTMX -->
+          </div>
+      </div>
+  </div>
+</div>
 
     <!-- Mobile Bottom Nav -->
     <nav class="mobile-bottom-nav">
@@ -1942,310 +625,9 @@
     </footer>
 
     <script src="{% static 'assets/js/main.js' %}"></script>
-    <script>
-      /**
-       * Form Mobile Optimized - Interactions
-       * Minimal JavaScript for enhanced UX
-       */
+    <script src="{% static 'assets/js/service-provider.js' %}"></script>
+    <script src="{% static 'assets/js/service-provider-modal.js' %}"></script>
 
-      (function () {
-        "use strict";
-
-        // ============================================
-        // Custom Multiselect Dropdown
-        // ============================================
-        function initMultiselect() {
-          const trigger = document.getElementById("regions-trigger");
-          const dropdown = document.getElementById("regions-dropdown");
-
-          if (!trigger || !dropdown) return;
-
-          const searchInput = dropdown.querySelector(
-            ".multiselect-search-input"
-          );
-          const options = dropdown.querySelectorAll(".multiselect-option");
-          const checkboxes = dropdown.querySelectorAll(".multiselect-checkbox");
-
-          // Toggle dropdown
-          trigger.addEventListener("click", function (e) {
-            e.preventDefault();
-            const isExpanded = trigger.getAttribute("aria-expanded") === "true";
-            trigger.setAttribute("aria-expanded", !isExpanded);
-            dropdown.classList.toggle("active");
-          });
-
-          // Close dropdown when clicking outside
-          document.addEventListener("click", function (e) {
-            if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
-              trigger.setAttribute("aria-expanded", "false");
-              dropdown.classList.remove("active");
-            }
-          });
-
-          // Update trigger text based on selections
-          function updateTriggerText() {
-            const selected = Array.from(checkboxes)
-              .filter((cb) => cb.checked)
-              .map((cb) => {
-                const label = cb
-                  .closest(".multiselect-option")
-                  .querySelector(".multiselect-option-text");
-                return label ? label.textContent : "";
-              });
-
-            const placeholder = trigger.querySelector(
-              ".multiselect-placeholder"
-            );
-            if (selected.length === 0) {
-              placeholder.textContent = "Select regions you serve";
-              placeholder.style.color = "var(--text-muted)";
-            } else if (selected.length === 1) {
-              placeholder.textContent = selected[0];
-              placeholder.style.color = "var(--text-primary)";
-            } else {
-              placeholder.textContent = `${selected.length} regions selected`;
-              placeholder.style.color = "var(--text-primary)";
-            }
-          }
-
-          // Listen for checkbox changes
-          checkboxes.forEach((checkbox) => {
-            checkbox.addEventListener("change", updateTriggerText);
-          });
-
-          // Search functionality
-          if (searchInput) {
-            searchInput.addEventListener("input", function () {
-              const searchTerm = this.value.toLowerCase();
-
-              options.forEach((option) => {
-                const text = option
-                  .querySelector(".multiselect-option-text")
-                  .textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                  option.style.display = "flex";
-                } else {
-                  option.style.display = "none";
-                }
-              });
-            });
-          }
-        }
-
-        // ============================================
-        // File Upload Preview
-        // ============================================
-        function initFileUpload() {
-          const fileInput = document.getElementById("id_service_image");
-          const fileLabel = document.querySelector(
-            ".file-upload-label-compact"
-          );
-
-          if (!fileInput || !fileLabel) return;
-
-          fileInput.addEventListener("change", function () {
-            const file = this.files[0];
-            if (!file) return;
-
-            const fileMain = fileLabel.querySelector(
-              ".file-upload-main-compact"
-            );
-            const fileSub = fileLabel.querySelector(".file-upload-sub-compact");
-
-            if (fileMain) {
-              fileMain.textContent = file.name;
-              fileLabel.style.borderColor = "var(--primary)";
-              fileLabel.style.background = "var(--bg-secondary)";
-            }
-
-            if (fileSub) {
-              const fileSizeKB = (file.size / 1024).toFixed(1);
-              const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
-              const sizeText =
-                file.size < 1024 * 1024
-                  ? `${fileSizeKB} KB`
-                  : `${fileSizeMB} MB`;
-              fileSub.textContent = sizeText;
-            }
-          });
-        }
-
-        // ============================================
-        // Collapsible Sections Auto-Expand
-        // ============================================
-        function initCollapsibles() {
-          const collapsibles = document.querySelectorAll(".form-collapsible");
-
-          collapsibles.forEach((collapsible) => {
-            const trigger = collapsible.querySelector(
-              ".form-collapsible-trigger"
-            );
-
-            if (trigger) {
-              trigger.addEventListener("click", function () {
-                // Scroll into view on mobile when opening
-                if (
-                  window.innerWidth <= 768 &&
-                  !collapsible.hasAttribute("open")
-                ) {
-                  setTimeout(() => {
-                    collapsible.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                  }, 300);
-                }
-              });
-            }
-          });
-        }
-
-        // ============================================
-        // Form Validation Helper
-        // ============================================
-        function initFormValidation() {
-          const form = document.querySelector(".service-form-mobile");
-          if (!form) return;
-
-          form.addEventListener("submit", function (e) {
-            const requiredFields = form.querySelectorAll("[required]");
-            let firstInvalidField = null;
-
-            requiredFields.forEach((field) => {
-              if (
-                !field.value ||
-                (field.type === "checkbox" && !field.checked)
-              ) {
-                field.style.borderColor = "var(--error)";
-                if (!firstInvalidField) {
-                  firstInvalidField = field;
-                }
-              } else {
-                field.style.borderColor = "";
-              }
-            });
-
-            // Check if at least one region is selected
-            const regionCheckboxes = form.querySelectorAll(
-              'input[name="regions"]:checked'
-            );
-            if (regionCheckboxes.length === 0) {
-              const regionsTrigger = document.getElementById("regions-trigger");
-              if (regionsTrigger && !firstInvalidField) {
-                regionsTrigger.style.borderColor = "var(--error)";
-                firstInvalidField = regionsTrigger;
-              }
-            }
-
-            if (firstInvalidField) {
-              e.preventDefault();
-              firstInvalidField.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-              });
-              firstInvalidField.focus();
-            }
-          });
-
-          // Remove error styling on input
-          const inputs = form.querySelectorAll(".form-control");
-          inputs.forEach((input) => {
-            input.addEventListener("input", function () {
-              if (this.value) {
-                this.style.borderColor = "";
-              }
-            });
-          });
-        }
-
-        // ============================================
-        // Testimonial Carousel
-        // ============================================
-        function initTestimonialCarousel() {
-          const container = document.querySelector(".testimonials-grid");
-          const prevBtn = document.querySelector(".testimonial-prev");
-          const nextBtn = document.querySelector(".testimonial-next");
-
-          if (!container) return;
-
-          const cards = container.querySelectorAll(".testimonial-card");
-          const cardWidth = cards[0]?.offsetWidth || 340;
-          const gap = 24; // 1.5rem
-          const scrollAmount = cardWidth + gap;
-
-          let autoSlideInterval;
-          const AUTO_SLIDE_DELAY = 5000; // 5 seconds
-
-          function scrollPrev() {
-            container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-          }
-
-          function scrollNext() {
-            // If at the end, scroll back to start
-            if (
-              container.scrollLeft + container.clientWidth >=
-              container.scrollWidth - 10
-            ) {
-              container.scrollTo({ left: 0, behavior: "smooth" });
-            } else {
-              container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-            }
-          }
-
-          function startAutoSlide() {
-            stopAutoSlide();
-            autoSlideInterval = setInterval(scrollNext, AUTO_SLIDE_DELAY);
-          }
-
-          function stopAutoSlide() {
-            if (autoSlideInterval) {
-              clearInterval(autoSlideInterval);
-              autoSlideInterval = null;
-            }
-          }
-
-          // Navigation button listeners
-          if (prevBtn) {
-            prevBtn.addEventListener("click", () => {
-              scrollPrev();
-              startAutoSlide(); // Reset timer after manual nav
-            });
-          }
-
-          if (nextBtn) {
-            nextBtn.addEventListener("click", () => {
-              scrollNext();
-              startAutoSlide(); // Reset timer after manual nav
-            });
-          }
-
-          // Pause auto-slide on hover
-          container.addEventListener("mouseenter", stopAutoSlide);
-          container.addEventListener("mouseleave", startAutoSlide);
-
-          // Start auto-slide
-          startAutoSlide();
-        }
-
-        // ============================================
-        // Initialize on DOM ready
-        // ============================================
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", function () {
-            initMultiselect();
-            initFileUpload();
-            initCollapsibles();
-            initFormValidation();
-            initTestimonialCarousel();
-          });
-        } else {
-          initMultiselect();
-          initFileUpload();
-          initCollapsibles();
-          initFormValidation();
-          initTestimonialCarousel();
-        }
-      })();
-    </script>
+    
   </body>
 </html>
