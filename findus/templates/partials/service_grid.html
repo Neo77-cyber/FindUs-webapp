@@ -1,0 +1,114 @@
+<!-- partials/service_grid.html -->
+{% if has_services %}
+<div class="provider-services-grid" id="services-grid">
+   {% for service in services %}
+   <article class="provider-service-card {% if service.service_status == 'Paused' %}paused{% endif %}">
+      <div class="provider-card-image-wrapper">
+         {% if service.image %}
+         <img src="{{ service.image.url }}" class="provider-card-image" alt="{{ service.title }}">
+         {% else %}
+         <img src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=400" 
+            class="provider-card-image" alt="{{ service.title }}">
+         {% endif %}
+         <span class="provider-card-status {% if service.service_status == 'Active' %}active{% else %}paused{% endif %}">
+         {{ service.service_status }}
+         </span>
+         {% if service.latest_boost_status %}
+         <div class="boost-status-badge {{ service.latest_boost_status }}">
+            {{ service.latest_boost_status_display }}
+         </div>
+         {% endif %}
+      </div>
+      <div class="provider-card-content">
+         <h3 class="provider-card-title">{{ service.title }}</h3>
+         <p class="provider-card-category">{{ service.get_category_display }}</p>
+         <div class="provider-card-stats">
+            <div class="provider-stat">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+               </svg>
+               <span>{% if service.materials_included %} Materials Inc. {% else %} Labor Only {% endif %}</span>
+            </div>
+            <div class="provider-stat">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+               </svg>
+               <span>{% if service.travel_fee > 0 %} +€{{ service.travel_fee }} Travel {% else %} Free Travel {% endif %}</span>
+            </div>
+         </div>
+         <div class="provider-card-location">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+               <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>{{ service.region }}</span>
+         </div>
+         <div class="provider-card-actions">
+            <button type="button" class="provider-action-btn edit" 
+               title="Edit Service"
+               data-service-id="{{ service.id }}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+               </svg>
+               <span>Edit</span>
+            </button>
+            <button type="button" class="provider-action-btn boost" 
+               data-service-id="{{ service.id }}"
+               data-service-title="{{ service.title }}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+               </svg>
+               <span>Boost</span>
+            </button>
+            <button type="button" class="provider-action-btn delete" 
+               title="Delete Service"
+               data-service-id="{{ service.id }}"
+               data-service-title="{{ service.title }}"
+               data-service-category="{{ service.get_category_display }}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+               </svg>
+               <span>Delete</span>
+            </button>
+         </div>
+      </div>
+   </article>
+   {% endfor %}
+</div>
+<!-- Pagination -->
+{% if services.has_other_pages %}
+<div class="provider-pagination">
+   {% if services.has_previous %}
+   <a href="?page={{ services.previous_page_number }}&service-filter={{ current_filter }}"
+      hx-get="{% url 'craftsman_dashboard' %}"
+      hx-target="#services-grid"
+      hx-push-url="true"
+      hx-vals='{"page": "{{ services.previous_page_number }}", "service-filter": "{{ current_filter }}"}'
+      class="pagination-link">
+   ← Previous
+   </a>
+   {% endif %}
+   <span class="pagination-info">
+   Page {{ services.number }} of {{ services.paginator.num_pages }}
+   </span>
+   {% if services.has_next %}
+   <a href="?page={{ services.next_page_number }}&service-filter={{ current_filter }}"
+      hx-get="{% url 'craftsman_dashboard' %}"
+      hx-target="#services-grid"
+      hx-push-url="true"
+      hx-vals='{"page": "{{ services.next_page_number }}", "service-filter": "{{ current_filter }}"}'
+      class="pagination-link">
+   Next →
+   </a>
+   {% endif %}
+</div>
+{% endif %}
+{% else %}
+<div class="empty-state">
+   <p>No services found{% if current_filter != 'all' %} with this filter{% endif %}.</p>
+</div>
+{% endif %}

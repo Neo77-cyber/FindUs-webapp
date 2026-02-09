@@ -2133,25 +2133,28 @@ select.form-control {
     cursor: not-allowed;
 }
 
-/* Boost button in service card */
 .provider-action-btn.boost {
-    background: #f59e0b;
-    color: white;
-    border: none;
-    cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    transition: all 0.2s;
+  background: linear-gradient(135deg, #fca001, #e19001);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(252, 160, 1, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .provider-action-btn.boost:hover {
-    background: #d97706;
-    transform: translateY(-1px);
+  background: linear-gradient(135deg, #e19001, #c68001);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(252, 160, 1, 0.4);
 }
 
 /* Scrollbar */
@@ -2206,4 +2209,89 @@ select.form-control {
   background: #f3f4f6;
   color: #6b7280;
   border: 1px solid #d1d5db;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  height: 70px;
+}
+
+.add-service-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  margin-top: -25px; /* Push it up above other buttons */
+}
+
+.add-service-circle {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+  transition: all 0.3s ease;
+  border: 4px solid white;
+}
+
+.add-service-circle svg {
+  width: 24px;
+  height: 24px;
+}
+
+.add-service-label {
+  margin-top: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #10b981;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.add-service-btn:hover .add-service-circle {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.add-service-btn:hover .add-service-label {
+  opacity: 1;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #6b7280;
+  font-size: 0.75rem;
+  transition: color 0.2s;
+  padding: 8px;
+}
+
+.bottom-nav-item svg {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+}
+
+.bottom-nav-item.active {
+  color: #10b981;
+}
+
+.bottom-nav-item:hover {
+  color: #10b981;
 }

@@ -1016,8 +1016,24 @@ def craftsman_dashboard(request):
     try:
         craftsman_profile = request.user.userprofile.craftsmanprofile
         
+        # Get filter from request
+        service_filter = request.GET.get('service-filter', 'all')
+        
         # Get all services for this craftsman
-        services_list = Service.objects.filter(craftsman=craftsman_profile).order_by('-created_at')
+        services_list = Service.objects.filter(craftsman=craftsman_profile)
+        
+        # Apply filters
+        if service_filter == 'active':
+            services_list = services_list.filter(service_status='Active')
+        elif service_filter == 'boosted':
+            # Get services that have an approved boost
+            boosted_service_ids = BoostRequest.objects.filter(
+                status='approved'
+            ).values_list('service_id', flat=True)
+            services_list = services_list.filter(id__in=boosted_service_ids)
+        
+        # Order by creation date (newest first)
+        services_list = services_list.order_by('-created_at')
         
         # SIMPLE APPROACH: Get ALL boost requests for each service
         for service in services_list:
@@ -1051,17 +1067,20 @@ def craftsman_dashboard(request):
             'CATEGORY_CHOICES': CATEGORY_CHOICES,
             'REGION_CHOICES': REGION_CHOICES,
             'AVAILABILITY_CHOICES': AVAILABILITY_CHOICES,
+            'current_filter': service_filter,  
         }
         
-        return render(request, "craftsman_dasboard.html", context)
+        # Check if it's an HTMX request (partial reload)
+        if request.headers.get('HX-Request'):
+            return render(request, "partials/service_grid.html", context)
+        else:
+            return render(request, "craftsman_dasboard.html", context)
         
     except CraftsmanProfile.DoesNotExist:
-        
         return redirect("provider_onboarding")
         
     except Exception as e:
         logger.error(f"Error in craftsman_dasboard: {e}")
-        
         return render(request, "craftsman_dasboard.html", {
             'has_services': False
         })
