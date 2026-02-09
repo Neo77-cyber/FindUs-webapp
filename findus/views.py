@@ -23,7 +23,24 @@ from .email_utils import send_welcome_email_async
 from .forms import *
 from .models import *
 
-# Get logger for this module
+from django import forms
+from formtools.wizard.views import SessionWizardView
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+import os
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+
+WIZARD_TEMP_DIR = os.path.join(settings.MEDIA_ROOT, 'wizard_temp')
+os.makedirs(WIZARD_TEMP_DIR, exist_ok=True)
+temp_storage = FileSystemStorage(location=WIZARD_TEMP_DIR)
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -380,7 +397,7 @@ def register(request):
             if field_errors + non_field_errors > 0 and not messages.get_messages(
                 request
             ):
-                messages.error(request, "⚠️ Please correct the errors below.")
+                messages.error(request, "Please correct the errors below.")
     else:
         form = CustomerSignUpForm()
 
@@ -1002,6 +1019,23 @@ def craftsman_dashboard(request):
         # Get all services for this craftsman
         services_list = Service.objects.filter(craftsman=craftsman_profile).order_by('-created_at')
         
+        # SIMPLE APPROACH: Get ALL boost requests for each service
+        for service in services_list:
+            # Get ALL boost requests for this service
+            boosts = BoostRequest.objects.filter(service=service)
+            
+            # Check for different statuses
+            service.has_pending_boost = boosts.filter(status__in=['pending', 'processing']).exists()
+            service.has_approved_boost = boosts.filter(status='approved').exists()
+            service.has_rejected_boost = boosts.filter(status='rejected').exists()
+            service.has_expired_boost = boosts.filter(status='expired').exists()
+            
+            # Store the latest boost if you want
+            latest_boost = boosts.order_by('-created_at').first()
+            if latest_boost:
+                service.latest_boost_status = latest_boost.status
+                service.latest_boost_status_display = latest_boost.get_status_display()
+        
         # Paginate - 8 items per page
         paginator = Paginator(services_list, 8)
         page_number = request.GET.get('page')
@@ -1014,198 +1048,464 @@ def craftsman_dashboard(request):
             'has_services': services_list.exists(),
             'active_count': services_list.filter(service_status='Active').count(),
             'paused_count': services_list.filter(service_status='Paused').count(),
+            'CATEGORY_CHOICES': CATEGORY_CHOICES,
+            'REGION_CHOICES': REGION_CHOICES,
+            'AVAILABILITY_CHOICES': AVAILABILITY_CHOICES,
         }
         
         return render(request, "craftsman_dasboard.html", context)
         
     except CraftsmanProfile.DoesNotExist:
-        messages.error(request, "Please complete your provider profile first")
+        
         return redirect("provider_onboarding")
         
     except Exception as e:
         logger.error(f"Error in craftsman_dasboard: {e}")
-        messages.error(request, "Unable to load dashboard")
+        
         return render(request, "craftsman_dasboard.html", {
             'has_services': False
         })
     
-@login_required
-def create_service_start(request):
-    """Start the service creation process - show the first step form"""
-    try:
-        craftsman_profile = request.user.userprofile.craftsmanprofile
-    except CraftsmanProfile.DoesNotExist:
-        messages.error(request, "Please complete your provider profile first")
-        return redirect("craftsman_profile")
-    
-    # Initialize empty form
-    form = ServiceForm()
-    
-    # Get available categories from your model
-    categories = CATEGORY_CHOICES
-    regions = REGION_CHOICES
-    
-    return render(request, "partials/service_form_step1.html", {
-        'form': form,
-        'categories': categories,
-        'regions': regions,
-        'step': 1,
-    })
 
 
-@login_required
-def create_service_step2(request):
-    """Handle step 2 (media & details)"""
-    if request.method != 'POST':
-        return redirect('create_service_start')
+
+# STEP 1: The Basic "Ad"
+class Step1BasicAdForm(forms.Form):
+    title = forms.CharField(
+        max_length=100,
+        label="Service Title",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'e.g., Professional Wall Painting'
+        }),
+        help_text="Make it clear and attractive to customers"
+    )
     
-    try:
-        # Get the data from step 1
-        step1_data = {
-            'title': request.POST.get('title'),
-            'category': request.POST.get('category'),
-            'price_type': request.POST.get('price_type'),
-            'hourly_rate': request.POST.get('hourly_rate'),
-            'fixed_price': request.POST.get('fixed_price'),
+    category = forms.ChoiceField(
+        choices=[
+            ("", "Choose a category"),
+            ("plumbing", "Plumber"),
+            ("electrical", "Electrician"),
+            ("ac_technician", "AC Technician"),
+            ("carpentry", "Carpenter"),
+            ("tiling", "Tiler"),
+            ("painting", "Painter"),
+            ("furniture_maker", "Furniture Maker"),
+            ("fumigation", "Fumigator"),
+            ("dstv_technician", "DSTV Technician"),
+            ("gas_appliance", "Gas Appliance Technician"),
+            ("pop_worker", "POP Worker"),
+            ("cleaning", "Cleaner"),
+            ("aluminium_worker", "Aluminium Worker"),
+            ("welding", "Welder"),
+            ("roofing", "Roof Technician"),
+            ("solar_power", "Solar Power Technician"),
+            ("masonry", "Mason"),
+            ("glass_partitioning", "Glass/Partitioning Worker"),
+            ("bricklayer", "Bricklayer / Plasterer"),
+            ("foreman", "Foreman"),
+            ("landscaping", "Landscaping"),
+            ("appliance_repair", "Appliance Repair"),
+            ("hvac", "HVAC Services"),
+            ("security_installation", "CCTV / Security System Technician"),
+            ("generator_technician", "Generator Technician"),
+            ("interior_design", "Interior Designer"),
+            ("flooring", "Flooring / Epoxy Work"),
+            ("metal_fabrication", "Metal Fabrication"),
+            ("waterproofing", "Waterproofing Specialist"),
+            ("pest_control", "Pest Control"),
+            ("scaffolding", "Scaffolding Worker"),
+            ("site_supervisor", "Site Supervisor"),
+            ("other", "Other"),
+        ],
+        label="Category",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    description = forms.CharField(
+        label="Description",
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': '4',
+            'placeholder': 'Describe your service...\nExample: I provide professional painting services with high-quality materials. I specialize in interior walls, ceilings, and exterior surfaces. 10+ years experience.'
+        }),
+        help_text="Tell customers what you do and why they should choose you"
+    )
+    
+    image = forms.ImageField(
+        required=False,
+        label="Photo of Your Work",
+        widget=forms.FileInput(attrs={
+            'class': 'file-input-hidden',
+            'accept': 'image/*'
+        }),
+        help_text="Upload one photo showing your best work"
+    )
+
+# STEP 2: The Location & Money
+class Step2LocationMoneyForm(forms.Form):
+    region = forms.ChoiceField(
+        choices=[
+            ("", "Select your service region"),
+            ("abruzzo", "Abruzzo"),
+            ("aosta_valley", "Aosta Valley (Valle d'Aosta)"),
+            ("apulia", "Apulia (Puglia)"),
+            ("basilicata", "Basilicata"),
+            ("calabria", "Calabria"),
+            ("campania", "Campania"),
+            ("emilia_romagna", "Emilia-Romagna"),
+            ("friuli_venezia_giulia", "Friuli-Venezia Giulia"),
+            ("lazio", "Lazio"),
+            ("liguria", "Liguria"),
+            ("lombardy", "Lombardy (Lombardia)"),
+            ("marche", "Marche"),
+            ("molise", "Molise"),
+            ("piedmont", "Piedmont (Piemonte)"),
+            ("sardinia", "Sardinia (Sardegna)"),
+            ("sicily", "Sicily (Sicilia)"),
+            ("trentino_south_tyrol", "Trentino-South Tyrol (Trentino-Alto Adige)"),
+            ("tuscany", "Tuscany (Toscana)"),
+            ("umbria", "Umbria"),
+            ("veneto", "Veneto"),
+        ],
+        label="Where do you work?",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    price_type = forms.ChoiceField(
+        choices=[
+            ("hourly", "Hourly Rate"),
+            ("fixed", "Fixed Price"),
+        ],
+        label="How do you charge?",
+        widget=forms.RadioSelect,
+        initial='hourly'
+    )
+    
+    hourly_rate = forms.DecimalField(
+        required=False,
+        max_digits=8,
+        decimal_places=2,
+        label="Hourly Rate",
+        widget=forms.NumberInput(attrs={
+            'class': 'modal-currency-field',
+            'placeholder': '0.00',
+            'step': '0.01'
+        }),
+        help_text="€ per hour"
+    )
+    
+    fixed_price = forms.DecimalField(
+        required=False,
+        max_digits=8,
+        decimal_places=2,
+        label="Fixed Price",
+        widget=forms.NumberInput(attrs={
+            'class': 'modal-currency-field',
+            'placeholder': '0.00',
+            'step': '0.01'
+        }),
+        help_text="Total € for the job"
+    )
+    
+    estimated_duration = forms.CharField(
+        max_length=100,
+        required=False,
+        label="Estimated Time",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'e.g., 2-3 hours, Half day, Full day'
+        }),
+        help_text="For hourly jobs: estimated time needed"
+    )
+    
+    travel_fee = forms.DecimalField(
+        required=False,
+        max_digits=6,
+        decimal_places=2,
+        label="Travel Fee (Optional)",
+        widget=forms.NumberInput(attrs={
+            'class': 'modal-currency-field',
+            'placeholder': '0.00',
+            'step': '0.01'
+        }),
+        help_text="Only if you want to charge for travel"
+    )
+
+# STEP 3: The "Finish Line"
+class Step3FinishLineForm(forms.Form):
+    availability = forms.ChoiceField(
+        choices=[
+            ("immediate", "Immediately Available"),
+            ("24_hours", "Within 24 Hours"),
+            ("48_hours", "Within 48 Hours"),
+            ("scheduled", "By Appointment Only"),
+        ],
+        label="How fast can you show up?",
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        initial='immediate'
+    )
+    
+    # Optional extras
+    materials_included = forms.BooleanField(
+        required=False,
+        label='Materials included in price',
+        initial=False
+    )
+    
+    # Hidden field to trigger final submission
+    final_submit = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+# ✅ SIMPLE WIZARD VIEW
+class ServiceWizardView(SessionWizardView):
+    template_name = "service_wizard_page.html"
+    file_storage = temp_storage
+    
+    # Define the form list
+    form_list = [
+        Step1BasicAdForm,      # Step 0: Basic Ad
+        Step2LocationMoneyForm, # Step 1: Location & Money  
+        Step3FinishLineForm     # Step 2: Finish Line
+    ]
+    
+    def get_context_data(self, form, **kwargs):
+        context = super().get_context_data(form=form, **kwargs)
+        # Add step information for template
+        current_step = int(self.steps.current) + 1  # Convert to 1-based
+        step_titles = {
+            1: "The Basic Ad",
+            2: "Location & Money", 
+            3: "Finish Line"
         }
-        
-        # Validate required fields from step 1
-        if not step1_data['title'] or not step1_data['category']:
-            messages.error(request, "Please complete all required fields")
-            return redirect('create_service_start')
-        
-        # Store step 1 data in session for later
-        request.session['service_step1_data'] = step1_data
-        
-        return render(request, "partials/service_form_step2.html", {
-            'step1_data': step1_data,
-            'step': 2,
+        context.update({
+            'current_step': current_step,
+            'total_steps': len(self.form_list),
+            'step_title': step_titles.get(current_step, f"Step {current_step}")
         })
-        
-    except Exception as e:
-        logger.error(f"Error in create_service_step2: {e}")
-        messages.error(request, "An error occurred. Please try again.")
-        return redirect('create_service_start')
-
-
-@login_required
-def create_service_step3(request):
-    """Handle step 3 (location & logistics)"""
-    if request.method != 'POST':
-        return redirect('create_service_start')
+        return context
     
-    try:
-        # Get step 1 data from session
-        step1_data = request.session.get('service_step1_data', {})
-        if not step1_data:
-            messages.error(request, "Session expired. Please start over.")
-            return redirect('create_service_start')
+    def done(self, form_list, **kwargs):
+        # Collect all form data
+        form_data = {}
+        image_file = None
         
-        # Get step 2 data
-        step2_data = {
-            'description': request.POST.get('description'),
-            'features': request.POST.getlist('features'),
-        }
+        for i, form in enumerate(form_list):
+            if form.is_valid():
+                cleaned_data = form.cleaned_data
+                
+                # Handle image file from step 0 (Basic Ad)
+                if i == 0 and 'image' in cleaned_data and cleaned_data['image']:
+                    image_file = cleaned_data['image']
+                    # Don't add file object to form_data
+                    cleaned_data.pop('image')
+                
+                form_data.update(cleaned_data)
         
-        # Store step 2 data in session
-        request.session['service_step2_data'] = step2_data
-        
-        return render(request, "partials/service_form_step3.html", {
-            'step1_data': step1_data,
-            'step2_data': step2_data,
-            'step': 3,
-            'availability_choices': AVAILABILITY_CHOICES,
-            'regions': REGION_CHOICES,
-        })
-        
-    except Exception as e:
-        logger.error(f"Error in create_service_step3: {e}")
-        messages.error(request, "An error occurred. Please try again.")
-        return redirect('create_service_start')
-
-
-@login_required
-def create_service_finalize(request):
-    """Final step - create the service in database"""
-    if request.method != 'POST':
-        return redirect('create_service_start')
-    
-    try:
-        craftsman_profile = request.user.userprofile.craftsmanprofile
-        
-        # Get all data from session
-        step1_data = request.session.get('service_step1_data', {})
-        step2_data = request.session.get('service_step2_data', {})
-        
-        if not step1_data or not step2_data:
-            messages.error(request, "Session expired. Please start over.")
-            return redirect('create_service_start')
-        
-        # Get step 3 data
-        step3_data = {
-            'availability': request.POST.get('availability'),
-            'region': request.POST.get('region'),
-            'travel_fee': request.POST.get('travel_fee') or 0,
-            'materials_included': bool(request.POST.get('materials_included')),
-        }
-        
-        # Combine all data
-        service_data = {**step1_data, **step2_data, **step3_data}
-        
-        # Handle image upload
-        if 'service_image' in request.FILES:
-            service_data['image'] = request.FILES['service_image']
-        
-        # Convert price fields
-        if service_data['price_type'] == 'hourly':
-            service_data['hourly_rate'] = float(service_data.get('hourly_rate', 0))
-            service_data['fixed_price'] = None
-        else:
-            service_data['fixed_price'] = float(service_data.get('fixed_price', 0))
-            service_data['hourly_rate'] = None
-        
-        # Create the service
-        service = Service.objects.create(
-            craftsman=craftsman_profile,
-            title=service_data['title'],
-            category=service_data['category'],
-            description=service_data['description'],
-            price_type=service_data['price_type'],
-            hourly_rate=service_data.get('hourly_rate'),
-            fixed_price=service_data.get('fixed_price'),
-            availability=service_data['availability'],
-            region=service_data['region'],
-            travel_fee=service_data['travel_fee'],
-            materials_included=service_data['materials_included'],
-            features=service_data.get('features', []),
-            service_status='Active',
-        )
-        
-        if 'image' in service_data:
-            service.image = service_data['image']
-            service.save()
-        
-        # Clear session data
-        request.session.pop('service_step1_data', None)
-        request.session.pop('service_step2_data', None)
-        
-        logger.info(f"Service created: {service.title} by {craftsman_profile.business_name}")
-        messages.success(request, f"Service '{service.title}' created successfully!")
-        
-        # Return success response for HTMX
-        if request.headers.get('HX-Request'):
-            return HttpResponse(
-                '<div class="success-message">Service created successfully! Redirecting...</div>'
-                '<script>setTimeout(() => window.location.href = "/craftsman-dashboard/", 1500)</script>'
+        try:
+            # Get craftsman profile
+            craftsman_profile = self.request.user.userprofile.craftsmanprofile
+            
+            # Determine price based on price type
+            if form_data['price_type'] == 'hourly':
+                hourly_rate = form_data.get('hourly_rate')
+                fixed_price = None
+            else:
+                hourly_rate = None
+                fixed_price = form_data.get('fixed_price')
+            
+            # Create the service object
+            service = Service.objects.create(
+                craftsman=craftsman_profile,
+                title=form_data['title'],
+                category=form_data['category'],
+                region=form_data['region'],
+                description=form_data['description'],
+                price_type=form_data['price_type'],
+                hourly_rate=hourly_rate,
+                fixed_price=fixed_price,
+                estimated_duration=form_data.get('estimated_duration', ''),
+                min_hours='',  # Optional field
+                availability=form_data['availability'],
+                job_size='medium',  # Default value
+                materials_included=form_data.get('materials_included', False),
+                travel_fee=form_data.get('travel_fee'),
+                features=[],  # Empty for now
+                service_status="Active"  # Set initial status
             )
+            
+            # Handle image upload
+            if image_file:
+                service.image = image_file
+                service.save()
+            
+            
+            
+        except Exception as e:
+            print(f"Error creating service: {e}")
+            
         
+        # Clear wizard session
+        try:
+            self.storage.reset()
+        except:
+            pass
+        
+        # Redirect to dashboard
         return redirect('craftsman_dashboard')
+
+@login_required
+def edit_service(request):
+    if request.method == 'POST':
+        try:
+            service_id = request.POST.get('service_id')
+            service = get_object_or_404(Service, id=service_id)
+            
+            # Permission check
+            if service.craftsman.user_profile.user != request.user:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'You do not have permission to edit this service'
+                }, status=403)
+            
+            # Update service fields
+            service.title = request.POST.get('title')
+            service.category = request.POST.get('category')
+            service.description = request.POST.get('description')
+            service.price_type = request.POST.get('price_type')
+            
+            # Handle price based on type
+            if service.price_type == 'hourly':
+                service.hourly_rate = request.POST.get('hourly_rate')
+                service.fixed_price = None
+            else:
+                service.fixed_price = request.POST.get('fixed_price')
+                service.hourly_rate = None
+            
+            # Update optional fields
+            service.region = request.POST.get('region', '')
+            service.availability = request.POST.get('availability')
+            service.save()
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Service updated successfully',
+                'service': {
+                    'id': service.id,
+                    'title': service.title,
+                    'category': service.get_category_display(),
+                    'description': service.description,
+                    'price_type': service.price_type,
+                    'hourly_rate': str(service.hourly_rate) if service.hourly_rate else '',
+                    'fixed_price': str(service.fixed_price) if service.fixed_price else '',
+                    'region': service.region,
+                    'availability': service.availability
+                }
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=400)
+    
+    # GET request - return service data for modal
+    if request.method == 'GET':
+        try:
+            service_id = request.GET.get('service_id')
+            service = get_object_or_404(Service, id=service_id)
+            
+            # Permission check
+            if service.craftsman.user_profile.user != request.user:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'You do not have permission to view this service'
+                }, status=403)
+            
+            return JsonResponse({
+                'success': True,
+                'service': {
+                    'id': service.id,
+                    'title': service.title,
+                    'category': service.category,
+                    'description': service.description,
+                    'price_type': service.price_type,
+                    'hourly_rate': str(service.hourly_rate) if service.hourly_rate else '',
+                    'fixed_price': str(service.fixed_price) if service.fixed_price else '',
+                    'region': service.region,
+                    'availability': service.availability
+                }
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=400)
+    
+    return JsonResponse({
+        'success': False,
+        'error': 'Invalid request method'
+    }, status=400)
+
+
+
+@login_required
+def delete_service(request):
+    if request.method == 'POST':
+        try:
+            service_id = request.POST.get('service_id')
+            service = get_object_or_404(Service, id=service_id)
+            
+            # Check if the service belongs to the current user
+            # Chain: service.craftsman.user_profile.user
+            if service.craftsman.user_profile.user != request.user:
+                
+                return redirect('craftsman_dashboard')
+            
+            # Delete the service
+            service_title = service.title
+            service.delete()
+            
+            
+            
+            # Return JSON for AJAX or redirect
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'message': 'Service deleted successfully'})
+            
+            return redirect('craftsman_dashboard')
+            
+        except Exception as e:
+            
+            
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': str(e)}, status=400)
+            
+            return redirect('craftsman_dashboard')
+    
+    return redirect('craftsman_dashboard')
+
+@login_required
+def check_boost_status(request, service_id):
+    """Check if service already has pending boost"""
+    try:
+        service = Service.objects.get(id=service_id)
+        
+        # Check for pending boosts
+        has_pending_boost = BoostRequest.objects.filter(
+            service=service,
+            status__in=['pending']
+        ).exists()
+        
+        return JsonResponse({
+            'has_pending_boost': has_pending_boost,
+            'service_id': service_id
+        })
         
     except Exception as e:
-        logger.error(f"Error creating service: {e}", exc_info=True)
-        messages.error(request, f"Error creating service: {str(e)}")
-        return redirect('create_service_start')
-
+        return JsonResponse({
+            'has_pending_boost': False,
+            'error': str(e)
+        })
 
 @login_required
 def craftsman_profile(request):
@@ -1213,9 +1513,28 @@ def craftsman_profile(request):
         craftsman_profile = request.user.userprofile.craftsmanprofile
     except:
         messages.error(request, "You need to complete provider onboarding first")
-        return redirect("provider_onboarding")
+        return redirect("craftsman_dashboard")
 
     if request.method == "POST":
+
+        service_id = request.POST.get('service_id')
+        
+        
+        service = Service.objects.get(id=service_id)
+        
+        
+        existing_boost = BoostRequest.objects.filter(
+            service=service,
+            status__in=['pending', 'processing']
+        ).exists()
+        
+        if existing_boost:
+            messages.error(request, 'You already have a pending boost request for this service. Please wait for approval.')
+            return JsonResponse({
+                'success': False,
+                'message': 'You already have a pending boost request for this service.'
+            })
+
 
         request.user.first_name = request.POST.get("first_name")
         request.user.last_name = request.POST.get("last_name")
@@ -1252,34 +1571,46 @@ def boost_service(request):
     if request.method == "POST":
         try:
             service_id = request.POST.get("service_id")
-            service = get_object_or_404(
-                Service, id=service_id, craftsman__user_profile__user=request.user
-            )
-
+            
+            
+            # Get the service
+            service = Service.objects.get(id=service_id)
+            
+            # Permission check
+            if service.craftsman.user_profile.user != request.user:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'You do not have permission to boost this service'
+                }, status=403)
+            
             payment_proof = request.FILES.get("payment_proof")
             if not payment_proof:
-                messages.error(request, "Please upload payment proof")
-                return redirect("craftsman_dashboard")
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Please upload payment proof'
+                }, status=400)
 
+            # Validate file
             allowed_extensions = [".jpg", ".jpeg", ".png", ".pdf"]
             file_extension = os.path.splitext(payment_proof.name)[1].lower()
             if file_extension not in allowed_extensions:
-                messages.error(
-                    request, "Invalid file type. Please upload JPG, PNG, or PDF"
-                )
-                return redirect("craftsman_dashboard")
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Invalid file type. Please upload JPG, PNG, or PDF'
+                }, status=400)
 
             if payment_proof.size > 5 * 1024 * 1024:  # 5MB
-                messages.error(request, "File size must be less than 5MB")
-                return redirect("craftsman_dashboard")
+                return JsonResponse({
+                    'success': False,
+                    'error': 'File size must be less than 5MB'
+                }, status=400)
 
             boost_duration = int(request.POST.get("boost_duration", 7))
-
             price_map = {7: 15, 14: 25, 30: 40}
             price = price_map.get(boost_duration, 15)
-
             expiry_date = datetime.now() + timedelta(days=boost_duration)
 
+            # Create boost request
             boost_request = BoostRequest.objects.create(
                 service=service,
                 user=request.user,
@@ -1291,17 +1622,29 @@ def boost_service(request):
                 expires_at=expiry_date,
             )
 
-            messages.success(
-                request,
-                f"Boost request submitted successfully! Your service will be boosted for {boost_duration} days once payment is verified.",
-            )
+            print(f"Boost request created: {boost_request.id}")
+            
+            return JsonResponse({
+                'success': True,
+                'message': f'Boost request submitted successfully! Your service will be boosted for {boost_duration} days once payment is verified.'
+            })
 
         except Service.DoesNotExist:
-            messages.error(request, "Service not found")
+            return JsonResponse({
+                'success': False,
+                'error': 'Service not found'
+            }, status=404)
         except Exception as e:
-            messages.error(request, f"Error submitting boost request: {str(e)}")
-
-    return redirect("craftsman_dashboard")
+            print(f"Error in boost_service: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'error': f'Error: {str(e)}'
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'error': 'Invalid request method'
+    }, status=400)
 
 
 @login_required(login_url="home")

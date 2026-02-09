@@ -3,6 +3,8 @@ from . import views
 from django.contrib.staticfiles.views import serve
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
+from .views import ServiceWizardView
+
 
 
 urlpatterns = [
@@ -20,6 +22,7 @@ urlpatterns = [
     path("service/<int:service_id>/", views.service_detail, name="service_detail"),
     path("customer-profile/", views.customer_profile, name="customer_profile"),
     path("craftsman-dashboard/", views.craftsman_dashboard, name="craftsman_dashboard"),
+    path('services/add/', ServiceWizardView.as_view(), name='service_wizard'),
     path("craftsman-profile/", views.craftsman_profile, name="craftsman_profile"),
     path(
         "craftsman/<int:craftsman_id>/",
@@ -34,15 +37,17 @@ urlpatterns = [
         views.create_review,
         name="create_review",
     ),
-    path('create-service/', views.create_service_start, name='create_service_start'),
-    path('create-service/step2/', views.create_service_step2, name='create_service_step2'),
-    path('create-service/step3/', views.create_service_step3, name='create_service_step3'),
-    path('create-service/finalize/', views.create_service_finalize, name='create_service_finalize'),
     path(
         "service/<int:service_id>/submit-review/",
         views.submit_review,
         name="submit_review",
     ),
+    path('services/delete/', views.delete_service, name='delete_service'),
+    path('edit-service/', views.edit_service, name='edit_service'),
+    path('check-boost-status/<int:service_id>/', views.check_boost_status, name='check_boost_status'),
+
+
+    
     path("boost-service/", views.boost_service, name="boost_service"),
     path("logout", views.user_logout, name="logout"),
     path("manifest.json", never_cache(serve), {"path": "manifest.json"}),

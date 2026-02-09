@@ -7,7 +7,18 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
-from .models import CraftsmanProfile, CustomerProfile, Review, Service, UserProfile
+from .models import (
+    CraftsmanProfile,
+    CustomerProfile,
+    Review,
+    Service,
+    UserProfile,
+    CATEGORY_CHOICES,
+    PRICE_TYPE_CHOICES,
+    AVAILABILITY_CHOICES,
+    REGION_CHOICES,
+)
+
 
 User = get_user_model()
 
@@ -370,3 +381,100 @@ class ReviewForm(forms.ModelForm):
             (2, "⭐⭐ Fair"),
             (1, "⭐ Poor"),
         ]
+
+class ServiceBasicInfoForm(forms.ModelForm):
+    title = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g., Emergency Plumbing Repair"}),
+        label="Service Title"
+    )
+    category = forms.ChoiceField(
+        choices=CATEGORY_CHOICES,
+        widget=forms.Select(attrs={"class": "form-control"}),
+        label="Category"
+    )
+    price_type = forms.ChoiceField(
+        choices=PRICE_TYPE_CHOICES,
+        widget=forms.RadioSelect(attrs={"class": "modal-radio-input"}), # Custom class for styling if needed
+        initial="hourly",
+        label="Pricing Type"
+    )
+    # We'll handle the actual price field dynamically or include both and validate based on type
+    hourly_rate = forms.DecimalField(
+        max_digits=8, decimal_places=2, required=False,
+        widget=forms.NumberInput(attrs={"class": "modal-currency-field", "placeholder": "0.00"}),
+        label="Hourly Rate"
+    )
+    fixed_price = forms.DecimalField(
+        max_digits=8, decimal_places=2, required=False,
+        widget=forms.NumberInput(attrs={"class": "modal-currency-field", "placeholder": "0.00"}),
+        label="Fixed Price"
+    )
+
+    class Meta:
+        model = Service
+        fields = ["title", "category", "price_type", "hourly_rate", "fixed_price"]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        price_type = cleaned_data.get("price_type")
+        hourly_rate = cleaned_data.get("hourly_rate")
+        fixed_price = cleaned_data.get("fixed_price")
+
+        if price_type == "hourly" and not hourly_rate:
+            self.add_error('hourly_rate', "Hourly rate is required for hourly pricing")
+        if price_type == "fixed" and not fixed_price:
+            self.add_error('fixed_price', "Fixed price is required for fixed pricing")
+        
+        return cleaned_data
+
+
+class ServiceDetailsForm(forms.ModelForm):
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": 4, "placeholder": "Describe what you offer..."}),
+        label="Description"
+    )
+    image = forms.ImageField(
+        required=False,
+        widget=forms.FileInput(attrs={"class": "file-input-hidden", "accept": "image/*"}),
+        label="Service Image"
+    )
+    features = forms.MultipleChoiceField(
+        choices=ServiceForm.SERVICE_FEATURES, # Reuse from existing form
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox-input"}),
+        required=False,
+        label="Key Features"
+    )
+
+    class Meta:
+        model = Service
+        fields = ["description", "image", "features"]
+
+
+class ServiceLocationForm(forms.ModelForm):
+    availability = forms.ChoiceField(
+        choices=AVAILABILITY_CHOICES,
+        widget=forms.Select(attrs={"class": "form-control"}),
+        label="Availability"
+    )
+    travel_fee = forms.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        required=False,
+        widget=forms.NumberInput(attrs={"class": "modal-currency-field", "placeholder": "0.00"}),
+        label="Travel Fee"
+    )
+    region = forms.ChoiceField(
+        choices=REGION_CHOICES,
+        widget=forms.Select(attrs={"class": "form-control"}), # Or custom widget for multiselect if single region isn't enough, but model says CharField
+        label="Service Region"
+    )
+    materials_included = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={"class": "checkbox-input"}),
+        label="Materials included"
+    )
+
+    class Meta:
+        model = Service
+        fields = ["availability", "travel_fee", "region", "materials_included"]

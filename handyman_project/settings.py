@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'formtools',
     'findus'
 ]
 
@@ -164,3 +165,8 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 SESSION_COOKIE_AGE = 31536000  
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+
+MEDIA_TEMP_DIR = os.path.join(MEDIA_ROOT, 'wizard_temp')
+if not os.path.exists(MEDIA_TEMP_DIR):
+    os.makedirs(MEDIA_TEMP_DIR, exist_ok=True)

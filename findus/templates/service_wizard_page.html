@@ -1,0 +1,401 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Service | FindUs</title>
+    <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/service-form-modal.css' %}" />
+    <link rel="icon" href="{% static 'assets/icons/find-su-logo.png' %}" type="image/png">
+    <style>
+        /* Wizard specific styles */
+        .form-help-text {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .step-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        /* Wizard Page Styles */
+        .service-wizard-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .service-wizard-form {
+            margin-top: 2rem;
+        }
+
+        .form-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: var(--error);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .text-danger {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Navigation Buttons */
+        .service-modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .btn-prev {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-next, .btn-submit-form {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-next:hover, .btn-submit-form:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Simple Header -->
+    <header class="dashboard-header">
+        <div class="dashboard-header-content">
+            <a href="{% url 'craftsman_dashboard' %}" class="logo" aria-label="FindUs Home">
+                <span class="logo-text">FindUs</span>
+            </a>
+            <a href="{% url 'craftsman_dashboard' %}" class="btn-prev">Cancel</a>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="provider-dashboard-container">
+            <!-- Wizard Content -->
+            <section class="provider-section">
+                <header class="provider-section-header">
+                    <div>
+                        <h1 class="provider-section-title">Add New Service</h1>
+                        <p class="step-description">
+                            {{ step_title }} • Step {{ current_step }} of {{ total_steps }}
+                        </p>
+                    </div>
+                </header>
+
+                <!-- Progress Indicator -->
+                <div class="service-form-steps-indicator">
+                    <div class="step-indicator {% if current_step >= 1 %}active{% endif %}" data-step="1">
+                        <span class="step-label">Basic Ad</span>
+                    </div>
+                    <div class="step-indicator {% if current_step >= 2 %}active{% endif %}" data-step="2">
+                        <span class="step-label">Location & Money</span>
+                    </div>
+                    <div class="step-indicator {% if current_step >= 3 %}active{% endif %}" data-step="3">
+                        <span class="step-label">Finish</span>
+                    </div>
+                </div>
+
+                <!-- Wizard Form -->
+                <div class="service-wizard-container">
+                    <form method="post" enctype="multipart/form-data" class="service-wizard-form" id="wizard-form">
+                        {% csrf_token %}
+                        {{ wizard.management_form }}
+                        
+                        {% if wizard.form.errors %}
+                        <div class="alert alert-danger" style="background: #fee; color: #c00; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                            Please correct the errors below.
+                        </div>
+                        {% endif %}
+
+                        <!-- STEP 1: The Basic "Ad" -->
+                        {% if wizard.steps.current == '0' %}
+                        <div class="service-form-step active">
+                            <div class="form-field">
+                                <label for="{{ wizard.form.title.id_for_label }}" class="form-label required">Service Title</label>
+                                {{ wizard.form.title }}
+                                <span class="form-help-text">{{ wizard.form.title.help_text }}</span>
+                                {% if wizard.form.title.errors %}<div class="text-danger">{{ wizard.form.title.errors }}</div>{% endif %}
+                            </div>
+
+                            <div class="form-field" style="margin-top: 1.5rem;">
+                                <label for="{{ wizard.form.category.id_for_label }}" class="form-label required">Category</label>
+                                {{ wizard.form.category }}
+                                {% if wizard.form.category.errors %}<div class="text-danger">{{ wizard.form.category.errors }}</div>{% endif %}
+                            </div>
+
+                            <div class="form-field" style="margin-top: 1.5rem;">
+                                <label for="{{ wizard.form.description.id_for_label }}" class="form-label required">Description</label>
+                                {{ wizard.form.description }}
+                                <span class="form-help-text">{{ wizard.form.description.help_text }}</span>
+                                {% if wizard.form.description.errors %}<div class="text-danger">{{ wizard.form.description.errors }}</div>{% endif %}
+                            </div>
+
+                            <div class="form-field" style="margin-top: 1.5rem;">
+                                <label class="form-label">Photo of Your Work</label>
+                                <div class="file-upload-compact">
+                                    {{ wizard.form.image }}
+                                    <label for="{{ wizard.form.image.id_for_label }}" class="file-upload-label-compact">
+                                        <div class="file-upload-icon-compact">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                                <polyline points="21 15 16 10 5 21"></polyline>
+                                            </svg>
+                                        </div>
+                                        <div class="file-upload-text-compact">
+                                            <span class="file-upload-main-compact">Click to upload your work photo</span>
+                                            <span class="file-upload-sub-compact">JPG or PNG • Max 5MB</span>
+                                        </div>
+                                    </label>
+                                </div>
+                                <span class="form-help-text">{{ wizard.form.image.help_text }}</span>
+                                {% if wizard.form.image.errors %}<div class="text-danger">{{ wizard.form.image.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- STEP 2: The Location & Money -->
+                        {% if wizard.steps.current == '1' %}
+                        <div class="service-form-step active">
+                            <div class="form-field">
+                                <label for="{{ wizard.form.region.id_for_label }}" class="form-label required">Where do you work?</label>
+                                {{ wizard.form.region }}
+                                {% if wizard.form.region.errors %}<div class="text-danger">{{ wizard.form.region.errors }}</div>{% endif %}
+                            </div>
+
+                            <div class="form-field" style="margin-top: 1.5rem;">
+                                <label class="form-label required">How do you charge?</label>
+                                <div class="modal-pricing-type" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                    {% for radio in wizard.form.price_type %}
+                                    <label class="modal-radio-card" style="flex: 1;">
+                                        {{ radio.tag }}
+                                        <span class="modal-radio-card-content">
+                                            <span class="modal-radio-indicator"></span>
+                                            <span class="modal-radio-label">{{ radio.choice_label }}</span>
+                                        </span>
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Hourly Rate Section -->
+                            <div id="hourly-section" style="margin-top: 1.5rem;">
+                                <div class="form-field">
+                                    <label class="form-label">Hourly Rate</label>
+                                    <div class="modal-currency-input">
+                                        <span class="modal-currency-symbol">€</span>
+                                        {{ wizard.form.hourly_rate }}
+                                        <span class="modal-currency-label">/hour</span>
+                                    </div>
+                                    <span class="form-help-text">{{ wizard.form.hourly_rate.help_text }}</span>
+                                    {% if wizard.form.hourly_rate.errors %}<div class="text-danger">{{ wizard.form.hourly_rate.errors }}</div>{% endif %}
+                                </div>
+
+                                <div class="form-field" style="margin-top: 1rem;">
+                                    <label for="{{ wizard.form.estimated_duration.id_for_label }}" class="form-label">Estimated Time</label>
+                                    {{ wizard.form.estimated_duration }}
+                                    <span class="form-help-text">{{ wizard.form.estimated_duration.help_text }}</span>
+                                    {% if wizard.form.estimated_duration.errors %}<div class="text-danger">{{ wizard.form.estimated_duration.errors }}</div>{% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Fixed Price Section -->
+                            <div id="fixed-section" style="margin-top: 1.5rem; display: none;">
+                                <div class="form-field">
+                                    <label class="form-label">Fixed Price</label>
+                                    <div class="modal-currency-input">
+                                        <span class="modal-currency-symbol">€</span>
+                                        {{ wizard.form.fixed_price }}
+                                        <span class="modal-currency-label">total</span>
+                                    </div>
+                                    <span class="form-help-text">{{ wizard.form.fixed_price.help_text }}</span>
+                                    {% if wizard.form.fixed_price.errors %}<div class="text-danger">{{ wizard.form.fixed_price.errors }}</div>{% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-field" style="margin-top: 1.5rem;">
+                                <label class="form-label">Travel Fee (Optional)</label>
+                                <div class="modal-currency-input">
+                                    <span class="modal-currency-symbol">€</span>
+                                    {{ wizard.form.travel_fee }}
+                                    <span class="modal-currency-label"></span>
+                                </div>
+                                <span class="form-help-text">{{ wizard.form.travel_fee.help_text }}</span>
+                                {% if wizard.form.travel_fee.errors %}<div class="text-danger">{{ wizard.form.travel_fee.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- STEP 3: The "Finish Line" -->
+                        {% if wizard.steps.current == '2' %}
+                        <div class="service-form-step active">
+                            <div class="form-field">
+                                <label for="{{ wizard.form.availability.id_for_label }}" class="form-label required">How fast can you show up?</label>
+                                {{ wizard.form.availability }}
+                                {% if wizard.form.availability.errors %}<div class="text-danger">{{ wizard.form.availability.errors }}</div>{% endif %}
+                            </div>
+
+                            <div class="form-field" style="margin-top: 1.5rem;">
+                                <label class="checkbox-card-simple">
+                                    {{ wizard.form.materials_included }}
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-text">Materials included in price</span>
+                                </label>
+                            </div>
+
+                            <div class="form-field" style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px;">
+                                <h4 style="margin-bottom: 0.5rem;">Ready to publish?</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                                    Your service will go live immediately. You can edit it anytime from your dashboard.
+                                </p>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Navigation Buttons -->
+                        <footer class="service-modal-footer" style="margin-top: 2rem;">
+                            {% if wizard.steps.prev %}
+                            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn-prev" formnovalidate>
+                                ← Back
+                            </button>
+                            {% else %}
+                            <a href="{% url 'craftsman_dashboard' %}" class="btn-prev">Cancel</a>
+                            {% endif %}
+
+                            <div style="flex: 1;"></div>
+
+                            {% if wizard.steps.next %}
+                            <button type="submit" class="btn-next">
+                                Continue
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                            {% else %}
+                            <button type="submit" class="btn-submit-form" id="final-submit-btn">
+                                Publish Service
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </button>
+                            {% endif %}
+                        </footer>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- SIMPLE JAVASCRIPT -->
+    <script>
+    // Just change button text, don't disable it
+    const finalSubmitBtn = document.getElementById('final-submit-btn');
+    if (finalSubmitBtn) {
+        finalSubmitBtn.addEventListener('click', function() {
+            this.innerHTML = 'Publishing...';
+            // That's all! Button stays enabled so form submits
+        });
+    }
+
+    // File upload preview
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const label = this.nextElementSibling;
+                    if (label && label.classList.contains('file-upload-label-compact')) {
+                        const mainText = label.querySelector('.file-upload-main-compact');
+                        const subText = label.querySelector('.file-upload-sub-compact');
+                        
+                        if (mainText) mainText.textContent = file.name;
+                        if (subText) {
+                            const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                            subText.textContent = `${sizeMB} MB`;
+                        }
+                        
+                        label.style.borderColor = 'var(--primary)';
+                        label.style.background = 'var(--bg-secondary)';
+                    }
+                }
+            });
+        }
+        
+        // Pricing toggle - only if on step 2
+        const hourlySection = document.getElementById('hourly-section');
+        const fixedSection = document.getElementById('fixed-section');
+        if (hourlySection && fixedSection) {
+            const priceRadios = document.querySelectorAll('input[name*="price_type"]');
+            priceRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    hourlySection.style.display = this.value === 'hourly' ? 'block' : 'none';
+                    fixedSection.style.display = this.value === 'fixed' ? 'block' : 'none';
+                });
+                
+                if (radio.checked) {
+                    hourlySection.style.display = radio.value === 'hourly' ? 'block' : 'none';
+                    fixedSection.style.display = radio.value === 'fixed' ? 'block' : 'none';
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
