@@ -1,0 +1,358 @@
+<!-- templates/partials/mobile_inline_filters.html -->
+{% load static %}
+
+<div class="mobile-inline-filters">
+    <!-- Filter Buttons -->
+    <div class="filter-chips-container">
+        <button type="button" class="filter-chip" onclick="openFilterModal('region')">
+            <span>{% if selected_region %}{{ selected_region }}{% else %}Region{% endif %}</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+        
+        <button type="button" class="filter-chip" onclick="openFilterModal('category')">
+            <span>{% if selected_category %}{{ selected_category }}{% else %}Category{% endif %}</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+        
+        <button type="button" class="filter-chip" onclick="openFilterModal('availability')">
+            <span>{% if availability %}Available{% else %}Availability{% endif %}</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+        
+        {% if selected_region or selected_category or availability %}
+        <button type="button" class="filter-chip-clear" onclick="window.location.href='{% url 'customer_dashboard' %}';">
+            Clear All
+        </button>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Filter Modals -->
+<div class="filter-modal" id="region-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Select Region</h4>
+            <button type="button" class="modal-close" onclick="closeFilterModal('region')">×</button>
+        </div>
+        <form id="region-form">
+            <div class="modal-body">
+                {% for value, label in REGION_CHOICES %}
+                <label class="modal-checkbox">
+                    <input type="radio" 
+                           name="region" 
+                           value="{{ value }}"
+                           {% if value == selected_region %}checked{% endif %}>
+                    <span>{{ label }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn-cancel" onclick="closeFilterModal('region')">Cancel</button>
+                <button type="submit" class="modal-btn-apply">Apply</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="filter-modal" id="category-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Select Category</h4>
+            <button type="button" class="modal-close" onclick="closeFilterModal('category')">×</button>
+        </div>
+        <form id="category-form">
+            <div class="modal-body">
+                {% for value, label in CATEGORY_CHOICES %}
+                <label class="modal-checkbox">
+                    <input type="radio" 
+                           name="category" 
+                           value="{{ value }}"
+                           {% if value == selected_category %}checked{% endif %}>
+                    <span>{{ label }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn-cancel" onclick="closeFilterModal('category')">Cancel</button>
+                <button type="submit" class="modal-btn-apply">Apply</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="filter-modal" id="availability-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Select Availability</h4>
+            <button type="button" class="modal-close" onclick="closeFilterModal('availability')">×</button>
+        </div>
+        <form id="availability-form">
+            <div class="modal-body">
+                {% for value, label in AVAILABILITY_CHOICES %}
+                <label class="modal-checkbox">
+                    <input type="checkbox" 
+                           name="availability" 
+                           value="{{ value }}"
+                           {% if value in availability %}checked{% endif %}>
+                    <span>{{ label }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn-cancel" onclick="closeFilterModal('availability')">Cancel</button>
+                <button type="submit" class="modal-btn-apply">Apply</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Mobile Inline Filters */
+    @media (max-width: 768px) {
+        .mobile-inline-filters {
+            padding: 0.75rem 1rem;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 60px;
+            z-index: 90;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .filter-chips-container {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding-bottom: 0.25rem;
+        }
+        
+        .filter-chips-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .filter-chip {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 0.75rem;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 2rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #374151;
+            white-space: nowrap;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .filter-chip-clear {
+            flex-shrink: 0;
+            padding: 0.5rem 0.75rem;
+            background: transparent;
+            border: none;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #ef4444;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        
+        /* Modal Styles */
+        .filter-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: flex-end;
+        }
+        
+        .modal-content {
+            width: 100%;
+            max-height: 80vh;
+            background: white;
+            border-radius: 1rem 1rem 0 0;
+            animation: slideUp 0.3s ease;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .modal-header h4 {
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .modal-body {
+            padding: 1rem 1.5rem;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        
+        .modal-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+        }
+        
+        .modal-checkbox:last-child {
+            border-bottom: none;
+        }
+        
+        .modal-checkbox input {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .modal-btn-cancel,
+        .modal-btn-apply {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .modal-btn-cancel {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .modal-btn-apply {
+            background: #10b981;
+            color: white;
+        }
+    }
+    
+    @media (min-width: 769px) {
+        .mobile-inline-filters,
+        .filter-modal {
+            display: none !important;
+        }
+    }
+    
+    @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+</style>
+
+<script>
+    // Modal Functions
+    function openFilterModal(type) {
+        document.getElementById(`${type}-modal`).style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeFilterModal(type) {
+        document.getElementById(`${type}-modal`).style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    
+    // Form Submission with HTMX
+    document.addEventListener('DOMContentLoaded', function() {
+        // Region Form
+        document.getElementById('region-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const region = this.querySelector('input[name="region"]:checked');
+            if (region) {
+                const params = new URLSearchParams(window.location.search);
+                params.set('region', region.value);
+                htmx.ajax('GET', `?${params.toString()}`, '#dashboard-results');
+                closeFilterModal('region');
+            }
+        });
+        
+        // Category Form
+        document.getElementById('category-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const category = this.querySelector('input[name="category"]:checked');
+            if (category) {
+                const params = new URLSearchParams(window.location.search);
+                params.set('category', category.value);
+                htmx.ajax('GET', `?${params.toString()}`, '#dashboard-results');
+                closeFilterModal('category');
+            }
+        });
+        
+        // Availability Form
+        document.getElementById('availability-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const checkboxes = this.querySelectorAll('input[name="availability"]:checked');
+            const params = new URLSearchParams(window.location.search);
+            
+            // Remove existing availability params
+            params.delete('availability');
+            
+            // Add selected availabilities
+            checkboxes.forEach(cb => {
+                params.append('availability', cb.value);
+            });
+            
+            htmx.ajax('GET', `?${params.toString()}`, '#dashboard-results');
+            closeFilterModal('availability');
+        });
+    });
+    
+    // Close modal when clicking outside
+    document.querySelectorAll('.filter-modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFilterModal(this.id.replace('-modal', ''));
+            }
+        });
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.filter-modal').forEach(modal => {
+                if (modal.style.display === 'flex') {
+                    const type = modal.id.replace('-modal', '');
+                    closeFilterModal(type);
+                }
+            });
+        }
+    });
+</script>

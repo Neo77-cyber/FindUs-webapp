@@ -263,3 +263,175 @@ def send_welcome_email_async(user_email, is_craftsman=False):
     email_thread = Thread(target=send_email)
     email_thread.daemon = True
     email_thread.start()
+
+def send_waitlist_confirmation_email(user_email, user_name, city, category):
+    """
+    Send waitlist confirmation email to users who signed up
+    """
+    try:
+        RESEND_API_KEY = "re_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ"
+
+        subject = f"We're on the hunt for top {category} professionals in {city}!"
+
+        html_message = f"""<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ text-align: center; margin-bottom: 30px; }}
+        .content {{ background: #f8f9fa; padding: 25px; border-radius: 10px; }}
+        .highlight-box {{ background: #e7f3ff; border: 1px solid #b3d7ff; padding: 20px; border-radius: 5px; margin: 20px 0; }}
+        .feature-list {{ margin: 20px 0; }}
+        .feature {{ display: flex; align-items: flex-start; margin-bottom: 15px; }}
+        .feature-icon {{ color: #007bff; font-size: 18px; margin-right: 10px; min-width: 25px; }}
+        .footer {{ margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 12px; color: #666; }}
+        .founder-badge {{ background: #15803D; color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; font-weight: bold; margin: 10px 0; }}
+        .platform-name {{ color: #007bff; font-weight: bold; }}
+        .urgent-box {{ background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 5px; margin: 20px 0; }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2 style="color: #007bff;">Find Us</h2>
+        <p style="color: #666; font-size: 14px;">Connecting you with trusted professionals</p>
+    </div>
+    
+    <div class="content">
+        <p>Hi <strong>{user_name}</strong>,</p>
+        
+        <p>We noticed you were looking for <strong>{category}</strong> services in <strong>{city}</strong> on <span class="platform-name">Find Us</span> today.</p>
+        
+        <div class="highlight-box">
+            <p><strong>Right now, we are in our "Quality Over Quantity" phase.</strong> We are hand-picking and verifying craftsmen one by one to ensure that when you hire someone through Find Us, they are truly the best in the business.</p>
+            
+            <div class="founder-badge">
+                FOUNDING MEMBER STATUS
+            </div>
+            
+            <p>Because we don't have a verified pro in your specific area yet, we've <strong>upgraded your account to "Founding Member" status.</strong></p>
+        </div>
+        
+        <h3>What we're doing for you:</h3>
+        
+        <div class="feature-list">
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <div>
+                    <strong>The Hunt:</strong> Our team is now actively scouting and verifying {category} professionals in {city} specifically because of your request.
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <div>
+                    <strong>Priority Notification:</strong> As soon as we verify a top-tier {category} professional in your neighborhood, you will be the <strong>first to know</strong> via email.
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <div>
+                    <strong>Founder Perks:</strong> As a thank you for your patience, you will receive <strong>lifetime priority booking</strong> and <strong>exclusive discounts</strong> once we fully launch in your region.
+                </div>
+            </div>
+        </div>
+        
+        <div class="urgent-box">
+            <h3>Is your job urgent?</h3>
+            <p>Simply reply to this email with a few details about what you need. We will do our best to manually find a trusted professional for you through our private network.</p>
+            <p><strong>Reply to:</strong> support@retechloans.com</p>
+        </div>
+        
+        <p>In the meantime, you can:</p>
+        <ul>
+            <li>Explore services available in nearby areas</li>
+            <li>Save your search to get notified when professionals become available</li>
+            <li>Browse our verified professionals' portfolios</li>
+        </ul>
+        
+        <p>Thank you for helping us build a more trusted community, one city at a time.</p>
+        
+        <p>Best regards,<br>
+        <strong>The <span class="platform-name">Find Us</span> Team</strong></p>
+    </div>
+    
+    <div class="footer">
+        <p>This email was sent to {user_email} because you signed up for the Find Us waitlist.</p>
+        <p>© 2024 Find Us. All rights reserved.</p>
+    </div>
+</body>
+</html>"""
+
+        plain_message = f"""Hi {user_name},
+
+We noticed you were looking for {category} services in {city} on Find Us today.
+
+Right now, we are in our "Quality Over Quantity" phase. We are hand-picking and verifying craftsmen one by one to ensure that when you hire someone through Find Us, they are truly the best in the business.
+
+Because we don't have a verified pro in your specific area yet, we've upgraded your account to "Founding Member" status.
+
+What we're doing for you:
+
+ THE HUNT: Our team is now actively scouting and verifying {category} professionals in {city} specifically because of your request.
+
+ PRIORITY NOTIFICATION: As soon as we verify a top-tier {category} professional in your neighborhood, you will be the FIRST to know via email.
+
+ FOUNDER PERKS: As a thank you for your patience, you will receive lifetime priority booking and exclusive discounts once we fully launch in your region.
+
+ IS YOUR JOB URGENT?
+Simply reply to this email with a few details about what you need. We will do our best to manually find a trusted professional for you through our private network.
+
+Reply to: support@retechloans.com
+
+Thank you for helping us build a more trusted community, one city at a time.
+
+Best regards,
+The Find Us Team
+
+---
+This email was sent to {user_email} because you signed up for the Find Us waitlist.
+© 2024 Find Us. All rights reserved."""
+
+        email_data = {
+            "from": "Find Us Waitlist <support@retechloans.com>",
+            "to": [user_email],
+            "subject": subject,
+            "html": html_message,
+            "text": plain_message,
+            "reply_to": "support@retechloans.com",
+        }
+
+        response = requests.post(
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {RESEND_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json=email_data,
+            timeout=5,
+        )
+
+        if response.status_code == 200:
+            print(f"DEBUG: ✅ Waitlist confirmation email sent to {user_email}")
+            logger.info(f"Waitlist confirmation email sent to {user_email}")
+            return True
+        else:
+            logger.error(f"Waitlist email API error for {user_email}: {response.text}")
+            return False
+
+    except Exception as e:
+        print(f"DEBUG ERROR: Exception in send_waitlist_confirmation_email: {str(e)}")
+        logger.error(f"Error sending waitlist email to {user_email}: {str(e)}")
+        return False
+
+
+def send_waitlist_email_async(user_email, user_name, city, category):
+    """
+    Send waitlist email asynchronously
+    """
+    def send_email():
+        send_waitlist_confirmation_email(user_email, user_name, city, category)
+
+    email_thread = Thread(target=send_email)
+    email_thread.daemon = True
+    email_thread.start()

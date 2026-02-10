@@ -24,11 +24,7 @@ urlpatterns = [
     path("craftsman-dashboard/", views.craftsman_dashboard, name="craftsman_dashboard"),
     path('services/add/', ServiceWizardView.as_view(), name='service_wizard'),
     path("craftsman-profile/", views.craftsman_profile, name="craftsman_profile"),
-    path(
-        "craftsman/<int:craftsman_id>/",
-        views.craftsman_public_profile,
-        name="craftsman_public_profile",
-    ),
+    path('craftsman/<int:pk>/', views.craftsman_public_profile, name='craftsman_public_profile'),
     
     path("saved-services/", views.saved_services, name="saved_services"),
     path("save-service/<int:service_id>/", views.save_service, name="save_service"),

@@ -19,7 +19,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 
-from .email_utils import send_welcome_email_async
+from .email_utils import *
 from .forms import *
 from .models import *
 
@@ -34,6 +34,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils import timezone
 
 
 WIZARD_TEMP_DIR = os.path.join(settings.MEDIA_ROOT, 'wizard_temp')
@@ -270,26 +271,35 @@ def apply_service_sorting(queryset, sort_by):
 def add_to_waiting_list(request):
     if request.method == "POST":
         try:
-
             logger.info(f"Form data: {dict(request.POST)}")
 
+            name = request.POST.get("fullname")
+            email = request.POST.get("email")
+            phone = request.POST.get("phone")
+            service_needed = request.POST.get("service")
+            location = request.POST.get("location")
+            notes = request.POST.get("notes")
+
             waiting_list_entry = WaitingList.objects.create(
-                name=request.POST.get("fullname"),
-                email=request.POST.get("email"),
-                phone=request.POST.get("phone"),
-                service_needed=request.POST.get("service"),
-                location=request.POST.get("location"),
-                notes=request.POST.get("notes"),
+                name=name,
+                email=email,
+                phone=phone,
+                service_needed=service_needed,
+                location=location,
+                notes=notes,
             )
 
             logger.info(
                 f"Created: {waiting_list_entry.name} - {waiting_list_entry.service_needed}"
             )
 
+            
+            send_waitlist_email_async(email, name, location, service_needed)
+
             if request.headers.get("HX-Request"):
-                return HttpResponse("Success! Added to waiting list.")
+                return HttpResponse("Success! We'll notify you when professionals are available.")
             else:
-                messages.success(request, "Success! Added to waiting list.")
+                messages.success(request, "Success! We'll notify you when professionals are available.")
                 return redirect(request.META.get("HTTP_REFERER", "home"))
 
         except Exception as e:
@@ -1666,46 +1676,42 @@ def boost_service(request):
     }, status=400)
 
 
-@login_required(login_url="home")
-def craftsman_public_profile(request, craftsman_id):
-
+def craftsman_public_profile(request, pk):
+    """Public profile view - Simple optimized"""
+    
     craftsman = get_object_or_404(
-        CraftsmanProfile.objects.select_related("user_profile", "user_profile__user"),
-        id=craftsman_id,
+        CraftsmanProfile.objects.select_related(
+            'user_profile',
+            'user_profile__user'  # Add this
+        ), 
+        pk=pk
     )
-
-    services = (
-        Service.objects.filter(craftsman=craftsman, service_status="Active")
-        .annotate(avg_rating=Avg("reviews__rating"), review_count=Count("reviews"))
-        .order_by("-created_at")
-    )
-
-    paginator = Paginator(services, 6)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    total_reviews = Review.objects.filter(service__craftsman=craftsman).count()
-    avg_rating = (
-        Review.objects.filter(service__craftsman=craftsman).aggregate(
-            avg_rating=Avg("rating")
-        )["avg_rating"]
-        or 0
-    )
-
-    craftsman_stats = {
-        "total_services": services.count(),
-        "total_reviews": total_reviews,
-        "avg_rating": round(avg_rating, 1) if avg_rating else 0,
-        "member_since": craftsman.created_at,
-    }
-
+    
+    services = Service.objects.filter(
+        craftsman=craftsman,
+        service_status='Active'
+    ).select_related(
+        'craftsman',
+        'craftsman__user_profile',
+        'craftsman__user_profile__user',  
+    ).prefetch_related(
+        'boost_requests'
+    ).order_by('-created_at')
+    
+    for service in services:
+        service.craftsman_name = service.craftsman.business_name
+        service.is_boosted = service.boost_requests.filter(
+            status='approved',
+            expires_at__gte=timezone.now()
+        ).exists()
+    
     context = {
-        "craftsman": craftsman,
-        "services": page_obj,
-        "craftsman_stats": craftsman_stats,
+        'craftsman': craftsman,
+        'services': services,
+        'total_services': services.count(),
     }
-
-    return render(request, "craftsman_public_profile.html", context)
+    
+    return render(request, 'craftsman_public_profile.html', context)
 
 def offline_page(request):
     return render(request, 'offline.html')

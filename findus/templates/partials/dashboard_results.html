@@ -1,5 +1,4 @@
 {% load static %}
-
 {% if has_services %}
     <!-- Services Found -->
     <section class="search-results">
@@ -47,11 +46,13 @@
                     
                     <div class="dashboard-card-content">
                         <div class="dashboard-card-header">
-                            {% if service.craftsman.profile_photo %}
-                                <img src="{{ service.craftsman.profile_photo.url }}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
-                            {% else %}
-                                <img src="{% static 'assets/img/default-image.jpg' %}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
-                            {% endif %}
+                            <a href="{% url 'craftsman_public_profile' service.craftsman.id %}">
+                                {% if service.craftsman.profile_photo %}
+                                    <img src="{{ service.craftsman.profile_photo.url }}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
+                                {% else %}
+                                    <img src="{% static 'assets/img/default-image.jpg' %}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
+                                {% endif %}
+                            </a>
                             
                             <div class="dashboard-card-header-info">
                                 <a href="{% url 'service_detail' service.id %}" class="dashboard-card-name-link">
