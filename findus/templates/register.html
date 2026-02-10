@@ -171,8 +171,8 @@
                   {% if form.terms.value %}checked{% endif %}
                   />
                   <span
-                     >I agree to the <a href="#">Terms of Service</a> and
-                  <a href="#">Privacy Policy</a></span
+                     >I agree to the <a href="{% static 'Privacy_Policy.pdf' %}" target="_blank">Terms of Service</a> and
+                  <a href="{% static 'Privacy_Policy.pdf' %}" target="_blank">Privacy Policy</a></span
                      >
                   </label>
                   {% if form.terms.errors %}

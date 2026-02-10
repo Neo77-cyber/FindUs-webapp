@@ -560,11 +560,11 @@ def signin(request):
             messages.error(request, "Please enter both username/email and password.")
             return render(request, "signin.html", {"username_value": username_or_email})
 
-        user = authenticate(request, username=username_or_email, password=password)
+        user = authenticate(request, username=username_or_email.lower(), password=password)
 
         if not user:
             try:
-                user_by_email = User.objects.get(email=username_or_email)
+                user_by_email = User.objects.get(email__iexact=username_or_email)
                 user = authenticate(
                     request, username=user_by_email.username, password=password
                 )
@@ -606,8 +606,8 @@ def signin(request):
             logger.warning(f"Failed login attempt for: {username_or_email}")
 
             user_exists = (
-                User.objects.filter(username=username_or_email).exists()
-                or User.objects.filter(email=username_or_email).exists()
+                User.objects.filter(username__iexact=username_or_email).exists()
+                or User.objects.filter(email__iexact=username_or_email).exists()
             )
 
             if user_exists:
