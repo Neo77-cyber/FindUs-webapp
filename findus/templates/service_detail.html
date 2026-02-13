@@ -111,10 +111,10 @@
                      {% endif %}
                      <div class="service-price-badge">
                         {% if service.price_type == 'hourly' %}
-                        <span class="currency">$</span>{{ service.hourly_rate }}
+                        <span class="currency">€</span>{{ service.hourly_rate }}
                         <span class="unit">/hour</span>
                         {% elif service.price_type == 'fixed' %}
-                        <span class="currency">$</span>{{ service.fixed_price }}
+                        <span class="currency">€</span>{{ service.fixed_price }}
                         <span class="unit">fixed price</span>
                         {% else %}
                         <span class="currency">Contact</span>
