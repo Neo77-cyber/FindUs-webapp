@@ -36,13 +36,23 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 
+from django.db.models import Case, When, F, Value, DecimalField, IntegerField
+from django.db.models.functions import Coalesce
+from decimal import Decimal
+from django.core.cache import cache
+import hashlib
+import json
+from django.db.models import Prefetch  # Add this line
+
 
 WIZARD_TEMP_DIR = os.path.join(settings.MEDIA_ROOT, 'wizard_temp')
 os.makedirs(WIZARD_TEMP_DIR, exist_ok=True)
 temp_storage = FileSystemStorage(location=WIZARD_TEMP_DIR)
 
 
+
 logger = logging.getLogger(__name__)
+
 
 
 def home(request):
@@ -69,25 +79,193 @@ def home(request):
         job_sizes = request.GET.getlist("job_size", [])
         sort_by = request.GET.get("sort", "relevance").strip()
 
-        # Check if filters are active (meaningful filters only)
+        # Check if filters are active
         filters_active = any(
             [
-                category_filter,  # Not empty
-                region_filter,    # Not empty  
-                search_query and len(search_query) >= 2,  # Meaningful search
-                price_min,        # Not empty
-                price_max,        # Not empty
-                rating,           # Not empty
-                availability,     # Has items
-                job_sizes,        # Has items
-                features,         # Has items
+                category_filter,
+                region_filter,
+                search_query and len(search_query) >= 2,
+                price_min,
+                price_max,
+                rating,
+                availability,
+                job_sizes,
+                features,
                 sort_by != "relevance",
             ]
         )
 
-        # Base context
+        # ============== REDIS CACHING ==============
+        from django.core.cache import cache
+        import hashlib
+        import json
+        
+        # Create a unique cache key based on all filters and page
+        cache_data = {
+            'category': category_filter,
+            'region': region_filter,
+            'search': search_query,
+            'price_min': price_min,
+            'price_max': price_max,
+            'rating': rating,
+            'availability': sorted(availability),
+            'features': sorted(features),
+            'job_sizes': sorted(job_sizes),
+            'sort': sort_by,
+            'page': request.GET.get("page", "1"),
+        }
+        
+        # Create MD5 hash of the cache data for a clean key
+        cache_key = f"home_results_{hashlib.md5(json.dumps(cache_data, sort_keys=True).encode()).hexdigest()}"
+        
+        # Try to get from Redis cache first (skip for HTMX requests to keep real-time)
+        if not is_htmx:
+            cached_result = cache.get(cache_key)
+            if cached_result:
+                # Update the cached context with current filter values
+                cached_result.update({
+                    "selected_category": category_filter,
+                    "selected_region": region_filter,
+                    "search_query": search_query,
+                    "filters_active": filters_active,
+                    "price_min": price_min,
+                    "price_max": price_max,
+                    "rating": rating,
+                    "availability": availability,
+                    "job_sizes": job_sizes,
+                    "features": features,
+                    "sort_by": sort_by,
+                    "AVAILABILITY_CHOICES": AVAILABILITY_CHOICES,
+                    "SERVICE_SCOPE_CHOICES": SERVICE_SCOPE_CHOICES,
+                    "REGION_CHOICES": REGION_CHOICES,
+                    "CATEGORY_CHOICES": CATEGORY_CHOICES,
+                })
+                return render(request, "home.html", cached_result)
+
+        # ============== FIXED QUERY WITH ALL NEEDED FIELDS ==============
+        # Use select_related and prefetch_related to prevent N+1 queries
+        base_services = (
+            Service.objects
+            .select_related(
+                'craftsman',
+                'craftsman__user_profile',
+                'craftsman__user_profile__user'
+            )
+            .prefetch_related(
+                Prefetch('reviews', queryset=Review.objects.only('rating', 'created_at'))
+            )
+            .only(
+                'id', 'title', 'description', 'category', 'region',
+                'price_type', 'hourly_rate', 'fixed_price', 'availability',
+                'job_size', 'created_at', 'craftsman_id', 'image',
+                'service_status', 'features', 'materials_included',
+                # Craftsman fields needed in template
+                'craftsman__id',
+                'craftsman__business_name',
+                'craftsman__rating',
+                'craftsman__is_verified',
+                'craftsman__license_number',
+                'craftsman__phone',  # ← CRITICAL: for the call button
+                'craftsman__profile_photo',  # ← CRITICAL: for the avatar
+                'craftsman__user_profile__user__username',
+                'craftsman__user_profile__user__first_name',
+                'craftsman__user_profile__user__last_name'
+            )
+            .filter(service_status="Active")
+        )
+
+        # Apply filters efficiently
+        if category_filter:
+            base_services = base_services.filter(category=category_filter)
+
+        if region_filter:
+            base_services = base_services.filter(region=region_filter)
+
+        if search_query and len(search_query) >= 2:
+            base_services = base_services.filter(
+                Q(title__icontains=search_query) |
+                Q(description__icontains=search_query) |
+                Q(craftsman__business_name__icontains=search_query)
+            )
+
+        # Price filtering - optimize with Case/When
+        if price_min or price_max:
+            base_services = base_services.annotate(
+                effective_price=Case(
+                    When(price_type="hourly", then=F("hourly_rate")),
+                    When(price_type="fixed", then=F("fixed_price")),
+                    default=Value(999999),
+                    output_field=DecimalField(),
+                )
+            )
+            if price_min:
+                try:
+                    price_min_val = float(price_min)
+                    if price_min_val >= 0:
+                        base_services = base_services.filter(effective_price__gte=price_min_val)
+                except:
+                    pass
+            if price_max:
+                try:
+                    price_max_val = float(price_max)
+                    if price_max_val >= 0:
+                        base_services = base_services.filter(effective_price__lte=price_max_val)
+                except:
+                    pass
+
+        # Rating filter
+        if rating:
+            try:
+                rating_val = float(rating)
+                if 0 <= rating_val <= 5:
+                    base_services = base_services.filter(craftsman__rating__gte=rating_val)
+            except:
+                pass
+
+        # Array/List filters
+        if availability:
+            base_services = base_services.filter(availability__in=availability)
+
+        if job_sizes:
+            base_services = base_services.filter(job_size__in=job_sizes)
+
+        if features:
+            for feature in features:
+                base_services = base_services.filter(features__contains=[feature])
+
+        # Annotate with aggregates (now with prefetched reviews)
+        services = base_services.annotate(
+            avg_rating=Coalesce(
+                Avg('reviews__rating'), 
+                Value(0.0), 
+                output_field=models.FloatField()
+            ),
+            review_count=Count('reviews', distinct=True)
+        )
+
+        # Apply sorting
+        services = apply_service_sorting(services, sort_by)
+        
+        if not services.ordered:
+            services = services.order_by("-craftsman__rating", "-created_at")
+
+        # ============== FORCE QUERY EXECUTION ==============
+        # Convert to list to force evaluation and cache all data
+        service_list = list(services)
+        
+        # ============== FIXED PAGINATION ==============
+        from django.core.paginator import Paginator
+        paginator = Paginator(service_list, 12)
+        page = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page)
+
+        # Build context
         context = {
             "Service": Service,
+            "page_obj": page_obj,
+            "services": page_obj,
+            "results_count": len(service_list),
+            "has_services": len(service_list) > 0,
             "selected_category": category_filter,
             "selected_region": region_filter,
             "search_query": search_query,
@@ -104,112 +282,17 @@ def home(request):
             "REGION_CHOICES": REGION_CHOICES,
             "CATEGORY_CHOICES": CATEGORY_CHOICES,
         }
-
-        # Initialize variables
-        services = Service.objects.none()
-        page_obj = None
-
-        # ALWAYS work with services (ignore craftsmen)
-        try:
-            # Start with all active services
-            services = Service.objects.filter(service_status="Active")
+        
+        # ============== STORE IN REDIS CACHE ==============
+        if not is_htmx:
+            # Store in Redis for 5 minutes (300 seconds)
+            cache.set(cache_key, context, 300)
             
-            # Apply filters if they exist
-            if category_filter:
-                services = services.filter(category=category_filter)
+            # Also store commonly accessed pages without filters
+            if not filters_active and page == 1:
+                cache.set('home_page_default', context, 300)
 
-            if region_filter:
-                services = services.filter(region=region_filter)
-
-            if search_query and len(search_query) >= 2:
-                services = services.filter(
-                    Q(title__icontains=search_query)
-                    | Q(description__icontains=search_query)
-                    | Q(craftsman__business_name__icontains=search_query)
-                )
-
-            if price_min:
-                try:
-                    price_min_val = float(price_min)
-                    if price_min_val >= 0:
-                        services = services.filter(
-                            Q(hourly_rate__gte=price_min_val)
-                            | Q(fixed_price__gte=price_min_val)
-                        )
-                except:
-                    pass
-
-            if price_max:
-                try:
-                    price_max_val = float(price_max)
-                    if price_max_val >= 0:
-                        services = services.filter(
-                            Q(hourly_rate__lte=price_max_val)
-                            | Q(fixed_price__lte=price_max_val)
-                        )
-                except:
-                    pass
-
-            if rating:
-                try:
-                    rating_val = float(rating)
-                    if 0 <= rating_val <= 5:
-                        services = services.filter(
-                            craftsman__rating__gte=rating_val
-                        )
-                except:
-                    pass
-
-            if availability:
-                services = services.filter(availability__in=availability)
-
-            if job_sizes:
-                services = services.filter(job_size__in=job_sizes)
-
-            if features:
-                for feature in features:
-                    services = services.filter(features__contains=[feature])
-
-            # Apply sorting
-            services = apply_service_sorting(services, sort_by)
-            
-            # If no sorting applied, use default
-            if not services.ordered:
-                services = services.order_by("-craftsman__rating", "-created_at")
-
-            context["services"] = services
-            context["has_services"] = services.exists()
-
-        except Exception as e:
-            logger.error(f"Database error: {e}")
-            # Fallback to simple query
-            services = Service.objects.filter(service_status="Active")[:50]
-            context["services"] = services
-            context["has_services"] = services.exists()
-            context["show_alert"] = "Showing limited results due to system issue"
-
-        # Get results count
-        results_count = services.count()
-        context["results_count"] = results_count
-
-        # Pagination
-        page = request.GET.get("page", 1)
-
-        if services.exists():
-            paginator = Paginator(services, 12)
-
-            try:
-                page_obj = paginator.page(page)
-            except:
-                page_obj = paginator.page(1)
-
-            context["page_obj"] = page_obj
-        else:
-            paginator = Paginator([], 12)
-            page_obj = Page([], 1, paginator)
-            context["page_obj"] = page_obj
-
-        # HTMX response - ALWAYS use filtered_results.html
+        # HTMX response
         if is_htmx:
             return render(request, "partials/filtered_results.html", context)
 
@@ -217,8 +300,8 @@ def home(request):
 
     except Exception as e:
         logger.error(f"Home view error: {e}")
-
-        # Simple context for error
+        import traceback
+        traceback.print_exc()
         context = {
             "Service": Service,
             "filters_active": False,
@@ -226,46 +309,35 @@ def home(request):
             "has_services": False,
             "show_alert": "We're working on fixing this issue. Please try again later.",
         }
-
         return render(request, "home.html", context)
 
 
 def apply_service_sorting(queryset, sort_by):
-
-    if sort_by == "relevance":
-
-        return queryset.order_by("-craftsman__rating", "-created_at")
-
-    elif sort_by == "rating":
-        return queryset.order_by("-craftsman__rating")
-
+    """Apply sorting to service queryset"""
+    if sort_by == "rating":
+        return queryset.order_by("-avg_rating", "-review_count")
     elif sort_by == "price_low":
-
-        return queryset.order_by(
-            models.Case(
-                models.When(hourly_rate__isnull=False, then="hourly_rate"),
-                models.When(fixed_price__isnull=False, then="fixed_price"),
-                default=999999,
-                output_field=models.DecimalField(),
+        return queryset.annotate(
+            effective_price=Case(
+                When(price_type="hourly", then=F("hourly_rate")),
+                When(price_type="fixed", then=F("fixed_price")),
+                default=Value(0),
+                output_field=DecimalField(),
             )
-        )
-
+        ).order_by("effective_price")
     elif sort_by == "price_high":
-
-        return queryset.order_by(
-            models.Case(
-                models.When(hourly_rate__isnull=False, then=-models.F("hourly_rate")),
-                models.When(fixed_price__isnull=False, then=-models.F("fixed_price")),
-                default=999999,
-                output_field=models.DecimalField(),
+        return queryset.annotate(
+            effective_price=Case(
+                When(price_type="hourly", then=F("hourly_rate")),
+                When(price_type="fixed", then=F("fixed_price")),
+                default=Value(0),
+                output_field=DecimalField(),
             )
-        )
-
-    elif sort_by == "distance":
-
-        return queryset.order_by("-craftsman__rating")
-
-    return queryset.order_by("-craftsman__rating")
+        ).order_by("-effective_price")
+    elif sort_by == "newest":
+        return queryset.order_by("-created_at")
+    else:  # relevance
+        return queryset.order_by("-craftsman__rating", "-created_at")
 
 
 def add_to_waiting_list(request):
@@ -530,96 +602,75 @@ def register_craftsman(request):
 @csrf_protect
 @require_http_methods(["GET", "POST"])
 def signin(request):
+    # Early redirect for already authenticated users
     if request.user.is_authenticated:
-        logger.debug(
-            f"Already authenticated user accessed signin: {request.user.username}"
-        )
-
         if hasattr(request.user, "userprofile"):
             try:
                 request.user.userprofile.craftsmanprofile
-                logger.debug(
-                    f"Redirecting craftsman to dashboard: {request.user.username}"
-                )
                 return redirect("craftsman_dashboard")
-            except Exception as e:
-                logger.debug(
-                    f"Redirecting customer to dashboard: {request.user.username}"
-                )
+            except:
                 return redirect("customer_dashboard")
         return redirect("customer_dashboard")
 
     if request.method == "POST":
-        username_or_email = request.POST.get("username", "").strip()
+        username = request.POST.get("username", "").strip().lower()  # Normalize to lowercase
         password = request.POST.get("password", "").strip()
+        
+        if not username or not password:
+            messages.error(request, "Please provide both username and password.")
+            return render(request, "signin.html", {"username_value": username})
 
-        logger.info(f"Login attempt for: {username_or_email}")
-
-        if not username_or_email or not password:
-            logger.warning(f"Login attempt with missing credentials")
-            messages.error(request, "Please enter both username/email and password.")
-            return render(request, "signin.html", {"username_value": username_or_email})
-
-        user = authenticate(request, username=username_or_email.lower(), password=password)
-
-        if not user:
+        # OPTIMIZATION: Try to get user from cache first
+        from django.core.cache import cache
+        cache_key = f"user_auth_{username}"
+        cached_user_id = cache.get(cache_key)
+        
+        user = None
+        if cached_user_id:
             try:
-                user_by_email = User.objects.get(email__iexact=username_or_email)
-                user = authenticate(
-                    request, username=user_by_email.username, password=password
-                )
+                user = User.objects.get(id=cached_user_id)
             except User.DoesNotExist:
-                user = None
+                pass
+        
+        # If not in cache, try authentication
+        if not user:
+            user = authenticate(request, username=username, password=password)
+            
+            if not user:
+                # Try email lookup (case-insensitive)
+                try:
+                    user_by_email = User.objects.get(email__iexact=username)
+                    user = authenticate(
+                        request, 
+                        username=user_by_email.username, 
+                        password=password
+                    )
+                except User.DoesNotExist:
+                    pass
+            
+            # Cache successful logins for 1 hour
+            if user:
+                cache.set(cache_key, user.id, 3600)
 
-        if user:
-            if not user.is_active:
-                logger.warning(
-                    f"Login attempt for inactive account: {username_or_email}"
-                )
-                messages.error(request, "This account is inactive.")
-                return render(
-                    request, "signin.html", {"username_value": username_or_email}
-                )
-
+        if user and user.is_active:
             login(request, user)
-            logger.info(
-                f"User logged in successfully: {user.username} ({user.email}) - IP: {request.META.get('REMOTE_ADDR')}"
-            )
-
+            
+            # Set session expiry
+            if not request.POST.get("remember"):
+                request.session.set_expiry(0)
+            
+            # Redirect based on user type
             if hasattr(user, "userprofile"):
                 try:
                     user.userprofile.craftsmanprofile
-                    logger.debug(
-                        f"Redirecting craftsman to dashboard after login: {user.username}"
-                    )
                     return redirect("craftsman_dashboard")
-                except Exception as e:
-                    logger.debug(
-                        f"Redirecting customer to dashboard after login: {user.username}"
-                    )
+                except:
                     return redirect("customer_dashboard")
-            logger.debug(
-                f"Redirecting user without profile to dashboard: {user.username}"
-            )
             return redirect("customer_dashboard")
-        else:
-            logger.warning(f"Failed login attempt for: {username_or_email}")
-
-            user_exists = (
-                User.objects.filter(username__iexact=username_or_email).exists()
-                or User.objects.filter(email__iexact=username_or_email).exists()
-            )
-
-            if user_exists:
-                logger.debug(
-                    f"Username/email exists but password incorrect: {username_or_email}"
-                )
-                messages.error(request, "Incorrect password.")
-            else:
-                logger.debug(f"Username/email not found: {username_or_email}")
-                messages.error(request, "No account found with this username/email.")
-
-            return render(request, "signin.html", {"username_value": username_or_email})
+        
+        # Failed login
+        messages.error(request, "Invalid username or password.")
+        return render(request, "signin.html", {"username_value": username})
 
     return render(request, "signin.html", {"username_value": ""})
 
@@ -660,40 +711,200 @@ def user_logout(request):
 ########################### CUSTOMER ####################
 
 
+@login_required(login_url="home")
 def customer_dashboard(request):
     is_htmx = request.headers.get("HX-Request") == "true"
-
+    
     try:
         # Get filter parameters
-        category_filter = request.GET.get("category", "")
-        region_filter = request.GET.get("region", "")
-        search_query = request.GET.get("search", "")
-        price_min = request.GET.get("price_min", "")
-        price_max = request.GET.get("price_max", "")
-        rating = request.GET.get("rating", "")
+        category_filter = request.GET.get("category", "").strip()
+        region_filter = request.GET.get("region", "").strip()
+        search_query = request.GET.get("search", "").strip()
+        price_min = request.GET.get("price_min", "").strip()
+        price_max = request.GET.get("price_max", "").strip()
+        rating = request.GET.get("rating", "").strip()
         availability = request.GET.getlist("availability", [])
         features = request.GET.getlist("features", [])
         job_sizes = request.GET.getlist("job_size", [])
-        sort_by = request.GET.get("sort", "relevance")
+        sort_by = request.GET.get("sort", "relevance").strip()
 
         # Check if filters are active
         filters_active = any(
             [
                 category_filter,
                 region_filter,
-                search_query,
+                search_query and len(search_query) >= 2,
                 price_min,
                 price_max,
                 rating,
                 availability,
                 job_sizes,
                 features,
+                sort_by != "relevance",
             ]
         )
 
-        # Base context
+        # ============== REDIS CACHING ==============
+        from django.core.cache import cache
+        import hashlib
+        import json
+        
+        # Create cache key from all parameters
+        cache_data = {
+            'category': category_filter,
+            'region': region_filter,
+            'search': search_query,
+            'price_min': price_min,
+            'price_max': price_max,
+            'rating': rating,
+            'availability': sorted(availability),
+            'features': sorted(features),
+            'job_sizes': sorted(job_sizes),
+            'sort': sort_by,
+            'page': request.GET.get("page", "1"),
+        }
+        
+        cache_key = f"customer_dash_{hashlib.md5(json.dumps(cache_data, sort_keys=True).encode()).hexdigest()}"
+        
+        # Try to get from cache
+        if not is_htmx:
+            cached_result = cache.get(cache_key)
+            if cached_result:
+                cached_result.update({
+                    "selected_category": category_filter,
+                    "selected_region": region_filter,
+                    "search_query": search_query,
+                    "filters_active": filters_active,
+                    "price_min": price_min,
+                    "price_max": price_max,
+                    "rating": rating,
+                    "availability": availability,
+                    "job_sizes": job_sizes,
+                    "features": features,
+                    "sort_by": sort_by,
+                })
+                
+                if is_htmx:
+                    return render(request, "partials/dashboard_results.html", cached_result)
+                return render(request, "customer_dashboard.html", cached_result)
+
+        # ============== FIXED QUERY WITH ALL NEEDED FIELDS ==============
+        # Use select_related and prefetch_related to prevent N+1 queries
+        services = (
+            Service.objects
+            .filter(service_status="Active")
+            .select_related(
+                'craftsman',
+                'craftsman__user_profile',
+                'craftsman__user_profile__user'
+            )
+            .prefetch_related('reviews')
+            .only(
+                'id', 'title', 'description', 'category', 'region',
+                'price_type', 'hourly_rate', 'fixed_price', 'availability',
+                'job_size', 'created_at', 'image', 'service_status', 
+                'features', 'materials_included',
+                # ALL craftsman fields needed in template
+                'craftsman__id',
+                'craftsman__business_name',
+                'craftsman__rating',
+                'craftsman__is_verified',
+                'craftsman__license_number',
+                'craftsman__phone',
+                'craftsman__profile_photo',
+                'craftsman__user_profile__user__username',
+                'craftsman__user_profile__user__first_name',
+                'craftsman__user_profile__user__last_name',
+                'craftsman__user_profile__user__email',
+            )
+        )
+
+        # Apply filters
+        if category_filter:
+            services = services.filter(category=category_filter)
+
+        if region_filter:
+            services = services.filter(region=region_filter)
+
+        if search_query and len(search_query) >= 2:
+            services = services.filter(
+                Q(title__icontains=search_query) |
+                Q(description__icontains=search_query) |
+                Q(craftsman__business_name__icontains=search_query)
+            )
+
+        # Price filtering
+        if price_min or price_max:
+            from django.db.models import Case, When, F, Value, DecimalField
+            services = services.annotate(
+                effective_price=Case(
+                    When(price_type='hourly', then=F('hourly_rate')),
+                    When(price_type='fixed', then=F('fixed_price')),
+                    default=Value(999999),
+                    output_field=DecimalField(),
+                )
+            )
+            if price_min:
+                try:
+                    services = services.filter(effective_price__gte=float(price_min))
+                except:
+                    pass
+            if price_max:
+                try:
+                    services = services.filter(effective_price__lte=float(price_max))
+                except:
+                    pass
+
+        if rating:
+            try:
+                rating_val = float(rating)
+                services = services.filter(craftsman__rating__gte=rating_val)
+            except:
+                pass
+
+        if availability:
+            services = services.filter(availability__in=availability)
+
+        if job_sizes:
+            services = services.filter(job_size__in=job_sizes)
+
+        if features:
+            for feature in features:
+                services = services.filter(features__contains=[feature])
+
+        # Annotate with aggregates
+        from django.db.models import Avg, Count, Value
+        from django.db.models.functions import Coalesce
+        
+        services = services.annotate(
+            avg_rating=Coalesce(
+                Avg('reviews__rating'), 
+                Value(0.0), 
+                output_field=models.FloatField()
+            ),
+            review_count=Count('reviews', distinct=True)
+        )
+
+        # Apply sorting
+        services = apply_service_sorting_v2(services, sort_by)
+        
+        # ============== FORCE QUERY EXECUTION ==============
+        # Convert to list to load ALL data into memory
+        service_list = list(services)
+        
+        # ============== PAGINATION ==============
+        from django.core.paginator import Paginator
+        paginator = Paginator(service_list, 12)
+        page = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page)
+
+        # Build context
         context = {
             "Service": Service,
+            "page_obj": page_obj,
+            "services": page_obj,
+            "results_count": len(service_list),
+            "has_services": len(service_list) > 0,
             "selected_category": category_filter,
             "selected_region": region_filter,
             "search_query": search_query,
@@ -711,101 +922,9 @@ def customer_dashboard(request):
             "CATEGORY_CHOICES": CATEGORY_CHOICES,
         }
 
-        # Initialize variables
-        services = Service.objects.none()
-        page_obj = None
-
-        # Always query services - either filtered or all active
-        try:
-            services = Service.objects.filter(service_status="Active")
-
-            # Apply filters only if they exist
-            if category_filter:
-                services = services.filter(category=category_filter)
-
-            if region_filter:
-                services = services.filter(region=region_filter)
-
-            if search_query and len(search_query.strip()) >= 2:
-                services = services.filter(
-                    Q(title__icontains=search_query)
-                    | Q(description__icontains=search_query)
-                    | Q(craftsman__business_name__icontains=search_query)
-                )
-
-            if price_min:
-                try:
-                    price_min_val = float(price_min)
-                    if price_min_val >= 0:
-                        services = services.filter(
-                            Q(hourly_rate__gte=price_min_val)
-                            | Q(fixed_price__gte=price_min_val)
-                        )
-                except:
-                    pass
-
-            if price_max:
-                try:
-                    price_max_val = float(price_max)
-                    if price_max_val >= 0:
-                        services = services.filter(
-                            Q(hourly_rate__lte=price_max_val)
-                            | Q(fixed_price__lte=price_max_val)
-                        )
-                except:
-                    pass
-
-            if rating:
-                try:
-                    rating_val = float(rating)
-                    if 0 <= rating_val <= 5:
-                        services = services.filter(craftsman__rating__gte=rating_val)
-                except:
-                    pass
-
-            if availability:
-                services = services.filter(availability__in=availability)
-
-            if job_sizes:
-                services = services.filter(job_size__in=job_sizes)
-
-            if features:
-                for feature in features:
-                    services = services.filter(features__contains=[feature])
-
-            # Apply sorting
-            services = apply_service_sorting(services, sort_by)
-
-            context["services"] = services
-            context["has_services"] = services.exists()
-
-        except Exception as e:
-            logger.error(f"Filter error: {e}")
-            services = Service.objects.filter(service_status="Active")[:50]
-            context["services"] = services
-            context["has_services"] = services.exists()
-            context["show_alert"] = "Showing limited results due to system issue"
-
-        # Get results count
-        results_count = services.count()
-        context["results_count"] = results_count
-
-        # Pagination (only if we have results)
-        if services.exists():
-            page = request.GET.get("page", 1)
-            paginator = Paginator(services, 12)
-
-            try:
-                page_obj = paginator.page(page)
-            except:
-                page_obj = paginator.page(1)
-
-            context["page_obj"] = page_obj
-        else:
-            # Empty paginator for no results
-            paginator = Paginator([], 12)
-            page_obj = Page([], 1, paginator)
-            context["page_obj"] = page_obj
+        # Store in Redis cache (5 minutes)
+        if len(service_list) > 0:
+            cache.set(cache_key, context, 300)
 
         # HTMX response
         if is_htmx:
@@ -815,8 +934,8 @@ def customer_dashboard(request):
 
     except Exception as e:
         logger.error(f"Customer dashboard error: {e}")
-
-        # Simple context for error
+        import traceback
+        traceback.print_exc()
         context = {
             "Service": Service,
             "filters_active": False,
@@ -824,70 +943,97 @@ def customer_dashboard(request):
             "has_services": False,
             "show_alert": "We're working on fixing this issue. Please try again later.",
         }
-
         return render(request, "customer_dashboard.html", context)
 
 
-def apply_service_sorting(queryset, sort_by):
-
+def apply_service_sorting_v2(queryset, sort_by):
+    """Optimized sorting function"""
+    from django.db.models import Case, When, F, Value, DecimalField
+    
     if sort_by == "relevance":
         return queryset.order_by("-craftsman__rating", "-created_at")
-
+    
     elif sort_by == "rating":
-        return queryset.order_by("-craftsman__rating")
-
+        return queryset.order_by("-craftsman__rating", "-created_at")
+    
     elif sort_by == "price_low":
-        return queryset.order_by(
-            models.Case(
-                models.When(hourly_rate__isnull=False, then="hourly_rate"),
-                models.When(fixed_price__isnull=False, then="fixed_price"),
-                default=999999,
-                output_field=models.DecimalField(),
+        return queryset.annotate(
+            sort_price=Case(
+                When(price_type='hourly', then=F('hourly_rate')),
+                When(price_type='fixed', then=F('fixed_price')),
+                default=Value(999999),
+                output_field=DecimalField()
             )
-        )
-
+        ).order_by('sort_price', '-created_at')
+    
     elif sort_by == "price_high":
-        return queryset.order_by(
-            models.Case(
-                models.When(hourly_rate__isnull=False, then=-models.F("hourly_rate")),
-                models.When(fixed_price__isnull=False, then=-models.F("fixed_price")),
-                default=999999,
-                output_field=models.DecimalField(),
+        return queryset.annotate(
+            sort_price=Case(
+                When(price_type='hourly', then=F('hourly_rate')),
+                When(price_type='fixed', then=F('fixed_price')),
+                default=Value(0),
+                output_field=DecimalField()
             )
-        )
-
+        ).order_by('-sort_price', '-created_at')
+    
     elif sort_by == "distance":
+        return queryset.order_by("-craftsman__rating", "-created_at")
+    
+    return queryset.order_by("-craftsman__rating", "-created_at")
 
-        return queryset.order_by("-craftsman__rating")
 
-    return queryset.order_by("-craftsman__rating")
 
+
+from django.db.models import Prefetch, Avg, Count, Value
+from django.db.models.functions import Coalesce
+from django.core.cache import cache
+import hashlib
 
 def service_detail(request, service_id):
-    service = get_object_or_404(Service, pk=service_id)
+    # Try cache first
+    cache_key = f"service_detail_{service_id}"
+    cached_context = cache.get(cache_key)
     
+    if cached_context:
+        return render(request, "service_detail.html", cached_context)
     
-    craftsman = getattr(service, 'craftsman', None)
-    if not craftsman:
-        
-        craftsman = None
-    
-    reviews = service.reviews.all().order_by("-created_at")[:5]
-
-    avg_rating = (
-        reviews.aggregate(Avg("rating"))["rating__avg"]
-        if reviews.exists() and craftsman
-        else 0
+    # OPTIMIZATION: Load everything in ONE query with correct paths
+    service = get_object_or_404(
+        Service.objects
+        .select_related(
+            'craftsman',
+            'craftsman__user_profile',
+            'craftsman__user_profile__user'
+        )
+        .annotate(
+            avg_rating=Coalesce(
+                Avg('reviews__rating'), 
+                Value(0.0), 
+                output_field=models.FloatField()
+            ),
+            review_count=Count('reviews')
+        ),
+        pk=service_id
     )
-
+    
+    # Load reviews separately (with proper select_related)
+    reviews = Review.objects.filter(service=service).select_related(
+        'customer',
+        'customer__user_profile',
+        'customer__user_profile__user'
+    ).order_by('-created_at')[:10]
+    
     context = {
         "service": service,
-        "craftsman": craftsman,
+        "craftsman": service.craftsman,
         "reviews": reviews,
-        "reviews_count": reviews.count(),
-        "avg_rating": avg_rating or 0,
+        "reviews_count": service.review_count,
+        "avg_rating": service.avg_rating,
     }
-
+    
+    # Cache for 1 hour (3600 seconds)
+    cache.set(cache_key, context, 3600)
+    
     return render(request, "service_detail.html", context)
 
 
@@ -1023,68 +1169,108 @@ def craftsman_dashboard(request):
     Shows empty state if no services, or service grid if services exist.
     """
     
+    
     try:
         craftsman_profile = request.user.userprofile.craftsmanprofile
         
         # Get filter from request
         service_filter = request.GET.get('service-filter', 'all')
         
-        # Get all services for this craftsman
-        services_list = Service.objects.filter(craftsman=craftsman_profile)
+        # Create cache key
+        cache_key = f"craftsman_dash_{craftsman_profile.id}_{service_filter}_{request.GET.get('page', '1')}"
+        cached_context = cache.get(cache_key)
+        
+        if cached_context and not request.headers.get('HX-Request'):
+            if request.headers.get('HX-Request'):
+                return render(request, "partials/service_grid.html", cached_context)
+            return render(request, "craftsman_dasboard.html", cached_context)
+        
+        # Get base services
+        services_qs = Service.objects.filter(craftsman=craftsman_profile)
+        
+        # Get ALL boost requests in ONE query and annotate statuses
+        from django.db.models import OuterRef, Subquery, Exists
+        
+        # Subquery for pending boosts
+        pending_boosts = BoostRequest.objects.filter(
+            service=OuterRef('pk'),
+            status__in=['pending', 'processing']
+        )
+        
+        # Subquery for approved boosts
+        approved_boosts = BoostRequest.objects.filter(
+            service=OuterRef('pk'),
+            status='approved'
+        )
+        
+        # Subquery for rejected boosts
+        rejected_boosts = BoostRequest.objects.filter(
+            service=OuterRef('pk'),
+            status='rejected'
+        )
+        
+        # Subquery for expired boosts
+        expired_boosts = BoostRequest.objects.filter(
+            service=OuterRef('pk'),
+            status='expired'
+        )
+        
+        # Subquery for latest boost status
+        latest_boost = BoostRequest.objects.filter(
+            service=OuterRef('pk')
+        ).order_by('-created_at').values('status')[:1]
+        
+        # Annotate all boost info in ONE query
+        services_qs = services_qs.annotate(
+            has_pending_boost=Exists(pending_boosts),
+            has_approved_boost=Exists(approved_boosts),
+            has_rejected_boost=Exists(rejected_boosts),
+            has_expired_boost=Exists(expired_boosts),
+            latest_boost_status=Subquery(latest_boost)
+        )
         
         # Apply filters
         if service_filter == 'active':
-            services_list = services_list.filter(service_status='Active')
+            services_qs = services_qs.filter(service_status='Active')
         elif service_filter == 'boosted':
-            # Get services that have an approved boost
-            boosted_service_ids = BoostRequest.objects.filter(
-                status='approved'
-            ).values_list('service_id', flat=True)
-            services_list = services_list.filter(id__in=boosted_service_ids)
+            services_qs = services_qs.filter(has_approved_boost=True)
         
-        # Order by creation date (newest first)
-        services_list = services_list.order_by('-created_at')
+        # Order by creation date
+        services_qs = services_qs.order_by('-created_at')
         
-        # SIMPLE APPROACH: Get ALL boost requests for each service
-        for service in services_list:
-            # Get ALL boost requests for this service
-            boosts = BoostRequest.objects.filter(service=service)
-            
-            # Check for different statuses
-            service.has_pending_boost = boosts.filter(status__in=['pending', 'processing']).exists()
-            service.has_approved_boost = boosts.filter(status='approved').exists()
-            service.has_rejected_boost = boosts.filter(status='rejected').exists()
-            service.has_expired_boost = boosts.filter(status='expired').exists()
-            
-            # Store the latest boost if you want
-            latest_boost = boosts.order_by('-created_at').first()
-            if latest_boost:
-                service.latest_boost_status = latest_boost.status
-                service.latest_boost_status_display = latest_boost.get_status_display()
+        # Get counts in ONE query
+        total_services = services_qs.count()
+        active_count = services_qs.filter(service_status='Active').count()
+        paused_count = services_qs.filter(service_status='Paused').count()
         
-        # Paginate - 8 items per page
-        paginator = Paginator(services_list, 8)
-        page_number = request.GET.get('page')
+        # Paginate
+        paginator = Paginator(services_qs, 8)
+        page_number = request.GET.get('page', 1)
         services = paginator.get_page(page_number)
+        
+        # Convert to list to force evaluation
+        service_list = list(services)
         
         context = {
             'craftsman': craftsman_profile,
             'services': services,
-            'total_services': services_list.count(),
-            'has_services': services_list.exists(),
-            'active_count': services_list.filter(service_status='Active').count(),
-            'paused_count': services_list.filter(service_status='Paused').count(),
+            'total_services': total_services,
+            'has_services': total_services > 0,
+            'active_count': active_count,
+            'paused_count': paused_count,
             'CATEGORY_CHOICES': CATEGORY_CHOICES,
             'REGION_CHOICES': REGION_CHOICES,
             'AVAILABILITY_CHOICES': AVAILABILITY_CHOICES,
-            'current_filter': service_filter,  
+            'current_filter': service_filter,
         }
         
-        # Check if it's an HTMX request (partial reload)
+        # Cache for 5 minutes
+        cache.set(cache_key, context, 300)
+        
+        # HTMX response
         if request.headers.get('HX-Request'):
             return render(request, "partials/service_grid.html", context)
-        else:
-            return render(request, "craftsman_dasboard.html", context)
+        return render(request, "craftsman_dasboard.html", context)
         
     except CraftsmanProfile.DoesNotExist:
         return redirect("provider_onboarding")
@@ -1715,3 +1901,6 @@ def craftsman_public_profile(request, pk):
 
 def offline_page(request):
     return render(request, 'offline.html')
+
+
+

@@ -49,4 +49,7 @@ urlpatterns = [
     path("manifest.json", never_cache(serve), {"path": "manifest.json"}),
     path("service-worker.js", never_cache(serve), {"path": "service-worker.js"}),
     path('offline/', views.offline_page, name='offline'),
+    
+    
+    
 ]

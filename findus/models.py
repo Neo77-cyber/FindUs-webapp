@@ -145,6 +145,16 @@ class Service(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['service_status', '-created_at']),
+            models.Index(fields=['category', 'service_status']),
+            models.Index(fields=['region', 'service_status']),
+            models.Index(fields=['availability']),
+            models.Index(fields=['job_size']),
+            models.Index(fields=['price_type']),
+        ]
+
     def __str__(self):
         return f"{self.title} - {self.get_category_display()}"
 
