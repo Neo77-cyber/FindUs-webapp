@@ -385,4 +385,24 @@
   }
 }
 
+.auth-home-link {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+}
 
+.auth-home-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.auth-home-link a:hover {
+  color: var(--primary);
+  text-decoration: none;
+}
