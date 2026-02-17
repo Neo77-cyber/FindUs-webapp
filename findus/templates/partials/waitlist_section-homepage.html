@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <section class="waitlist-section" id="waitlist" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px;" >
    <div class="waitlist-container">
       <div class="waitlist-empty-state">
@@ -33,17 +34,16 @@
             </svg>
          </div>
          <div class="empty-message">
-            <h2 class="empty-title">No services found for your filters. Try different categories or regions.</h2>
+            <h2 class="empty-title">{% trans "Nessun servizio trovato per i tuoi filtri. Prova con categorie o regioni diverse." %}</h2>
             <p class="empty-description">
-               We're expanding! Join our waiting list to be the first to know
-               when FindUs launches in your neighborhood.
+               {% trans "Ci stiamo espandendo! Iscriviti alla nostra lista d'attesa per essere il primo a sapere quando FindUs arriva nella tua zona." %}
             </p>
          </div>
       </div>
       <div class="waitlist-form-wrapper">
          <div class="waitlist-form-header">
-            <h3>Join the Waiting List</h3>
-            <p>Be among the first to access verified professionals when we launch.</p>
+            <h3>{% trans "Iscriviti alla lista d'attesa" %}</h3>
+            <p>{% trans "Sii tra i primi ad accedere a professionisti verificati quando lanceremo." %}</p>
          </div>
          <form
             class="waitlist-form"
@@ -59,72 +59,72 @@
             <div id="form-message" class="form-message"></div>
             <div class="form-row">
                <div class="form-group">
-                  <label for="waitlist-name">Full Name <span class="required">*</span></label>
-                  <input type="text" id="waitlist-name" name="fullname" placeholder="John Doe" required/>
+                  <label for="waitlist-name">{% trans "Nome completo" %} <span class="required">*</span></label>
+                  <input type="text" id="waitlist-name" name="fullname" placeholder="{% trans 'Mario Rossi' %}" required/>
                </div>
                <div class="form-group">
-                  <label for="waitlist-email">Email Address <span class="required">*</span></label>
-                  <input type="email" id="waitlist-email" name="email" placeholder="john@example.com" required/>
-               </div>
-            </div>
-            <div class="form-row">
-               <div class="form-group">
-                  <label for="waitlist-location">Location <span class="required">*</span></label>
-                  <input type="text" id="waitlist-location" name="location" placeholder="Your city" required/>
-               </div>
-               <div class="form-group">
-                  <label for="waitlist-phone">Phone Number</label>
-                  <input type="tel" id="waitlist-phone" name="phone" placeholder="+1 (555) 123-4567"/>
+                  <label for="waitlist-email">{% trans "Indirizzo email" %} <span class="required">*</span></label>
+                  <input type="email" id="waitlist-email" name="email" placeholder="{% trans 'mario@example.com' %}" required/>
                </div>
             </div>
             <div class="form-row">
                <div class="form-group">
-                  <label for="waitlist-service">Service Needed <span class="required">*</span></label>
+                  <label for="waitlist-location">{% trans "Località" %} <span class="required">*</span></label>
+                  <input type="text" id="waitlist-location" name="location" placeholder="{% trans 'La tua città' %}" required/>
+               </div>
+               <div class="form-group">
+                  <label for="waitlist-phone">{% trans "Numero di telefono" %}</label>
+                  <input type="tel" id="waitlist-phone" name="phone" placeholder="+39 123 456 7890"/>
+               </div>
+            </div>
+            <div class="form-row">
+               <div class="form-group">
+                  <label for="waitlist-service">{% trans "Servizio necessario" %} <span class="required">*</span></label>
                   <select id="waitlist-service" name="service" required>
-                     <option value="" disabled selected>Select a service</option>
-                     <option value="plumbing">Plumber</option>
-                     <option value="electrical">Electrician</option>
-                     <option value="ac_technician">AC Technician</option>
-                     <option value="carpentry">Carpenter</option>
-                     <option value="tiling">Tiler</option>
-                     <option value="painting">Painter</option>
-                     <option value="furniture_maker">Furniture Maker</option>
-                     <option value="fumigation">Fumigator</option>
-                     <option value="dstv_technician">DSTV Technician</option>
-                     <option value="gas_appliance">Gas Appliance Technician</option>
-                     <option value="pop_worker">POP Worker</option>
-                     <option value="cleaning">Cleaner</option>
-                     <option value="aluminium_worker">Aluminium Worker</option>
-                     <option value="welding">Welder</option>
-                     <option value="roofing">Roof Technician</option>
-                     <option value="solar_power">Solar Power Technician</option>
-                     <option value="masonry">Mason</option>
-                     <option value="glass_partitioning">Glass/Partitioning Worker</option>
-                     <option value="bricklayer">Bricklayer / Plasterer</option>
-                     <option value="foreman">Foreman</option>
-                     <option value="landscaping">Landscaping</option>
-                     <option value="appliance_repair">Appliance Repair</option>
-                     <option value="hvac">HVAC Services</option>
-                     <option value="security_installation">CCTV / Security System Technician</option>
-                     <option value="generator_technician">Generator Technician</option>
-                     <option value="interior_design">Interior Designer</option>
-                     <option value="flooring">Flooring / Epoxy Work</option>
-                     <option value="metal_fabrication">Metal Fabrication</option>
-                     <option value="waterproofing">Waterproofing Specialist</option>
-                     <option value="pest_control">Pest Control</option>
-                     <option value="scaffolding">Scaffolding Worker</option>
-                     <option value="site_supervisor">Site Supervisor</option>
-                     <option value="other">Other</option>
+                     <option value="" disabled selected>{% trans "Seleziona un servizio" %}</option>
+                     <option value="plumbing">{% trans "Idraulico" %}</option>
+                     <option value="electrical">{% trans "Elettricista" %}</option>
+                     <option value="ac_technician">{% trans "Tecnico AC" %}</option>
+                     <option value="carpentry">{% trans "Carpentiere" %}</option>
+                     <option value="tiling">{% trans "Pavimentista" %}</option>
+                     <option value="painting">{% trans "Pittore" %}</option>
+                     <option value="furniture_maker">{% trans "Falegname" %}</option>
+                     <option value="fumigation">{% trans "Disinfestatore" %}</option>
+                     <option value="dstv_technician">{% trans "Tecnico DSTV" %}</option>
+                     <option value="gas_appliance">{% trans "Tecnico elettrodomestici a gas" %}</option>
+                     <option value="pop_worker">{% trans "Operatore POP" %}</option>
+                     <option value="cleaning">{% trans "Addetto alle pulizie" %}</option>
+                     <option value="aluminium_worker">{% trans "Operatore alluminio" %}</option>
+                     <option value="welding">{% trans "Saldatore" %}</option>
+                     <option value="roofing">{% trans "Tecnico tetti" %}</option>
+                     <option value="solar_power">{% trans "Tecnico fotovoltaico" %}</option>
+                     <option value="masonry">{% trans "Muratore" %}</option>
+                     <option value="glass_partitioning">{% trans "Operatore vetro/divisioni" %}</option>
+                     <option value="bricklayer">{% trans "Muratore / Intonacatore" %}</option>
+                     <option value="foreman">{% trans "Capocantiere" %}</option>
+                     <option value="landscaping">{% trans "Giardinaggio" %}</option>
+                     <option value="appliance_repair">{% trans "Riparazione elettrodomestici" %}</option>
+                     <option value="hvac">{% trans "Servizi HVAC" %}</option>
+                     <option value="security_installation">{% trans "Tecnico CCTV / Sistemi di sicurezza" %}</option>
+                     <option value="generator_technician">{% trans "Tecnico gruppi elettrogeni" %}</option>
+                     <option value="interior_design">{% trans "Interior designer" %}</option>
+                     <option value="flooring">{% trans "Pavimentazione / Lavori in epossidica" %}</option>
+                     <option value="metal_fabrication">{% trans "Lavorazione metalli" %}</option>
+                     <option value="waterproofing">{% trans "Specialista impermeabilizzazione" %}</option>
+                     <option value="pest_control">{% trans "Disinfestazione" %}</option>
+                     <option value="scaffolding">{% trans "Operatore ponteggi" %}</option>
+                     <option value="site_supervisor">{% trans "Supervisore di cantiere" %}</option>
+                     <option value="other">{% trans "Altro" %}</option>
                   </select>
                </div>
             </div>
             <div class="form-group form-group-full">
-               <label for="waitlist-notes">Additional Notes</label>
+               <label for="waitlist-notes">{% trans "Note aggiuntive" %}</label>
                <textarea
                   id="waitlist-notes"
                   name="notes"
                   rows="3"
-                  placeholder="Tell us more about what you're looking for..."
+                  placeholder="{% trans 'Dicci di più su cosa stai cercando...' %}"
                   ></textarea>
             </div>
             <div class="form-group form-group-full">
@@ -132,12 +132,12 @@
                <input type="checkbox" name="updates" id="waitlist-updates" checked/>
                <span class="checkbox-custom"></span>
                <span class="checkbox-text">
-               I agree to receive updates about FindUs launch and exclusive early access offers.
+               {% trans "Accetto di ricevere aggiornamenti sul lancio di FindUs e offerte esclusive di accesso anticipato." %}
                </span>
                </label>
             </div>
             <button type="submit" class="waitlist-submit">
-               <span>Join Waiting List</span>
+               <span>{% trans "Iscriviti alla lista d'attesa" %}</span>
                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                </svg>
@@ -146,7 +146,7 @@
                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                </svg>
-               Your information is secure and will never be shared.
+               {% trans "Le tue informazioni sono al sicuro e non verranno mai condivise." %}
             </p>
          </form>
       </div>

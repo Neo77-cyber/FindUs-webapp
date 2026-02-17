@@ -1,15 +1,17 @@
+{% load static %}
+{% load i18n %}
 <!doctype html>
-<html lang="en">
+<html lang="it">
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="description" content="Your saved professionals on FindUs" />
-      <title>Saved | FindUs</title>
-      {% load static %}
+      <meta name="description" content="{% trans 'I tuoi professionisti salvati su FidaMano' %}" />
+      <title>{% trans "Salvati" %} | FidaMano</title>
       <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
       <link 
          rel="icon" 
          href="{% static 'assets/icons/find-su-logo.png' %}" 
@@ -21,16 +23,48 @@
          />
    </head>
    <body>
+      <div class="language-switcher-fixed">
+         <form action="{% url 'set_language' %}" method="post" id="language-form">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.path }}">
+            <button type="button" class="language-button" id="language-button" aria-expanded="false">
+               {% get_current_language as LANGUAGE_CODE %}
+               {% get_language_info for LANGUAGE_CODE as current_lang %}
+               <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
+               <span class="language-label">{{ current_lang.name_local }}</span>
+               <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+               </svg>
+            </button>
+            <div class="language-dropdown" id="language-dropdown">
+               {% get_current_language as LANGUAGE_CODE %}
+               {% get_available_languages as LANGUAGES %}
+               {% get_language_info_list for LANGUAGES as languages %}
+               {% for language in languages %}
+               <button type="submit" 
+                  name="language" 
+                  value="{{ language.code }}"
+                  class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+                  data-value="{{ language.code }}">
+               <span class="fi fi-{% if language.code == 'it' %}it{% else %}gb{% endif %}"></span>
+               {{ language.name_local }}
+               </button>
+               {% endfor %}
+            </div>
+         </form>
+      </div>
       <header class="dashboard-header">
          <div class="dashboard-header-content">
-            <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FindUs Home">
-            <span class="logo-text">FindUs</span>
+            <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FidaMano Home">
+               <span class="logo-text">FidaMano</span>
             </a>
+            
+            
             <nav class="dashboard-nav">
                <a
                   href="{% url 'saved_services' %}"
                   class="nav-icon-link active"
-                  data-tooltip="Saved"
+                  data-tooltip="{% trans 'Salvati' %}"
                   >
                   <svg
                      viewBox="0 0 24 24"
@@ -43,7 +77,7 @@
                         ></path>
                   </svg>
                </a>
-               <a href="javascript:alert('This feature is in progress')" class="nav-icon-link" data-tooltip="My Messages">
+               <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="nav-icon-link" data-tooltip="{% trans 'I miei messaggi' %}">
                   <svg
                      viewBox="0 0 24 24"
                      fill="none"
@@ -59,7 +93,7 @@
                <a
                   href="{% url 'customer_profile' %}"
                   class="nav-icon-link"
-                  data-tooltip="Profile"
+                  data-tooltip="{% trans 'Profilo' %}"
                   >
                   <svg
                      viewBox="0 0 24 24"
@@ -71,7 +105,7 @@
                      <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                </a>
-               <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="Logout">
+               <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                      <polyline points="16 17 21 12 16 7"></polyline>
@@ -90,16 +124,20 @@
                   <polyline points="16 17 21 12 16 7"></polyline>
                   <line x1="21" y1="12" x2="9" y2="12"></line>
                </svg>
-               <span>Become a Provider</span>
+               <span>{% trans "Diventa professionista" %}</span>
             </a>
          </div>
       </header>
       <main class="dashboard-main">
          <div class="saved-page-container">
             <header class="saved-page-header">
-               <h1>Saved Professionals</h1>
+               <h1>{% trans "Professionisti salvati" %}</h1>
                <p class="saved-count">
-                  You have <strong id="saved-count">{{ saved_count }}</strong> saved professionals
+                  {% blocktrans count counter=saved_count %}
+                  Hai <strong>{{ counter }}</strong> professionista salvato
+                  {% plural %}
+                  Hai <strong>{{ counter }}</strong> professionisti salvati
+                  {% endblocktrans %}
                </p>
             </header>
             {% if saved_count == 0 %}
@@ -117,10 +155,9 @@
                            ></path>
                      </svg>
                   </div>
-                  <h2>No saved professionals yet</h2>
+                  <h2>{% trans "Nessun professionista salvato" %}</h2>
                   <p>
-                     Browse our trusted professionals and save them here for quick
-                     access later.
+                     {% trans "Esplora i nostri professionisti fidati e salvali qui per accedervi rapidamente in seguito." %}
                   </p>
                   <a href="{% url 'customer_dashboard' %}" class="btn-primary">
                      <svg
@@ -134,7 +171,7 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                      </svg>
-                     Browse Professionals
+                     {% trans "Cerca professionisti" %}
                   </a>
                </div>
             </section>
@@ -142,12 +179,11 @@
             <section class="saved-items-section" id="saved-items-section">
                <div class="saved-grid">
                   {% for service in saved_services %}
-                  <!-- Use your service card template -->
                   <article class="customer-dashboard-service-card" data-category="{{ service.category }}">
                      <button
                         type="button"
                         class="saved-card-remove"
-                        aria-label="Remove from saved"
+                        aria-label="{% trans 'Rimuovi dai salvati' %}"
                         hx-get="{% url 'save_service' service.id %}"
                         hx-target="closest .customer-dashboard-service-card"
                         hx-swap="outerHTML"
@@ -189,13 +225,13 @@
                                     <svg viewBox="0 0 24 24" fill="currentColor">
                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                                     </svg>
-                                    Verified Pro
+                                    {% trans "Professionista verificato" %}
                                  </span>
                                  {% endif %}
                                  {% if service.craftsman.license_number %}
-                                 <span class="service-license licensed">Licensed</span>
+                                 <span class="service-license licensed">{% trans "Autorizzato" %}</span>
                                  {% else %}
-                                 <span class="service-license not-licensed">Not Licensed</span>
+                                 <span class="service-license not-licensed">{% trans "Non autorizzato" %}</span>
                                  {% endif %}
                               </div>
                            </div>
@@ -206,7 +242,7 @@
                                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                  <circle cx="12" cy="10" r="3"></circle>
                               </svg>
-                              <span>{{ service.region }}</span>
+                              <span>{{ service.get_region_display }}</span>
                            </div>
                            <div class="dashboard-card-detail-item">
                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -220,14 +256,14 @@
                                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                               </svg>
                               <span>
-                              Starting at 
+                              {% trans "A partire da" %} 
                               <strong class="dashboard-card-price">
                               {% if service.price_type == 'hourly' %}
-                              €{{ service.hourly_rate }}/hr
+                              €{{ service.hourly_rate }}/{% trans "ora" %}
                               {% elif service.price_type == 'fixed' %}
                               €{{ service.fixed_price }}
                               {% else %}
-                              Contact for price
+                              {% trans "Contattaci per il prezzo" %}
                               {% endif %}
                               </strong>
                               </span>
@@ -237,7 +273,7 @@
                            <span class="dashboard-tag">{{ service.get_availability_display }}</span>
                            <span class="dashboard-tag">{{ service.get_job_size_display }}</span>
                            {% if service.materials_included %}
-                           <span class="dashboard-tag">Materials Included</span>
+                           <span class="dashboard-tag">{% trans "Materiali inclusi" %}</span>
                            {% endif %}
                         </div>
                         <div class="dashboard-card-actions">
@@ -245,14 +281,14 @@
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                               </svg>
-                              Call Now
+                              {% trans "Chiama ora" %}
                            </button>
                            <button class="btn-service-secondary" onclick="window.location.href='{% url 'service_detail' service.id %}'">
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                  <circle cx="12" cy="12" r="3"></circle>
                               </svg>
-                              View
+                              {% trans "Visualizza" %}
                            </button>
                         </div>
                      </div>
@@ -275,7 +311,7 @@
                <polyline points="2 17 12 22 22 17"></polyline>
                <polyline points="2 12 12 17 22 12"></polyline>
             </svg>
-            <span>Dashboard</span>
+            <span>{% trans "Dashboard" %}</span>
          </a>
          <a href="{% url 'saved_services' %}" class="bottom-nav-item active">
             <svg
@@ -286,9 +322,9 @@
                >
                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
             </svg>
-            <span>Saved</span>
+            <span>{% trans "Salvati" %}</span>
          </a>
-         <a href="javascript:alert('This feature is in progress')" class="bottom-nav-item">
+         <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="bottom-nav-item">
             <svg
                viewBox="0 0 24 24"
                fill="none"
@@ -299,7 +335,7 @@
                   d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
                   ></path>
             </svg>
-            <span>Messages</span>
+            <span>{% trans "Messaggi" %}</span>
             <span class="bottom-nav-badge"></span>
          </a>
          <a href="{% url 'customer_profile' %}" class="bottom-nav-item">
@@ -312,7 +348,7 @@
                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                <circle cx="12" cy="7" r="4"></circle>
             </svg>
-            <span>Profile</span>
+            <span>{% trans "Profilo" %}</span>
          </a>
          <a href="{% url 'logout' %}" class="bottom-nav-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -320,12 +356,12 @@
                <polyline points="16 17 21 12 16 7"></polyline>
                <line x1="21" y1="12" x2="9" y2="12"></line>
             </svg>
-            <span>Logout</span>
+            <span>{% trans "Esci" %}</span>
          </a>
       </nav>
       <footer class="site-footer">
          <div class="footer-container">
-            <p class="footer-copyright">&copy; 2026 FindUs. All rights reserved.</p>
+            <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
          </div>
       </footer>
       <script src="{% static 'assets/js/main.js' %}"></script>

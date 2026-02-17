@@ -32,13 +32,13 @@ def send_customer_welcome_email(user_email):
 </head>
 <body>
     <div class="header">
-        <h2 style="color: #007bff;">Find Us</h2>
+        <h2 style="color: #007bff;">FidaMano</h2>
     </div>
     
     <div class="content">
         
         
-        <p>Welcome to <span class="platform-name">Find Us</span>. Whether you have a leaking pipe, need a new roof, or want to redesign your living room, the right expert is just a phone call away.</p>
+        <p>Welcome to <span class="platform-name">FidaMano</span>. Whether you have a leaking pipe, need a new roof, or want to redesign your living room, the right expert is just a phone call away.</p>
         
         <h3>How it works:</h3>
         
@@ -70,14 +70,14 @@ def send_customer_welcome_email(user_email):
         </p>
         
         <p>Happy building,<br>
-        <strong>The <span class="platform-name">Find Us</span> Team</strong></p>
+        <strong>The <span class="platform-name">FidaMano</span> Team</strong></p>
     </div>
 </body>
 </html>"""
 
         plain_message = f"""Hey there!,
 
-Welcome to Find Us. Whether you have a leaking pipe, need a new roof, or want to redesign your living room, the right expert is just a phone call away.
+Welcome to FidaMano. Whether you have a leaking pipe, need a new roof, or want to redesign your living room, the right expert is just a phone call away.
 
 How it works:
 
@@ -92,13 +92,13 @@ Safety First: To keep your experience great, remember:
 • Agreement: Ensure you both agree on costs and timelines before the work begins.
 • Rate the Pro: Finished? Leave a review to support your pro and help others find the best talent!
 
-Find a Craftsman Near Me: https://yourdomain.com/customer-dashboard/
+Find a Craftsman Near Me: https://fidamano.com/customer-dashboard/
 
 Happy building,
-The Find Us Team"""
+The FidaMano Team"""
 
         email_data = {
-            "from": "Find Us <support@retechloans.com>",
+            "from": "FidaMano <support@retechloans.com>",
             "to": [user_email],
             "subject": subject,
             "html": html_message,
@@ -161,13 +161,13 @@ def send_craftsman_welcome_email(
 </head>
 <body>
     <div class="header">
-        <h2 style="color: #28a745;">Find Us</h2>
+        <h2 style="color: #28a745;">FidaMano </h2>
     </div>
     
     <div class="content">
         
         
-        <p>Welcome to <span class="platform-name">Find Us</span>! You've just joined a community of the best hands in the business—from Plumbers and Masons to Interior Designers.</p>
+        <p>Welcome to <span class="platform-name">FidaMano</span>! You've just joined a community of the best hands in the business—from Plumbers and Masons to Interior Designers.</p>
         
         <p>We've built this platform to help you grow your business without the middleman. Remember: <span class="highlight">You are the boss.</span> You talk to the clients, you set your prices, and you keep 100% of what you earn.</p>
         
@@ -195,14 +195,14 @@ def send_craftsman_welcome_email(
         </p>
         
         <p>To your success,<br>
-        <strong>The <span class="platform-name">Find Us</span> Team</strong></p>
+        <strong>The <span class="platform-name">FidaMano</span> Team</strong></p>
     </div>
 </body>
 </html>"""
 
         plain_message = f"""Hey there!,
 
-Welcome to Find Us! You've just joined a community of the best hands in the business—from Plumbers and Masons to Interior Designers.
+Welcome to FidaMano! You've just joined a community of the best hands in the business—from Plumbers and Masons to Interior Designers.
 
 We've built this platform to help you grow your business without the middleman. Remember: You are the boss. You talk to the clients, you set your prices, and you keep 100% of what you earn.
 
@@ -217,10 +217,10 @@ Safety Tip: Always meet new clients in a safe environment and clearly agree on m
 Post Your Service Now: https://yourdomain.com/craftsman-dashboard/
 
 To your success,
-The Find Us Team"""
+The FidaMano Team"""
 
         email_data = {
-            "from": "Find Us <support@retechloans.com>",
+            "from": "FidaMano <support@retechloans.com>",
             "to": [user_email],
             "subject": subject,
             "html": html_message,
@@ -292,17 +292,17 @@ def send_waitlist_confirmation_email(user_email, user_name, city, category):
 </head>
 <body>
     <div class="header">
-        <h2 style="color: #007bff;">Find Us</h2>
+        <h2 style="color: #007bff;">FidaMano </h2>
         <p style="color: #666; font-size: 14px;">Connecting you with trusted professionals</p>
     </div>
     
     <div class="content">
         <p>Hi <strong>{user_name}</strong>,</p>
         
-        <p>We noticed you were looking for <strong>{category}</strong> services in <strong>{city}</strong> on <span class="platform-name">Find Us</span> today.</p>
+        <p>We noticed you were looking for <strong>{category}</strong> services in <strong>{city}</strong> on <span class="platform-name">FidaMano</span> today.</p>
         
         <div class="highlight-box">
-            <p><strong>Right now, we are in our "Quality Over Quantity" phase.</strong> We are hand-picking and verifying craftsmen one by one to ensure that when you hire someone through Find Us, they are truly the best in the business.</p>
+            <p><strong>Right now, we are in our "Quality Over Quantity" phase.</strong> We are hand-picking and verifying craftsmen one by one to ensure that when you hire someone through FidaMano, they are truly the best in the business.</p>
             
             <div class="founder-badge">
                 FOUNDING MEMBER STATUS
@@ -352,21 +352,21 @@ def send_waitlist_confirmation_email(user_email, user_name, city, category):
         <p>Thank you for helping us build a more trusted community, one city at a time.</p>
         
         <p>Best regards,<br>
-        <strong>The <span class="platform-name">Find Us</span> Team</strong></p>
+        <strong>The <span class="platform-name">FidaMano</span> Team</strong></p>
     </div>
     
     <div class="footer">
-        <p>This email was sent to {user_email} because you signed up for the Find Us waitlist.</p>
-        <p>© 2024 Find Us. All rights reserved.</p>
+        <p>This email was sent to {user_email} because you signed up for the FidaMano waitlist.</p>
+        <p>© 2024 FidaMano. All rights reserved.</p>
     </div>
 </body>
 </html>"""
 
         plain_message = f"""Hi {user_name},
 
-We noticed you were looking for {category} services in {city} on Find Us today.
+We noticed you were looking for {category} services in {city} on FidaMano today.
 
-Right now, we are in our "Quality Over Quantity" phase. We are hand-picking and verifying craftsmen one by one to ensure that when you hire someone through Find Us, they are truly the best in the business.
+Right now, we are in our "Quality Over Quantity" phase. We are hand-picking and verifying craftsmen one by one to ensure that when you hire someone through FidaMano, they are truly the best in the business.
 
 Because we don't have a verified pro in your specific area yet, we've upgraded your account to "Founding Member" status.
 
@@ -386,14 +386,14 @@ Reply to: support@retechloans.com
 Thank you for helping us build a more trusted community, one city at a time.
 
 Best regards,
-The Find Us Team
+The FidaMano Team
 
 ---
-This email was sent to {user_email} because you signed up for the Find Us waitlist.
-© 2024 Find Us. All rights reserved."""
+This email was sent to {user_email} because you signed up for the FidaMano waitlist.
+© 2024 FidaMano. All rights reserved."""
 
         email_data = {
-            "from": "Find Us Waitlist <support@retechloans.com>",
+            "from": "FidaMano Waitlist <support@retechloans.com>",
             "to": [user_email],
             "subject": subject,
             "html": html_message,

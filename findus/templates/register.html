@@ -1,18 +1,20 @@
 {% load static %}
+{% load i18n %}
 <!doctype html>
-<html lang="en">
+<html lang="it">
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta
          name="description"
-         content="Create your FindUs account - Get started today"
+         content="{% trans 'Crea il tuo account FidaMano - Inizia oggi' %}"
          />
-      <title>Sign Up | FindUs</title>
+      <title>{% trans "Registrati" %} | FidaMano</title>
       <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/auth.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/register-form-2.css' %}" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
       <link 
          rel="icon" 
          href="{% static 'assets/icons/find-su-logo.png' %}" 
@@ -24,12 +26,43 @@
          />
    </head>
    <body class="auth-page">
+      <div class="language-switcher-fixed">
+         <form action="{% url 'set_language' %}" method="post" id="language-form">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.path }}">
+            <button type="button" class="language-button" id="language-button" aria-expanded="false">
+               {% get_current_language as LANGUAGE_CODE %}
+               {% get_language_info for LANGUAGE_CODE as current_lang %}
+               <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
+               <span class="language-label">{{ current_lang.name_local }}</span>
+               <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+               </svg>
+            </button>
+            <div class="language-dropdown" id="language-dropdown">
+               {% get_current_language as LANGUAGE_CODE %}
+               {% get_available_languages as LANGUAGES %}
+               {% get_language_info_list for LANGUAGES as languages %}
+               {% for language in languages %}
+               <button type="submit" 
+                  name="language" 
+                  value="{{ language.code }}"
+                  class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+                  data-value="{{ language.code }}">
+               <span class="fi fi-{% if language.code == 'it' %}it{% else %}gb{% endif %}"></span>
+               {{ language.name_local }}
+               </button>
+               {% endfor %}
+            </div>
+         </form>
+      </div>
+      
       <div class="auth-container auth-container-wide">
          <div class="auth-card">
-            <a href="{% url 'home' %}" class="auth-logo">FindUs</a>
+            <a href="{% url 'home' %}" class="auth-logo">FidaMano</a>
             <header class="auth-header">
-               <h1>Create account</h1>
-               <p>Join FindUs today</p>
+               <h1>{% trans "Crea account" %}</h1>
+               <p>{% trans "Iscriviti a FidaMano oggi" %}</p>
             </header>
             {% if messages %}
             <div class="auth-messages">
@@ -48,12 +81,12 @@
                >
                {% csrf_token %}
                <div class="auth-form-group">
-                  <label for="signup-username">Username</label>
+                  <label for="signup-username">{% trans "Nome utente" %}</label>
                   <input
                      type="text"
                      id="signup-username"
                      name="username"
-                     placeholder="Choose a username"
+                     placeholder="{% trans 'Scegli un nome utente' %}"
                      required
                      autocomplete="username"
                      value="{{ form.username.value|default:'' }}"
@@ -63,12 +96,12 @@
                   {% endif %}
                </div>
                <div class="auth-form-group">
-                  <label for="signup-email">Email</label>
+                  <label for="signup-email">{% trans "Email" %}</label>
                   <input
                      type="email"
                      id="signup-email"
                      name="email"
-                     placeholder="Enter your email"
+                     placeholder="{% trans 'Inserisci la tua email' %}"
                      required
                      autocomplete="email"
                      value="{{ form.email.value|default:'' }}"
@@ -78,7 +111,7 @@
                   {% endif %}
                </div>
                <div class="auth-form-group">
-                  <label for="signup-phone">Phone Number * (Italian format)</label>
+                  <label for="signup-phone">{% trans "Numero di telefono" %} * ({% trans "formato italiano" %})</label>
                   <input
                      type="tel"
                      id="signup-phone"
@@ -89,27 +122,27 @@
                      value="{{ form.phone.value|default:'' }}"
                      />
                   <small class="form-text">
-                  Enter Italian mobile (starts with 3) or landline (starts with 0)
+                  {% trans "Inserisci cellulare italiano (inizia con 3) o fisso (inizia con 0)" %}
                   </small>
                   {% if form.phone.errors %}
                   <div class="error-feedback">{{ form.phone.errors.0 }}</div>
                   {% endif %}
                </div>
                <div class="auth-form-group">
-                  <label for="signup-password">Password</label>
+                  <label for="signup-password">{% trans "Password" %}</label>
                   <div class="password-input-wrapper">
                      <input
                         type="password"
                         id="signup-password"
                         name="password1"
-                        placeholder="Create a password"
+                        placeholder="{% trans 'Crea una password' %}"
                         required
                         autocomplete="new-password"
                         />
                      <button
                         type="button"
                         class="toggle-password"
-                        aria-label="Show password"
+                        aria-label="{% trans 'Mostra password' %}"
                         >
                         <svg
                            width="20"
@@ -124,26 +157,26 @@
                         </svg>
                      </button>
                   </div>
-                  <p class="input-hint">Must be at least 8 characters</p>
+                  <p class="input-hint">{% trans "Deve essere lunga almeno 8 caratteri" %}</p>
                   {% if form.password1.errors %}
                   <div class="error-feedback">{{ form.password1.errors.0 }}</div>
                   {% endif %}
                </div>
                <div class="auth-form-group">
-                  <label for="signup-password2">Confirm Password</label>
+                  <label for="signup-password2">{% trans "Conferma password" %}</label>
                   <div class="password-input-wrapper">
                      <input
                         type="password"
                         id="signup-password2"
                         name="password2"
-                        placeholder="Confirm your password"
+                        placeholder="{% trans 'Conferma la tua password' %}"
                         required
                         autocomplete="new-password"
                         />
                      <button
                         type="button"
                         class="toggle-password"
-                        aria-label="Show password"
+                        aria-label="{% trans 'Mostra password' %}"
                         >
                         <svg
                            width="20"
@@ -170,30 +203,30 @@
                   required 
                   {% if form.terms.value %}checked{% endif %}
                   />
-                  <span
-                     >I agree to the <a href="{% static 'Privacy_Policy.pdf' %}" target="_blank">Terms of Service</a> and
-                  <a href="{% static 'Privacy_Policy.pdf' %}" target="_blank">Privacy Policy</a></span
-                     >
+                  <span>
+                     {% trans "Accetto i" %} <a href="{% static 'Privacy_Policy.pdf' %}" target="_blank">{% trans "Termini di servizio" %}</a> {% trans "e la" %}
+                     <a href="{% static 'Privacy_Policy.pdf' %}" target="_blank">{% trans "Informativa sulla privacy" %}</a>
+                  </span>
                   </label>
                   {% if form.terms.errors %}
                   <div class="error-feedback">{{ form.terms.errors.0 }}</div>
                   {% endif %}
                </div>
                <button type="submit" class="auth-submit" id="submit-btn">
-                  <span class="btn-text">Create Account</span>
+                  <span class="btn-text">{% trans "Crea account" %}</span>
                   <span class="spinner-container">
                      <svg class="spinner" viewBox="0 0 50 50">
                         <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
                      </svg>
-                     Processing...
+                     {% trans "Elaborazione in corso..." %}
                   </span>
                </button>
             </form>
             <footer class="auth-footer">
-               <p>Already have an account? <a href="{% url 'signin' %}">Sign in</a></p>
+               <p>{% trans "Hai già un account?" %} <a href="{% url 'signin' %}">{% trans "Accedi" %}</a></p>
                <p class="auth-footer-alt">
-                  Want to offer services?
-                  <a href="{% url 'register_as_a_craftsman' %}">Join as provider</a>
+                  {% trans "Vuoi offrire servizi?" %}
+                  <a href="{% url 'register_as_a_craftsman' %}">{% trans "Diventa professionista" %}</a>
                </p>
                <div class="auth-home-link">
                   <a href="{% url 'home' %}">
@@ -210,7 +243,7 @@
                         <line x1="19" y1="12" x2="5" y2="12"></line>
                         <polyline points="12 19 5 12 12 5"></polyline>
                      </svg>
-                     Back to Home
+                     {% trans "Torna alla home" %}
                   </a>
                </div>
             </footer>

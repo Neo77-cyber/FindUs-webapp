@@ -395,11 +395,11 @@ class ServiceBasicInfoForm(forms.ModelForm):
     )
     price_type = forms.ChoiceField(
         choices=PRICE_TYPE_CHOICES,
-        widget=forms.RadioSelect(attrs={"class": "modal-radio-input"}), # Custom class for styling if needed
+        widget=forms.RadioSelect(attrs={"class": "modal-radio-input"}), 
         initial="hourly",
         label="Pricing Type"
     )
-    # We'll handle the actual price field dynamically or include both and validate based on type
+    
     hourly_rate = forms.DecimalField(
         max_digits=8, decimal_places=2, required=False,
         widget=forms.NumberInput(attrs={"class": "modal-currency-field", "placeholder": "0.00"}),
@@ -440,7 +440,7 @@ class ServiceDetailsForm(forms.ModelForm):
         label="Service Image"
     )
     features = forms.MultipleChoiceField(
-        choices=ServiceForm.SERVICE_FEATURES, # Reuse from existing form
+        choices=ServiceForm.SERVICE_FEATURES, 
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox-input"}),
         required=False,
         label="Key Features"

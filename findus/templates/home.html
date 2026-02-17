@@ -1,85 +1,100 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta
          name="description"
-         content="FindUs - Find trusted professionals for all your home and business needs"
+         content="{% trans 'FidaMano - Trova professionisti di fiducia per tutte le tue esigenze domestiche e lavorative' %}"
          />
       <link href="{% static 'assets/icons/find-su-logo.png' %}" rel="icon" />
       <link
          href="{% static 'assets/icons/find-su-logo.png' %}"
          rel="apple-touch-icon"
          />
-      <title>FindUs</title>
+      <title>FidaMano</title>
       <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/results.css' %}">
       <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}">
       <link rel="stylesheet" href="{% static 'assets/css/signup-modal.css' %}">
-
-      <!-- ===== ESSENTIAL PWA TAGS ===== -->
-      <!-- iOS Status Bar -->
+      <!-- PWA Tags -->
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
       <meta name="apple-mobile-web-app-capable" content="yes">
-      <!-- Apple Touch Icons (iOS Home Screen) -->
       <link rel="apple-touch-icon" href="{% static 'icons/180.png' %}">
       <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/180.png' %}">
       <link rel="apple-touch-icon" sizes="167x167" href="{% static 'icons/167.png' %}">
       <link rel="apple-touch-icon" sizes="152x152" href="{% static 'icons/152.png' %}">
       <link rel="apple-touch-icon" sizes="120x120" href="{% static 'icons/120.png' %}">
       <link rel="apple-touch-icon" sizes="114x114" href="{% static 'icons/114.png' %}">
-      <!-- Theme Colors -->
       <meta name="theme-color" content="#077f46">
-      <!-- Web App Manifest -->
       <link rel="manifest" href="{% static 'manifest.json' %}">
-      <!-- ===== SPLASH SCREENS ===== -->
-      <!-- Universal splash screen -->
       <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}">
-      <!-- Optional: Additional iOS splash screens -->
       <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
       <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
       <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
       <style>
-         /* Simple background color for splash screen compatibility */
          @media screen and (max-width: 1024px) {
          body {
          background-color: #077f46;
          }
          }
       </style>
+      <link
+         rel="stylesheet"
+         href="https://cdn.jsdelivr.net/npm/flag-icons@7.5.0/css/flag-icons.min.css"
+         />
    </head>
    <body>
+      <div class="language-switcher-fixed">
+         <form action="{% url 'set_language' %}" method="post" id="language-form">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.path }}">
+            <button type="button" class="language-button" id="language-button" aria-expanded="false">
+               {% get_current_language as LANGUAGE_CODE %}
+               {% get_language_info for LANGUAGE_CODE as current_lang %}
+               <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
+               <span class="language-label">{{ current_lang.name_local }}</span>
+               <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+               </svg>
+            </button>
+            <div class="language-dropdown" id="language-dropdown">
+               {% get_current_language as LANGUAGE_CODE %}
+               {% get_available_languages as LANGUAGES %}
+               {% get_language_info_list for LANGUAGES as languages %}
+               {% for language in languages %}
+               <button type="submit" 
+                  name="language" 
+                  value="{{ language.code }}"
+                  class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+                  data-value="{{ language.code }}">
+               <span class="fi fi-{% if language.code == 'it' %}it{% else %}gb{% endif %}"></span>
+               {{ language.name_local }}
+               </button>
+               {% endfor %}
+            </div>
+         </form>
+      </div>
       <header class="main-header">
          <div class="header-content">
-            <a href="{% url 'home' %}" class="logo" aria-label="FindUs Home">
-            <span class="logo-text">FindUs</span>
+            <a href="{% url 'home' %}" class="logo" aria-label="FidaMano Home">
+            <span class="logo-text">FidaMano</span>
             </a>
             <nav class="nav-menu" id="nav-menu">
-               <a href="{% url 'register' %}" class="nav-link">Register</a>
-               <a href="{% url 'register_as_a_craftsman' %}" class="nav-link"
-                  >Join as a service provider</a
-                  >
+               <a href="{% url 'register' %}" class="nav-link">{% trans "Registrati" %}</a>
+               <a href="{% url 'register_as_a_craftsman' %}" class="nav-link">
+               {% trans "Diventa un professionista" %}
+               </a>
                <button type="button" class="btn-primary" id="open-signin" onclick="openSigninModal()">
-               Sign In
+               {% trans "Accedi" %}
                </button>
             </nav>
-            <button
-               class="mobile-menu-toggle"
-               id="mobile-menu-toggle"
-               aria-label="Toggle navigation"
-               >
-               <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  >
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <line x1="3" y1="12" x2="21" y2="12"></line>
                   <line x1="3" y1="6" x2="21" y2="6"></line>
                   <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -91,7 +106,8 @@
       <main class="landing-content">
          <section class="hero">
             <div class="hero-container">
-               <h1>What are you looking for?</h1>
+               <h1>{% trans "Cosa stai cercando?" %}</h1>
+               <p>{% trans "Che tu abbia bisogno di un idraulico o di un pittore, FidaMano ti aiuta a fare il lavoro nel modo giusto." %}</p>
                <div class="search-box">
                   <form
                      class="search-form"
@@ -111,7 +127,7 @@
                            {% if value == selected_region %}{{ label }}{% endif %}
                            {% endfor %}
                            {% else %}
-                           All Regions
+                           {% trans "Tutte le regioni" %}
                            {% endif %}
                            </span>
                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -134,7 +150,7 @@
                               document.getElementById('service-search').requestSubmit();
                               "
                               >
-                           All Regions
+                           {% trans "Tutte le regioni" %}
                            </button>
                            {% for value, label in REGION_CHOICES %}
                            <button
@@ -159,7 +175,7 @@
                            {% if value == selected_category %}{{ label }}{% endif %}
                            {% endfor %}
                            {% else %}
-                           All Categories
+                           {% trans "Tutte le categorie" %}
                            {% endif %}
                            </span>
                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -182,7 +198,7 @@
                               document.getElementById('service-search').requestSubmit();
                               "
                               >
-                           All Categories
+                           {% trans "Tutte le categorie" %}
                            </button>
                            {% for value, label in CATEGORY_CHOICES %}
                            <button
@@ -204,7 +220,7 @@
                            type="text"
                            id="service-type"
                            name="search"
-                           placeholder="I am looking for..."
+                           placeholder="{% trans 'Sto cercando...' %}"
                            autocomplete="off"
                            value="{{ search_query|default:'' }}"
                            hx-get="."
@@ -216,7 +232,7 @@
                         <button
                            type="submit"
                            class="search-icon-btn"
-                           aria-label="Search"
+                           aria-label="{% trans 'Cerca' %}"
                            >
                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                               <circle cx="11" cy="11" r="8"></circle>
@@ -246,9 +262,8 @@
                   <header class="sidebar-header">
                      <div class="sidebar-header-left">
                         <button type="button" class="btn-close-filters" id="btn-close-filters">
-                           <!-- SVG -->
                         </button>
-                        <h2 class="sidebar-title">Filters</h2>
+                        <h2 class="sidebar-title">{% trans "Filtri" %}</h2>
                      </div>
                      <div class="sidebar-actions">
                         <button 
@@ -256,39 +271,37 @@
                            class="btn-clear-filters"
                            onclick="window.location.href='/';"
                            >
-                        Clear All
+                        {% trans "Cancella tutto" %}
                         </button>
-                        <button type="submit" class="btn-apply-filters">Apply</button>
+                        <button type="submit" class="btn-apply-filters">{% trans "Applica" %}</button>
                      </div>
                   </header>
-                  <!-- Price Range -->
                   <fieldset class="filter-group">
-                     <legend class="filter-group-title">Price Range</legend>
+                     <legend class="filter-group-title">{% trans "Fascia di prezzo" %}</legend>
                      <div class="filter-range-inputs">
                         <input
                            type="number"
                            name="price_min"
                            class="filter-input filter-input-sm"
-                           placeholder="Min"
+                           placeholder="{% trans 'Min' %}"
                            min="0"
                            value="{{ price_min }}"
                            hx-trigger="keyup changed delay:800ms"
                            />
-                        <span class="filter-range-sep">to</span>
+                        <span class="filter-range-sep">{% trans "a" %}</span>
                         <input
                            type="number"
                            name="price_max"
                            class="filter-input filter-input-sm"
-                           placeholder="Max"
+                           placeholder="{% trans 'Max' %}"
                            min="0"
                            value="{{ price_max }}"
                            hx-trigger="keyup changed delay:800ms"
                            />
                      </div>
                   </fieldset>
-                  <!-- Rating -->
                   <fieldset class="filter-group">
-                     <legend class="filter-group-title">Rating</legend>
+                     <legend class="filter-group-title">{% trans "Valutazione" %}</legend>
                      <label class="filter-radio">
                      <input 
                      type="radio" 
@@ -298,7 +311,7 @@
                      hx-trigger="change"
                      />
                      <span class="radio-custom"></span>
-                     <span class="rating-option">★★★★★ 5 stars</span>
+                     <span class="rating-option">★★★★★ {% trans "5 stelle" %}</span>
                      </label>
                      <label class="filter-radio">
                      <input 
@@ -309,7 +322,7 @@
                      hx-trigger="change"
                      />
                      <span class="radio-custom"></span>
-                     <span class="rating-option">★★★★☆ 4+ stars</span>
+                     <span class="rating-option">★★★★☆ {% trans "4+ stelle" %}</span>
                      </label>
                      <label class="filter-radio">
                      <input 
@@ -320,7 +333,7 @@
                      hx-trigger="change"
                      />
                      <span class="radio-custom"></span>
-                     <span class="rating-option">★★★☆☆ 3+ stars</span>
+                     <span class="rating-option">★★★☆☆ {% trans "3+ stelle" %}</span>
                      </label>
                      <label class="filter-radio">
                      <input 
@@ -331,12 +344,11 @@
                      hx-trigger="change"
                      />
                      <span class="radio-custom"></span>
-                     <span class="rating-option">Any rating</span>
+                     <span class="rating-option">{% trans "Qualsiasi valutazione" %}</span>
                      </label>
                   </fieldset>
-                  <!-- Availability -->
                   <fieldset class="filter-group">
-                     <legend class="filter-group-title">Availability</legend>
+                     <legend class="filter-group-title">{% trans "Disponibilità" %}</legend>
                      {% for value, label in AVAILABILITY_CHOICES %}
                      <label class="filter-checkbox">
                      <input 
@@ -352,7 +364,7 @@
                      {% endfor %}
                   </fieldset>
                   <fieldset class="filter-group">
-                     <legend class="filter-group-title">Job Size</legend>
+                     <legend class="filter-group-title">{% trans "Dimensione lavoro" %}</legend>
                      {% for value, label in SERVICE_SCOPE_CHOICES %}
                      <label class="filter-checkbox">
                      <input 
@@ -367,9 +379,8 @@
                      </label>
                      {% endfor %}
                   </fieldset>
-                  <!-- Features -->
                   <fieldset class="filter-group">
-                     <legend class="filter-group-title">Features</legend>
+                     <legend class="filter-group-title">{% trans "Caratteristiche" %}</legend>
                      <label class="filter-checkbox">
                      <input 
                      type="checkbox" 
@@ -379,7 +390,7 @@
                      hx-trigger="change"
                      />
                      <span class="checkbox-custom"></span>
-                     <span>Verified Pro</span>
+                     <span>{% trans "Professionista verificato" %}</span>
                      </label>
                      <label class="filter-checkbox">
                      <input 
@@ -390,7 +401,7 @@
                      hx-trigger="change"
                      />
                      <span class="checkbox-custom"></span>
-                     <span>Licensed</span>
+                     <span>{% trans "Autorizzato" %}</span>
                      </label>
                      <label class="filter-checkbox">
                      <input 
@@ -401,7 +412,7 @@
                      hx-trigger="change"
                      />
                      <span class="checkbox-custom"></span>
-                     <span>Insured</span>
+                     <span>{% trans "Assicurato" %}</span>
                      </label>
                      <label class="filter-checkbox">
                      <input 
@@ -412,7 +423,7 @@
                      hx-trigger="change"
                      />
                      <span class="checkbox-custom"></span>
-                     <span>Offers Warranty</span>
+                     <span>{% trans "Offre garanzia" %}</span>
                      </label>
                   </fieldset>
                   {% if selected_category %}
@@ -424,16 +435,15 @@
                   {% if search_query %}
                   <input type="hidden" name="search" value="{{ search_query }}">
                   {% endif %}
-                  <!-- Loading indicator -->
                   <div id="loading-indicator" class="htmx-indicator" style="display: none;">
                      <div style="text-align: center; padding: 1rem;">
-                        Loading...
+                        {% trans "Caricamento..." %}
                      </div>
                   </div>
                </form>
                <div class="sidebar-footer-mobile">
                   <button type="button" class="btn-cancel-mobile" id="btn-cancel-filters">
-                  Cancel
+                  {% trans "Annulla" %}
                   </button>
                   <button 
                      type="button" 
@@ -441,7 +451,7 @@
                      id="btn-apply-filters"
                      onclick="document.querySelector('.filter-form').requestSubmit()"
                      >
-                  Show Results
+                  {% trans "Mostra risultati" %}
                   </button>
                </div>
             </aside>
@@ -469,7 +479,7 @@
                   <line x1="9" y1="8" x2="15" y2="8"></line>
                   <line x1="17" y1="16" x2="23" y2="16"></line>
                </svg>
-               Filters
+               {% trans "Filtri" %}
             </button>
             {% if not has_services %}
             <section class="waitlist-section" id="waitlist">
@@ -481,152 +491,22 @@
                            fill="none"
                            xmlns="http://www.w3.org/2000/svg"
                            >
-                           <circle
-                              cx="200"
-                              cy="150"
-                              r="120"
-                              fill="var(--secondary)"
-                              opacity="0.5"
-                              />
-                           <circle
-                              cx="200"
-                              cy="150"
-                              r="80"
-                              fill="var(--secondary)"
-                              opacity="0.8"
-                              />
-                           <g transform="translate(140, 80)">
-                              <rect
-                                 x="0"
-                                 y="60"
-                                 width="120"
-                                 height="80"
-                                 rx="8"
-                                 fill="var(--bg-primary)"
-                                 stroke="var(--border-default)"
-                                 stroke-width="2"
-                                 />
-                              <path
-                                 d="M10 80 L40 80 M50 80 L70 80 M80 80 L110 80"
-                                 stroke="var(--border-default)"
-                                 stroke-width="2"
-                                 stroke-linecap="round"
-                                 />
-                              <path
-                                 d="M15 95 L45 95 M55 95 L85 95"
-                                 stroke="var(--border-default)"
-                                 stroke-width="2"
-                                 stroke-linecap="round"
-                                 />
-                              <path
-                                 d="M20 110 L50 110 M60 110 L90 110"
-                                 stroke="var(--border-default)"
-                                 stroke-width="2"
-                                 stroke-linecap="round"
-                                 />
-                              <g transform="translate(60, 0)">
-                                 <path
-                                    d="M0 45 C0 25 -20 0 -20 -15 C-20 -30 -35 -45 0 -45 C35 -45 20 -30 20 -15 C20 0 0 25 0 45"
-                                    fill="var(--primary)"
-                                    opacity="0.9"
-                                    />
-                                 <circle cx="0" cy="-15" r="10" fill="white" />
-                              </g>
-                              <circle
-                                 cx="60"
-                                 cy="100"
-                                 r="25"
-                                 fill="var(--primary)"
-                                 opacity="0.15"
-                                 />
-                              <text
-                                 x="60"
-                                 y="108"
-                                 text-anchor="middle"
-                                 font-size="24"
-                                 font-weight="bold"
-                                 fill="var(--primary)"
-                                 >
-                                 ?
-                              </text>
-                           </g>
-                           <circle
-                              cx="100"
-                              cy="100"
-                              r="4"
-                              fill="var(--primary)"
-                              opacity="0.3"
-                              />
-                           <circle
-                              cx="300"
-                              cy="80"
-                              r="6"
-                              fill="var(--primary)"
-                              opacity="0.2"
-                              />
-                           <circle
-                              cx="320"
-                              cy="200"
-                              r="5"
-                              fill="var(--primary)"
-                              opacity="0.25"
-                              />
-                           <circle
-                              cx="80"
-                              cy="200"
-                              r="5"
-                              fill="var(--primary)"
-                              opacity="0.2"
-                              />
-                           <g transform="translate(70, 140)" opacity="0.6">
-                              <circle
-                                 cx="0"
-                                 cy="0"
-                                 r="18"
-                                 fill="var(--bg-primary)"
-                                 stroke="var(--border-default)"
-                                 stroke-width="1.5"
-                                 />
-                              <path
-                                 d="M-6 -2 L6 -2 M-4 2 L4 2 M0 -6 L0 6"
-                                 stroke="var(--text-muted)"
-                                 stroke-width="1.5"
-                                 stroke-linecap="round"
-                                 />
-                           </g>
-                           <g transform="translate(330, 130)" opacity="0.6">
-                              <circle
-                                 cx="0"
-                                 cy="0"
-                                 r="18"
-                                 fill="var(--bg-primary)"
-                                 stroke="var(--border-default)"
-                                 stroke-width="1.5"
-                                 />
-                              <path
-                                 d="M-5 0 L5 0 M0 -5 L0 5"
-                                 stroke="var(--text-muted)"
-                                 stroke-width="1.5"
-                                 stroke-linecap="round"
-                                 />
-                           </g>
+                           <!-- SVG content -->
                         </svg>
                      </div>
                      <div class="empty-message">
-                        <span class="empty-badge">Coming Soon</span>
-                        <h2 class="empty-title">No services in your area yet</h2>
+                        <span class="empty-badge">{% trans "Prossimamente" %}</span>
+                        <h2 class="empty-title">{% trans "Nessun servizio nella tua zona" %}</h2>
                         <p class="empty-description">
-                           We're expanding! Join our waiting list to be the first to know
-                           when FindUs launches in your neighborhood.
+                           {% trans "Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a sapere quando FidaMano arriva nel tuo quartiere." %}
                         </p>
                      </div>
                   </div>
                   <div class="waitlist-form-wrapper">
                      <div class="waitlist-form-header">
-                        <h3>Join the Waiting List</h3>
+                        <h3>{% trans "Iscriviti alla lista d'attesa" %}</h3>
                         <p>
-                           Be among the first to access verified professionals when we
-                           launch.
+                           {% trans "Sii tra i primi ad accedere a professionisti verificati quando lanceremo." %}
                         </p>
                      </div>
                      <form
@@ -640,127 +520,83 @@
                         hx-on:htmx:after-request="if(event.detail.successful) this.reset()"
                         >
                         {% csrf_token %}
-                        <div
-                           id="form-message"
-                           class="form-message"
-                           style="
-                           background: #d4edda;
-                           color: #155724;
-                           padding: 12px;
-                           margin: 15px 0;
-                           border-radius: 6px;
-                           border: 1px solid #c3e6cb;
-                           "
-                           ></div>
+                        <div id="form-message" class="form-message"></div>
                         <div class="form-row">
                            <div class="form-group">
-                              <label for="waitlist-name"
-                                 >Full Name <span class="required">*</span></label
-                                 >
+                              <label for="waitlist-name">{% trans "Nome completo" %} <span class="required">*</span></label>
                               <input
                                  type="text"
                                  id="waitlist-name"
                                  name="fullname"
-                                 placeholder="John Doe"
+                                 placeholder="{% trans 'Mario Rossi' %}"
                                  required
                                  />
                            </div>
                            <div class="form-group">
-                              <label for="waitlist-email"
-                                 >Email Address <span class="required">*</span></label
-                                 >
+                              <label for="waitlist-email">{% trans "Indirizzo email" %} <span class="required">*</span></label>
                               <input
                                  type="email"
                                  id="waitlist-email"
                                  name="email"
-                                 placeholder="john@example.com"
+                                 placeholder="{% trans 'mario@example.com' %}"
                                  required
                                  />
                            </div>
                         </div>
                         <div class="form-row">
                            <div class="form-group">
-                              <label for="waitlist-location"
-                                 >Location <span class="required">*</span></label
-                                 >
+                              <label for="waitlist-location">{% trans "Località" %} <span class="required">*</span></label>
                               <input
                                  type="text"
                                  id="waitlist-location"
                                  name="location"
-                                 placeholder="Your city"
+                                 placeholder="{% trans 'La tua città' %}"
                                  required
                                  />
                            </div>
                            <div class="form-group">
-                              <label for="waitlist-phone">Phone Number</label>
+                              <label for="waitlist-phone">{% trans "Numero di telefono" %}</label>
                               <input
                                  type="tel"
                                  id="waitlist-phone"
                                  name="phone"
-                                 placeholder="+1 (555) 123-4567"
+                                 placeholder="{% trans '+39 123 456 7890' %}"
                                  />
                            </div>
                         </div>
                         <div class="form-row">
                            <div class="form-group">
-                              <label for="waitlist-service"
-                                 >Service Needed <span class="required">*</span></label
-                                 >
+                              <label for="waitlist-service">{% trans "Servizio necessario" %} <span class="required">*</span></label>
                               <select id="waitlist-service" name="service" required>
-                                 <option value="" disabled selected>Select a service</option>
-                                 <option value="plumbing">Plumber</option>
-                                 <option value="electrical">Electrician</option>
-                                 <option value="ac_technician">AC Technician</option>
-                                 <option value="carpentry">Carpenter</option>
-                                 <option value="tiling">Tiler</option>
-                                 <option value="painting">Painter</option>
-                                 <option value="furniture_maker">Furniture Maker</option>
-                                 <option value="fumigation">Fumigator</option>
-                                 <option value="dstv_technician">DSTV Technician</option>
-                                 <option value="gas_appliance">
-                                    Gas Appliance Technician
-                                 </option>
-                                 <option value="pop_worker">POP Worker</option>
-                                 <option value="cleaning">Cleaner</option>
-                                 <option value="aluminium_worker">Aluminium Worker</option>
-                                 <option value="welding">Welder</option>
-                                 <option value="roofing">Roof Technician</option>
-                                 <option value="solar_power">Solar Power Technician</option>
-                                 <option value="masonry">Mason</option>
-                                 <option value="glass_partitioning">
-                                    Glass/Partitioning Worker
-                                 </option>
-                                 <option value="bricklayer">Bricklayer / Plasterer</option>
-                                 <option value="foreman">Foreman</option>
-                                 <option value="landscaping">Landscaping</option>
-                                 <option value="appliance_repair">Appliance Repair</option>
-                                 <option value="hvac">HVAC Services</option>
-                                 <option value="security_installation">
-                                    CCTV / Security System Technician
-                                 </option>
-                                 <option value="generator_technician">
-                                    Generator Technician
-                                 </option>
-                                 <option value="interior_design">Interior Designer</option>
-                                 <option value="flooring">Flooring / Epoxy Work</option>
-                                 <option value="metal_fabrication">Metal Fabrication</option>
-                                 <option value="waterproofing">
-                                    Waterproofing Specialist
-                                 </option>
-                                 <option value="pest_control">Pest Control</option>
-                                 <option value="scaffolding">Scaffolding Worker</option>
-                                 <option value="site_supervisor">Site Supervisor</option>
-                                 <option value="other">Other</option>
+                                 <option value="" disabled selected>{% trans "Seleziona un servizio" %}</option>
+                                 <option value="plumbing">{% trans "Idraulico" %}</option>
+                                 <option value="electrical">{% trans "Elettricista" %}</option>
+                                 <option value="ac_technician">{% trans "Tecnico AC" %}</option>
+                                 <option value="carpentry">{% trans "Carpentiere" %}</option>
+                                 <option value="tiling">{% trans "Pavimentista" %}</option>
+                                 <option value="painting">{% trans "Pittore" %}</option>
+                                 <option value="furniture_maker">{% trans "Falegname" %}</option>
+                                 <option value="fumigation">{% trans "Disinfestatore" %}</option>
+                                 <option value="cleaning">{% trans "Pulizie" %}</option>
+                                 <option value="welding">{% trans "Saldatore" %}</option>
+                                 <option value="roofing">{% trans "Tetto" %}</option>
+                                 <option value="solar_power">{% trans "Tecnico solare" %}</option>
+                                 <option value="masonry">{% trans "Muratore" %}</option>
+                                 <option value="landscaping">{% trans "Giardiniere" %}</option>
+                                 <option value="hvac">{% trans "Climatizzazione" %}</option>
+                                 <option value="interior_design">{% trans "Interior designer" %}</option>
+                                 <option value="pest_control">{% trans "Controllo parassiti" %}</option>
+                                 <option value="other">{% trans "Altro" %}</option>
                               </select>
                            </div>
                         </div>
                         <div class="form-group form-group-full">
-                           <label for="waitlist-notes">Additional Notes</label>
+                           <label for="waitlist-notes">{% trans "Note aggiuntive" %}</label>
                            <textarea
                               id="waitlist-notes"
                               name="notes"
                               rows="3"
-                              placeholder="Tell us more about what you're looking for..."
+                              placeholder="{% trans 'Dicci di più su cosa stai cercando...' %}"
                               ></textarea>
                         </div>
                         <div class="form-group form-group-full">
@@ -773,36 +609,21 @@
                               />
                            <span class="checkbox-custom"></span>
                            <span class="checkbox-text">
-                           I agree to receive updates about FindUs launch and exclusive
-                           early access offers.
+                           {% trans "Accetto di ricevere aggiornamenti sul lancio di FidaMano e offerte esclusive di accesso anticipato." %}
                            </span>
                            </label>
                         </div>
                         <button type="submit" class="waitlist-submit">
-                           <span>Join Waiting List</span>
-                           <svg
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              >
+                           <span>{% trans "Iscriviti alla lista d'attesa" %}</span>
+                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                               <path d="M5 12h14M12 5l7 7-7 7" />
                            </svg>
                         </button>
                         <p class="form-privacy">
-                           <svg
-                              width="14"
-                              height="14"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              >
+                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                            </svg>
-                           Your information is secure and will never be shared.
+                           {% trans "Le tue informazioni sono al sicuro e non verranno mai condivise." %}
                         </p>
                      </form>
                   </div>
@@ -813,15 +634,15 @@
                <header class="results-header">
                   <div class="results-meta">
                      <h2 class="results-title">
-                        {% if filters_active %}Professionals Near You{% else %}Top Rated Professionals{% endif %}
+                        {% if filters_active %}{% trans "Professionisti vicino a te" %}{% else %}{% trans "Professionisti più votati" %}{% endif %}
                      </h2>
                      <p class="results-count">
-                        Showing <strong>{{ results_count }}</strong> 
-                        {% if filters_active %}result{{ results_count|pluralize:"s" }}{% else %}professionals{% endif %}
+                        {% trans "Mostrando" %} <strong>{{ results_count }}</strong> 
+                        {% if filters_active %}{% blocktrans count counter=results_count %}risultato{% plural %}risultati{% endblocktrans %}{% else %}{% trans "professionisti" %}{% endif %}
                      </p>
                   </div>
                   <div class="results-sort">
-                     <label for="sort-by" class="visually-hidden">Sort by</label>
+                     <label for="sort-by" class="visually-hidden">{% trans "Ordina per" %}</label>
                      <select 
                         name="sort" 
                         id="sort-by" 
@@ -835,11 +656,11 @@
                         [name='price_min'], [name='price_max'], [name='rating'],
                         [name='availability'], [name='job_size'], [name='features']"
                         >
-                     <option value="relevance" {% if sort_by == "relevance" %}selected{% endif %}>Most Relevant</option>
-                     <option value="rating" {% if sort_by == "rating" %}selected{% endif %}>Highest Rated</option>
-                     <option value="price_low" {% if sort_by == "price_low" %}selected{% endif %}>Price: Low to High</option>
-                     <option value="price_high" {% if sort_by == "price_high" %}selected{% endif %}>Price: High to Low</option>
-                     <option value="distance" {% if sort_by == "distance" %}selected{% endif %}>Nearest</option>
+                     <option value="relevance" {% if sort_by == "relevance" %}selected{% endif %}>{% trans "Più rilevanti" %}</option>
+                     <option value="rating" {% if sort_by == "rating" %}selected{% endif %}>{% trans "Più votati" %}</option>
+                     <option value="price_low" {% if sort_by == "price_low" %}selected{% endif %}>{% trans "Prezzo: dal più basso" %}</option>
+                     <option value="price_high" {% if sort_by == "price_high" %}selected{% endif %}>{% trans "Prezzo: dal più alto" %}</option>
+                     <option value="distance" {% if sort_by == "distance" %}selected{% endif %}>{% trans "Più vicini" %}</option>
                      </select>
                   </div>
                </header>
@@ -850,7 +671,7 @@
       </section>
       <dialog id="signin-dialog" class="signin-dialog">
          <div class="dialog-container">
-            <button type="button" class="close-dialog" id="close-signin" aria-label="Close dialog">
+            <button type="button" class="close-dialog" id="close-signin" aria-label="{% trans 'Chiudi' %}">
                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
                   <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -858,37 +679,37 @@
             </button>
             <div class="signin-form-section">
                <header class="form-header">
-                  <h2>Welcome back</h2>
-                  <p>Sign in to your account</p>
+                  <h2>{% trans "Bentornato" %}</h2>
+                  <p>{% trans "Accedi al tuo account" %}</p>
                </header>
                <form class="signin-form" method="POST" action="{% url 'signin' %}" id="modal-login-form">
                   {% csrf_token %}
                   <div id="modal-messages"></div>
                   <div class="form-group">
-                     <label for="signin-email">Username or Email</label>
+                     <label for="signin-email">{% trans "Nome utente o email" %}</label>
                      <input
                         type="text"
                         id="signin-email"
                         name="username"
-                        placeholder="Enter your username or email"
+                        placeholder="{% trans 'Inserisci il tuo nome utente o email' %}"
                         required
                         autocomplete="username"
                         />
                   </div>
                   <div class="form-group">
-                     <label for="signin-password">Password</label>
+                     <label for="signin-password">{% trans "Password" %}</label>
                      <div class="password-field">
                         <input
                            type="password"
                            id="signin-password"
                            name="password"
-                           placeholder="Enter your password"
+                           placeholder="{% trans 'Inserisci la tua password' %}"
                            required
                            />
                         <button
                            type="button"
                            class="toggle-password"
-                           aria-label="Show password"
+                           aria-label="{% trans 'Mostra password' %}"
                            onclick="togglePassword('signin-password')"
                            >
                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -899,31 +720,28 @@
                      </div>
                   </div>
                   <button type="submit" class="submit-btn" id="modal-submit-btn">
-                     <span id="btn-text">Sign In</span>
+                     <span id="btn-text">{% trans "Accedi" %}</span>
                      <span id="btn-spinner" style="display: none;">
                         <svg class="spinner" width="20" height="20" viewBox="0 0 50 50">
                            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
                         </svg>
-                        Signing in...
+                        {% trans "Accesso in corso..." %}
                      </span>
                   </button>
                </form>
                <footer class="form-footer">
                   <p>
-                     Don't have an account?
-                     <a href="{% url 'register' %}" >Sign up</a>
+                     {% trans "Non hai un account?" %}
+                     <a href="{% url 'register' %}">{% trans "Registrati" %}</a>
                   </p>
                   <p class="auth-footer-alt">
-                     Want to offer services?
-                     <a href="{% url 'register_as_a_craftsman' %}">Join as provider</a>
+                     {% trans "Vuoi offrire servizi?" %}
+                     <a href="{% url 'register_as_a_craftsman' %}">{% trans "Diventa professionista" %}</a>
                   </p>
                </footer>
             </div>
          </div>
       </dialog>
-      
-      
-      
       {% if show_alert %}
       <div style="
          background: #f8d7da;
@@ -939,7 +757,7 @@
       {% endif %}
       <footer class="site-footer">
          <div class="footer-container">
-            <p class="footer-copyright">&copy; 2026 FindUs. All rights reserved.</p>
+            <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
          </div>
       </footer>
       <script src="{% static 'assets/js/filter-constants.js' %}"></script>
@@ -959,13 +777,13 @@
          display: none;
          border-top: 3px solid white;
          ">
-         <span>📱 Install FindUs App → </span>
+         <span>📱 {% trans "Installa l'app FidaMano" %} → </span>
          <a href="#" style="
             color: white;
             text-decoration: underline;
             font-weight: bold;
             margin-left: 10px;
-            ">Tap here for instructions</a>
+            ">{% trans "Tocca qui per le istruzioni" %}</a>
          <button onclick="document.getElementById('ios-install-banner').style.display='none'" style="
             background: transparent;
             color: white;
@@ -986,10 +804,12 @@
          
          document.querySelector('#ios-install-banner a').addEventListener('click', (e) => {
              e.preventDefault();
-             alert('To install:\n1. Tap the Share button (📤)\n2. Scroll down\n3. Tap "Add to Home Screen"\n4. Tap "Add"');
+             alert('{% trans "Per installare:" %}\n' +
+                     '1. {% trans "Tocca Condividi (📤)" %}\n' +
+                     '2. {% trans "Scorri verso il basso" %}\n' +
+                     '3. {% trans "Aggiungi alla Home" %}\n' +
+                     '4. {% trans "Conferma" %}');
          });
-      </script>
-      <script>
          
          if ('serviceWorker' in navigator) {
            window.addEventListener('load', () => { 

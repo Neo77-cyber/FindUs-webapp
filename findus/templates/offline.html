@@ -1,9 +1,10 @@
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>You're Offline - FindUs</title>
+    <title>{% trans "Sei offline" %} - FidaMano</title>
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -44,9 +45,9 @@
 </head>
 <body>
     <div class="offline-icon">📶</div>
-    <h1>You're Offline</h1>
-    <p>Please check your internet connection and try again.</p>
-    <button onclick="window.location.reload()">Try Again</button>
+    <h1>{% trans "Sei offline" %}</h1>
+    <p>{% trans "Controlla la tua connessione internet e riprova." %}</p>
+    <button onclick="window.location.reload()">{% trans "Riprova" %}</button>
     
     <script>
         // Try to reload when connection is back

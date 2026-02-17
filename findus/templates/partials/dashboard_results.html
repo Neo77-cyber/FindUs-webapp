@@ -1,15 +1,21 @@
 {% load static %}
+{% load i18n %}
 {% if has_services %}
     <!-- Services Found -->
     <section class="search-results">
         <header class="results-header">
             <div class="results-meta">
-                <h2 class="results-title">Professionals Near You</h2>
-                <p class="results-count">Showing <strong>{{ results_count }}</strong> result{{ results_count|pluralize:"s" }}</p>
+                <h2 class="results-title">{% trans "Professionisti vicino a te" %}</h2>
+                <p class="results-count">{% trans "Mostrando" %} <strong>{{ results_count }}</strong> 
+                {% blocktrans count counter=results_count %}
+                    risultato
+                {% plural %}
+                    risultati
+                {% endblocktrans %}</p>
             </div>
             
             <div class="results-sort">
-                <label for="sort-by" class="visually-hidden">Sort by</label>
+                <label for="sort-by" class="visually-hidden">{% trans "Ordina per" %}</label>
                 <select 
                     name="sort" 
                     id="sort-by" 
@@ -23,11 +29,11 @@
                                 [name='price_min'], [name='price_max'], [name='rating'],
                                 [name='availability'], [name='job_size'], [name='features']"
                 >
-                    <option value="relevance" {% if sort_by == "relevance" %}selected{% endif %}>Most Relevant</option>
-                    <option value="rating" {% if sort_by == "rating" %}selected{% endif %}>Highest Rated</option>
-                    <option value="price_low" {% if sort_by == "price_low" %}selected{% endif %}>Price: Low to High</option>
-                    <option value="price_high" {% if sort_by == "price_high" %}selected{% endif %}>Price: High to Low</option>
-                    <option value="distance" {% if sort_by == "distance" %}selected{% endif %}>Nearest</option>
+                    <option value="relevance" {% if sort_by == "relevance" %}selected{% endif %}>{% trans "Più rilevanti" %}</option>
+                    <option value="rating" {% if sort_by == "rating" %}selected{% endif %}>{% trans "Più votati" %}</option>
+                    <option value="price_low" {% if sort_by == "price_low" %}selected{% endif %}>{% trans "Prezzo: dal più basso" %}</option>
+                    <option value="price_high" {% if sort_by == "price_high" %}selected{% endif %}>{% trans "Prezzo: dal più alto" %}</option>
+                    <option value="distance" {% if sort_by == "distance" %}selected{% endif %}>{% trans "Più vicini" %}</option>
                 </select>
             </div>
         </header>
@@ -71,14 +77,14 @@
                                             <svg viewBox="0 0 24 24" fill="currentColor">
                                                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                                             </svg>
-                                            Verified Pro
+                                            {% trans "Professionista verificato" %}
                                         </span>
                                     {% endif %}
                                     
                                     {% if service.craftsman.license_number %}
-                                        <span class="service-license licensed">Licensed</span>
+                                        <span class="service-license licensed">{% trans "Autorizzato" %}</span>
                                     {% else %}
-                                        <span class="service-license not-licensed">Not Licensed</span>
+                                        <span class="service-license not-licensed">{% trans "Non autorizzato" %}</span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -90,7 +96,7 @@
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                     <circle cx="12" cy="10" r="3"></circle>
                                 </svg>
-                                <span>{{ service.region }}</span>
+                                <span>{{ service.get_region_display }}</span>
                             </div>
                             
                             <div class="dashboard-card-detail-item">
@@ -106,14 +112,14 @@
                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
                                 <span>
-                                    Starting at 
+                                    {% trans "A partire da" %} 
                                     <strong class="dashboard-card-price">
                                         {% if service.price_type == 'hourly' %}
-                                        €{{ service.hourly_rate }}/hr
+                                        €{{ service.hourly_rate }}/{% trans "ora" %}
                                         {% elif service.price_type == 'fixed' %}
                                         €{{ service.fixed_price }}
                                         {% else %}
-                                            Contact for price
+                                            {% trans "Contattaci per il prezzo" %}
                                         {% endif %}
                                     </strong>
                                 </span>
@@ -124,7 +130,7 @@
                             <span class="dashboard-tag">{{ service.get_availability_display }}</span>
                             <span class="dashboard-tag">{{ service.get_job_size_display }}</span>
                             {% if service.materials_included %}
-                                <span class="dashboard-tag">Materials Included</span>
+                                <span class="dashboard-tag">{% trans "Materiali inclusi" %}</span>
                             {% endif %}
                         </div>
 
@@ -134,7 +140,7 @@
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                                     </svg>
-                                    Call Now
+                                    {% trans "Chiama ora" %}
                                 </button>
                             
                             
@@ -144,7 +150,7 @@
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
-                                    View
+                                    {% trans "Visualizza" %}
                                 </button>
                             
                         </div>
@@ -154,7 +160,7 @@
         </div>
 
         <!-- Pagination -->
-        <nav class="pagination" aria-label="Search results pages">
+        <nav class="pagination" aria-label="{% trans 'Pagine dei risultati' %}">
             {% if page_obj.has_previous %}
                 <a 
                     href="#"
@@ -164,7 +170,7 @@
                     hx-push-url="true"
                     hx-include=".filter-form"
                     class="pagination-link pagination-prev"
-                    aria-label="Previous page"
+                    aria-label="{% trans 'Pagina precedente' %}"
                 >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="15 18 9 12 15 6"></polyline>
@@ -201,7 +207,7 @@
                     hx-push-url="true"
                     hx-include=".filter-form"
                     class="pagination-link pagination-next"
-                    aria-label="Next page"
+                    aria-label="{% trans 'Pagina successiva' %}"
                 >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="9 18 15 12 9 6"></polyline>

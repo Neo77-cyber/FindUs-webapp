@@ -1,17 +1,19 @@
 {% load static %}
+{% load i18n %}
 <!doctype html>
-<html lang="en">
+<html lang="it">
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="description" content="{{ craftsman.business_name|default:craftsman.user_profile.user.username }} - Professional on FindUs" />
-      <title>{{ craftsman.business_name|default:craftsman.user_profile.user.username }} | FindUs</title>
+      <meta name="description" content="{% blocktrans with name=craftsman.business_name|default:craftsman.user_profile.user.username %}{{ name }} - Professionista su FidaMano{% endblocktrans %}" />
+      <title>{{ craftsman.business_name|default:craftsman.user_profile.user.username }} | FidaMano</title>
       <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/dashboard-results.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/public-profile.css' %}" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
       <link 
          rel="icon" 
          href="{% static 'assets/icons/find-su-logo.png' %}" 
@@ -23,107 +25,98 @@
          />
    </head>
    <body>
+      <div class="language-switcher-fixed">
+         <form action="{% url 'set_language' %}" method="post" id="language-form">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.path }}">
+            <button type="button" class="language-button" id="language-button" aria-expanded="false">
+               {% get_current_language as LANGUAGE_CODE %}
+               {% get_language_info for LANGUAGE_CODE as current_lang %}
+               <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
+               <span class="language-label">{{ current_lang.name_local }}</span>
+               <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+               </svg>
+            </button>
+            <div class="language-dropdown" id="language-dropdown">
+               {% get_current_language as LANGUAGE_CODE %}
+               {% get_available_languages as LANGUAGES %}
+               {% get_language_info_list for LANGUAGES as languages %}
+               {% for language in languages %}
+               <button type="submit" 
+                  name="language" 
+                  value="{{ language.code }}"
+                  class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+                  data-value="{{ language.code }}">
+               <span class="fi fi-{% if language.code == 'it' %}it{% else %}gb{% endif %}"></span>
+               {{ language.name_local }}
+               </button>
+               {% endfor %}
+            </div>
+         </form>
+      </div>
       <!-- Existing Navbar -->
       <header class="dashboard-header">
-         <div class="dashboard-header-content">
-            <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FindUs Home">
-            <span class="logo-text">FindUs</span>
+         <div class="header-content">
+            <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FidaMano Home">
+               <span class="logo-text">FidaMano</span>
             </a>
-            <div class="dashboard-search">
-               <svg
-                  class="dashboard-search-icon"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  >
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-               </svg>
-               <input
-                  type="search"
-                  class="dashboard-search-input"
-                  placeholder="Search for services..."
-                  aria-label="Search services"
-                  />
-            </div>
+            {% if request.user.is_authenticated %}
             <nav class="dashboard-nav">
-               <a
-                  href="{% url 'saved_services' %}"
-                  class="nav-icon-link"
-                  data-tooltip="Saved"
-                  >
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path
-                        d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
-                        ></path>
+               <a href="{% url 'saved_services' %}" class="nav-icon-link" data-tooltip="{% trans 'Salvati' %}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                   </svg>
                </a>
-               <a href="javascript:alert('This feature is in progress')" class="nav-icon-link" data-tooltip="My Messages">
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path
-                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                        ></path>
+               <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="nav-icon-link" data-tooltip="{% trans 'I miei messaggi' %}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                   </svg>
                   <span class="notification-badge"></span>
                </a>
-               <a
-                  href="{% url 'customer_profile' %}"
-                  class="nav-icon-link"
-                  data-tooltip="Profile"
-                  >
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
+               <a href="{% url 'customer_profile' %}" class="nav-icon-link" data-tooltip="{% trans 'Profilo' %}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                      <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                </a>
-               <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="My Adverts">
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
+               <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                      <polyline points="16 17 21 12 16 7"></polyline>
                      <line x1="21" y1="12" x2="9" y2="12"></line>
                   </svg>
                </a>
             </nav>
-            <a href="#" class="dashboard-cta" onclick="event.preventDefault(); document.getElementById('logout-to-craftsman-form').submit();">
+            {% else %}
+            <!-- Non-authenticated user navigation -->
+            <nav class="nav-menu" id="nav-menu">
+               <a href="{% url 'register' %}" class="nav-link">{% trans "Registrati" %}</a>
+               <a href="{% url 'register_as_a_craftsman' %}" class="nav-link">{% trans "Diventa un professionista" %}</a>
+               <button type="button" class="btn-primary" id="open-signin" onclick="window.location.href='{% url 'signin' %}'">
+               {% trans "Accedi" %}
+               </button>
+            </nav>
+            <button
+               class="mobile-menu-toggle"
+               id="mobile-menu-toggle"
+               aria-label="Toggle navigation"
+               >
                <svg
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   >
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
                </svg>
-               <span>Become a Provider</span>
-            </a>
-            <form id="logout-to-craftsman-form" method="POST" action="{% url 'logout' %}" style="display: none;">
-               {% csrf_token %}
-               <input type="hidden" name="next" value="{% url 'register_as_a_craftsman' %}">
-            </form>
+            </button>
+            {% endif %}
+            
          </div>
       </header>
       <main class="dashboard-main">
@@ -141,16 +134,16 @@
                      {{ craftsman.business_name|default:craftsman.user_profile.user.username }}
                   </h1>
                   {% if craftsman.years_of_experience %}
-                  <p class="profile-subtitle">{{ craftsman.years_of_experience }}+ years on FindUs</p>
+                  <p class="profile-subtitle">{% blocktrans with years=craftsman.years_of_experience %}{{ years }}+ anni su FidaMano{% endblocktrans %}</p>
                   {% else %}
-                  <p class="profile-subtitle">FindUs Professional</p>
+                  <p class="profile-subtitle">{% trans "Professionista FidaMano" %}</p>
                   {% endif %}
                   {% if craftsman.license_number %}
                   <div class="verified-badge">
                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                         <path d="M20 6L9 17l-5-5"/>
                      </svg>
-                     Verified ID
+                     {% trans "ID verificato" %}
                   </div>
                   {% endif %}
                </div>
@@ -159,28 +152,28 @@
                      <circle cx="12" cy="12" r="10"/>
                      <polyline points="12 6 12 12 16 14"/>
                   </svg>
-                  <span>Last seen 1 hour ago</span>
+                  <span>{% trans "Visto l'ultima volta 1 ora fa" %}</span>
                </div>
                <!-- Profile Stats -->
                <div class="profile-stats-sidebar">
                   <div class="stat-item">
-                     <span class="stat-label">On FindUs</span>
+                     <span class="stat-label">{% trans "Su FidaMano" %}</span>
                      <span class="stat-value">
                      {% if craftsman.years_of_experience %}
-                     {{ craftsman.years_of_experience }}+ years
+                     {{ craftsman.years_of_experience }}+ {% trans "anni" %}
                      {% else %}
-                     3+ years
+                     3+ {% trans "anni" %}
                      {% endif %}
                      </span>
                   </div>
                   <div class="stat-item">
-                     <span class="stat-label">Verification</span>
+                     <span class="stat-label">{% trans "Verifica" %}</span>
                      <span class="stat-value">
-                     Verified Pro
+                     {% trans "Professionista verificato" %}
                      </span>
                   </div>
                   <div class="stat-item">
-                     <span class="stat-label">Services</span>
+                     <span class="stat-label">{% trans "Servizi" %}</span>
                      <span class="stat-value">{{ total_services }}</span>
                   </div>
                </div>
@@ -190,21 +183,21 @@
                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                      </svg>
-                     Call Now
+                     {% trans "Chiama ora" %}
                   </a>
                   {% else %}
                   <a href="{% url 'signin' %}" class="contact-btn phone">
                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                      </svg>
-                     Show Contact
+                     {% trans "Mostra contatto" %}
                   </a>
                   {% endif %}
-                  <a href="javascript:alert('This feature is in progress')" class="contact-btn message">
+                  <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="contact-btn message">
                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                      </svg>
-                     Send Message
+                     {% trans "Invia messaggio" %}
                   </a>
                </div>
             </aside>
@@ -213,16 +206,16 @@
                <!-- Bio/Description -->
                {% if craftsman.bio or craftsman.description %}
                <div class="profile-info-card" style="margin-bottom: 2rem;">
-                  <h3 style="margin-bottom: 1rem; color: #111827;">About Me</h3>
+                  <h3 style="margin-bottom: 1rem; color: #111827;">{% trans "Chi sono" %}</h3>
                   <p style="color: #4b5563; line-height: 1.6;">
-                     {{ craftsman.bio|default:craftsman.description|default:"No description provided yet." }}
+                     {{ craftsman.bio|default:craftsman.description|default:_("Nessuna descrizione fornita.") }}
                   </p>
                </div>
                {% endif %}
                <!-- Services Section -->
                <div class="services-header">
-                  <h2>Services Offered</h2>
-                  <span class="services-count">{{ services|length }} service{{ services|length|pluralize }}</span>
+                  <h2>{% trans "Servizi offerti" %}</h2>
+                  <span class="services-count">{% blocktrans count counter=services|length %}{{ counter }} servizio{% plural %}{{ counter }} servizi{% endblocktrans %}</span>
                </div>
                {% if services %}
                <div class="provider-services-grid" style="margin-top: 0;">
@@ -236,10 +229,10 @@
                            class="provider-card-image" alt="{{ service.title }}">
                         {% endif %}
                         <span class="provider-card-status {% if service.service_status == 'Active' %}active{% else %}paused{% endif %}">
-                        {{ service.service_status }}
+                        {% if service.service_status == 'Active' %}{% trans "Attivo" %}{% else %}{% trans "In pausa" %}{% endif %}
                         </span>
                         {% if service.is_boosted %}
-                        <div class="provider-card-boost-badge" title="Boosted">
+                        <div class="provider-card-boost-badge" title="{% trans 'In evidenza' %}">
                            <svg viewBox="0 0 24 24" fill="currentColor">
                               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                            </svg>
@@ -262,7 +255,7 @@
                                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                  <circle cx="12" cy="10" r="3"></circle>
                               </svg>
-                              <span>{{ service.region }}</span>
+                              <span>{{ service.get_region_display }}</span>
                            </div>
                         </div>
                         <div class="provider-card-location">
@@ -274,12 +267,12 @@
                         </div>
                         <div class="provider-card-actions">
                            <a href="{% url 'service_detail' service.id %}" class="provider-action-btn view" 
-                              title="View Details">
+                              title="{% trans 'Vedi dettagli' %}">
                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                  <circle cx="12" cy="12" r="3"></circle>
                               </svg>
-                              <span>View Details</span>
+                              <span>{% trans "Vedi dettagli" %}</span>
                            </a>
                         </div>
                      </div>
@@ -295,8 +288,8 @@
                      <line x1="16" y1="17" x2="8" y2="17"></line>
                      <polyline points="10 9 9 9 8 9"></polyline>
                   </svg>
-                  <h3 style="color: #6b7280; margin-bottom: 0.5rem;">No Services Yet</h3>
-                  <p style="color: #9ca3af;">This provider hasn't listed any services yet.</p>
+                  <h3 style="color: #6b7280; margin-bottom: 0.5rem;">{% trans "Nessun servizio" %}</h3>
+                  <p style="color: #9ca3af;">{% trans "Questo professionista non ha ancora elencato alcun servizio." %}</p>
                </div>
                {% endif %}
             </div>
@@ -315,7 +308,7 @@
                <polyline points="2 17 12 22 22 17"></polyline>
                <polyline points="2 12 12 17 22 12"></polyline>
             </svg>
-            <span>Dashboard</span>
+            <span>{% trans "Dashboard" %}</span>
          </a>
          <a href="{% url 'saved_services' %}" class="bottom-nav-item">
             <svg
@@ -326,9 +319,9 @@
                >
                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
             </svg>
-            <span>Saved</span>
+            <span>{% trans "Salvati" %}</span>
          </a>
-         <a href="javascript:alert('This feature is in progress')" class="bottom-nav-item">
+         <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="bottom-nav-item">
             <svg
                viewBox="0 0 24 24"
                fill="none"
@@ -339,7 +332,7 @@
                   d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
                   ></path>
             </svg>
-            <span>Messages</span>
+            <span>{% trans "Messaggi" %}</span>
             <span class="bottom-nav-badge"></span>
          </a>
          <a href="{% url 'customer_profile' %}" class="bottom-nav-item">
@@ -352,7 +345,7 @@
                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                <circle cx="12" cy="7" r="4"></circle>
             </svg>
-            <span>Profile</span>
+            <span>{% trans "Profilo" %}</span>
          </a>
          <a href="{% url 'logout' %}" class="bottom-nav-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -360,14 +353,15 @@
                <polyline points="16 17 21 12 16 7"></polyline>
                <line x1="21" y1="12" x2="9" y2="12"></line>
             </svg>
-            <span>Logout</span>
+            <span>{% trans "Esci" %}</span>
          </a>
       </nav>
       {% endif %}
       <footer class="site-footer">
          <div class="footer-container">
-            <p class="footer-copyright">&copy; 2026 FindUs. All rights reserved.</p>
+            <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
          </div>
       </footer>
    </body>
+   <script src="{% static 'assets/js/main.js' %}"></script>
 </html>

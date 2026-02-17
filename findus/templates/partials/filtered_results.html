@@ -1,5 +1,6 @@
 <!-- templates/partials/filtered_results.html -->
 {% load static %}
+{% load i18n %}
 <section class="search-results">
     
     <div class="results-grid">
@@ -16,12 +17,13 @@
           
           <div class="dashboard-card-content">
             <div class="dashboard-card-header">
-              {% if service.craftsman.profile_photo %}
-                <img src="{{ service.craftsman.profile_photo.url }}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
-              {% else %}
-                <img src="{% static 'assets/img/default-image.jpg' %}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
-              {% endif %}
-              
+              <a href="{% url 'craftsman_public_profile' service.craftsman.id %}">
+                {% if service.craftsman.profile_photo %}
+                    <img src="{{ service.craftsman.profile_photo.url }}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
+                {% else %}
+                    <img src="{% static 'assets/img/default-image.jpg' %}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
+                {% endif %}
+            </a>
               <div class="dashboard-card-header-info">
                   <a href="{% url 'service_detail' service.id %}" class="dashboard-card-name-link">
                     <h3 class="dashboard-card-name">{{ service.title }}</h3>
@@ -39,14 +41,14 @@
                       <svg viewBox="0 0 24 24" fill="currentColor">
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                       </svg>
-                      Verified Pro
+                      {% trans "Professionista verificato" %}
                     </span>
                   {% endif %}
                   
                   {% if service.craftsman.license_number %}
-                    <span class="service-license licensed">Licensed</span>
+                    <span class="service-license licensed">{% trans "Autorizzato" %}</span>
                   {% else %}
-                    <span class="service-license not-licensed">Not Licensed</span>
+                    <span class="service-license not-licensed">{% trans "Non autorizzato" %}</span>
                   {% endif %}
                 </div>
               </div>
@@ -58,7 +60,7 @@
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                <span>{{ service.region }}</span>
+                <span>{{ service.get_region_display }}</span>
               </div>
               
               <div class="dashboard-card-detail-item">
@@ -74,14 +76,14 @@
                   <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                 </svg>
                 <span>
-                  Starting at 
+                  {% trans "A partire da" %} 
                   <strong class="dashboard-card-price">
                     {% if service.price_type == 'hourly' %}
-                    €{{ service.hourly_rate }}/hr
+                    €{{ service.hourly_rate }}/{% trans "ora" %}
                     {% elif service.price_type == 'fixed' %}
                     €{{ service.fixed_price }}
                     {% else %}
-                      Contact for price
+                      {% trans "Contattaci per il prezzo" %}
                     {% endif %}
                   </strong>
                 </span>
@@ -92,7 +94,7 @@
               <span class="dashboard-tag">{{ service.get_availability_display }}</span>
               <span class="dashboard-tag">{{ service.get_job_size_display }}</span>
               {% if service.materials_included %}
-                <span class="dashboard-tag">Materials Included</span>
+                <span class="dashboard-tag">{% trans "Materiali inclusi" %}</span>
               {% endif %}
             </div>
   
@@ -102,14 +104,14 @@
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
-                  Call Now
+                  {% trans "Chiama ora" %}
                 </button>
               {% else %}
                 <button class="btn-service-primary" onclick="window.location.href='{% url 'signin' %}'">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
-                  Call Now
+                  {% trans "Chiama ora" %}
                 </button>
               {% endif %}
               
@@ -119,7 +121,7 @@
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
-                  View
+                  {% trans "Visualizza" %}
                 </button>
               {% else %}
                 <button class="btn-service-secondary" onclick="window.location.href='{% url 'signin' %}'">
@@ -127,7 +129,7 @@
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
-                  View
+                  {% trans "Visualizza" %}
                 </button>
               {% endif %}
             </div>
@@ -139,7 +141,7 @@
       {% endfor %}
     </div>
 
-    <nav class="pagination" aria-label="Search results pages">
+    <nav class="pagination" aria-label="{% trans 'Pagine dei risultati' %}">
       {% if page_obj.has_previous %}
           <a 
               href="#"
@@ -148,7 +150,7 @@
               hx-swap="innerHTML"
               hx-push-url="true"
               class="pagination-link pagination-prev"
-              aria-label="Previous page"
+              aria-label="{% trans 'Pagina precedente' %}"
           >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="15 18 9 12 15 6"></polyline>
@@ -184,7 +186,7 @@
               hx-swap="innerHTML"
               hx-push-url="true"
               class="pagination-link pagination-next"
-              aria-label="Next page"
+              aria-label="{% trans 'Pagina successiva' %}"
           >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="9 18 15 12 9 6"></polyline>
@@ -193,7 +195,4 @@
       {% endif %}
   </nav>
 
-    
-
-    
   </section>

@@ -1,0 +1,1343 @@
+# English translations for FindUs
+# Copyright (C) 2026 FindUs
+# This file is distributed under the same license as the FindUs package.
+# FindUs Team, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FindUs\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-15 12:00+0100\n"
+"PO-Revision-Date: 2026-02-15 12:00+0100\n"
+"Last-Translator: FindUs Team\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: handyman_project/settings.py:141
+msgid "Italiano"
+msgstr "Italian"
+
+#: handyman_project/settings.py:142
+msgid "English"
+msgstr "English"
+
+# ============== HOME PAGE ==============
+msgid "Cosa stai cercando?"
+msgstr "What are you looking for?"
+
+msgid "Tutte le regioni"
+msgstr "All Regions"
+
+msgid "Tutte le categorie"
+msgstr "All Categories"
+
+msgid "Sto cercando..."
+msgstr "I am looking for..."
+
+msgid "Cerca"
+msgstr "Search"
+
+msgid "Filtri"
+msgstr "Filters"
+
+msgid "Cancella tutto"
+msgstr "Clear All"
+
+msgid "Applica"
+msgstr "Apply"
+
+msgid "Fascia di prezzo"
+msgstr "Price Range"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "a"
+msgstr "to"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "Valutazione"
+msgstr "Rating"
+
+msgid "5 stelle"
+msgstr "5 stars"
+
+msgid "4+ stelle"
+msgstr "4+ stars"
+
+msgid "3+ stelle"
+msgstr "3+ stars"
+
+msgid "Qualsiasi valutazione"
+msgstr "Any rating"
+
+msgid "Disponibilità"
+msgstr "Availability"
+
+msgid "Dimensione lavoro"
+msgstr "Job Size"
+
+msgid "Caratteristiche"
+msgstr "Features"
+
+msgid "Professionista verificato"
+msgstr "Verified Pro"
+
+msgid "Autorizzato"
+msgstr "Licensed"
+
+msgid "Assicurato"
+msgstr "Insured"
+
+msgid "Offre garanzia"
+msgstr "Offers Warranty"
+
+msgid "Caricamento..."
+msgstr "Loading..."
+
+msgid "Annulla"
+msgstr "Cancel"
+
+msgid "Mostra risultati"
+msgstr "Show Results"
+
+msgid "Prossimamente"
+msgstr "Coming Soon"
+
+msgid "Nessun servizio nella tua zona"
+msgstr "No services in your area yet"
+
+msgid "Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a sapere quando FindUs arriva nel tuo quartiere."
+msgstr "We're expanding! Join our waiting list to be the first to know when FindUs launches in your neighborhood."
+
+msgid "Nome completo"
+msgstr "Full Name"
+
+msgid "Indirizzo email"
+msgstr "Email Address"
+
+msgid "Località"
+msgstr "Location"
+
+msgid "Numero di telefono"
+msgstr "Phone Number"
+
+msgid "Servizio necessario"
+msgstr "Service Needed"
+
+msgid "Seleziona un servizio"
+msgstr "Select a service"
+
+msgid "Note aggiuntive"
+msgstr "Additional Notes"
+
+msgid "Dicci di più su cosa stai cercando..."
+msgstr "Tell us more about what you're looking for..."
+
+msgid "Accetto di ricevere aggiornamenti sul lancio di FindUs e offerte esclusive di accesso anticipato."
+msgstr "I agree to receive updates about FindUs launch and exclusive early access offers."
+
+msgid "Le tue informazioni sono al sicuro e non verranno mai condivise."
+msgstr "Your information is secure and will never be shared."
+
+msgid "Professionisti vicino a te"
+msgstr "Professionals Near You"
+
+msgid "Professionisti più votati"
+msgstr "Top Rated Professionals"
+
+msgid "Mostrando"
+msgstr "Showing"
+
+msgid "risultato"
+msgid_plural "risultati"
+msgstr[0] "result"
+msgstr[1] "results"
+
+msgid "professionisti"
+msgstr "professionals"
+
+msgid "Ordina per"
+msgstr "Sort by"
+
+msgid "Più rilevanti"
+msgstr "Most Relevant"
+
+msgid "Più votati"
+msgstr "Highest Rated"
+
+msgid "Prezzo: dal più basso"
+msgstr "Price: Low to High"
+
+msgid "Prezzo: dal più alto"
+msgstr "Price: High to Low"
+
+msgid "Più vicini"
+msgstr "Nearest"
+
+# ============== REGISTER PAGE ==============
+msgid "Crea il tuo account FindUs - Inizia oggi"
+msgstr "Create your FindUs account - Get started today"
+
+msgid "Registrati"
+msgstr "Register"
+
+msgid "Crea account"
+msgstr "Create account"
+
+msgid "Iscriviti a FindUs oggi"
+msgstr "Join FindUs today"
+
+msgid "Nome utente"
+msgstr "Username"
+
+msgid "Scegli un nome utente"
+msgstr "Choose a username"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Inserisci la tua email"
+msgstr "Enter your email"
+
+msgid "formato italiano"
+msgstr "Italian format"
+
+msgid "Inserisci cellulare italiano (inizia con 3) o fisso (inizia con 0)"
+msgstr "Enter Italian mobile (starts with 3) or landline (starts with 0)"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Crea una password"
+msgstr "Create a password"
+
+msgid "Mostra password"
+msgstr "Show password"
+
+msgid "Deve essere lunga almeno 8 caratteri"
+msgstr "Must be at least 8 characters"
+
+msgid "Conferma password"
+msgstr "Confirm Password"
+
+msgid "Conferma la tua password"
+msgstr "Confirm your password"
+
+msgid "Accetto i"
+msgstr "I agree to the"
+
+msgid "Termini di servizio"
+msgstr "Terms of Service"
+
+msgid "e la"
+msgstr "and the"
+
+msgid "Informativa sulla privacy"
+msgstr "Privacy Policy"
+
+msgid "Elaborazione in corso..."
+msgstr "Processing..."
+
+msgid "Hai già un account?"
+msgstr "Already have an account?"
+
+msgid "Accedi"
+msgstr "Sign in"
+
+msgid "Vuoi offrire servizi?"
+msgstr "Want to offer services?"
+
+msgid "Diventa professionista"
+msgstr "Join as provider"
+
+msgid "Torna alla home"
+msgstr "Back to Home"
+
+# ============== CRAFTSMAN REGISTER PAGE ==============
+msgid "Iscriviti a FindUs come professionista - Fai crescere la tua attività"
+msgstr "Join FindUs as a service provider - Grow your business"
+
+msgid "Diventa Professionista"
+msgstr "Become a Provider"
+
+msgid "Diventa un Professionista"
+msgstr "Become a Service Provider"
+
+msgid "Entra nella nostra rete di professionisti fidati"
+msgstr "Join our network of trusted professionals"
+
+msgid "Anni di esperienza"
+msgstr "Years of experience"
+
+msgid "0-1 anni"
+msgstr "0-1 years"
+
+msgid "1-3 anni"
+msgstr "1-3 years"
+
+msgid "3-5 anni"
+msgstr "3-5 years"
+
+msgid "5+ anni"
+msgstr "5+ years"
+
+msgid "Foto profilo"
+msgstr "Profile Photo"
+
+msgid "opzionale"
+msgstr "Optional"
+
+msgid "Scegli foto profilo"
+msgstr "Choose Profile Photo"
+
+msgid "JPG, PNG fino a 5MB"
+msgstr "JPG, PNG up to 5MB"
+
+msgid "Anteprima"
+msgstr "Preview"
+
+msgid "Ho una licenza professionale"
+msgstr "I have a professional license"
+
+msgid "Inserisci il numero di licenza"
+msgstr "Enter license number"
+
+msgid "Crea account professionista"
+msgstr "Create Provider Account"
+
+msgid "Vuoi assumere?"
+msgstr "Looking to hire?"
+
+msgid "Registrati come cliente"
+msgstr "Sign up as customer"
+
+# ============== SIGNIN PAGE ==============
+msgid "Accedi a FindUs - Accedi al tuo account"
+msgstr "Sign in to FindUs - Access your account"
+
+
+msgid "Bentornato"
+msgstr "Welcome back"
+
+msgid "Accedi al tuo account"
+msgstr "Sign in to your account"
+
+msgid "Nome utente o email"
+msgstr "Username or Email"
+
+msgid "Inserisci il tuo nome utente o email"
+msgstr "Enter your username or email"
+
+msgid "Inserisci la tua password"
+msgstr "Enter your password"
+
+msgid "Accesso in corso..."
+msgstr "Signing in..."
+
+msgid "Non hai un account?"
+msgstr "Don't have an account?"
+
+# ============== DASHBOARD ==============
+msgid "La tua dashboard FindUs - Trova e gestisci professionisti fidati"
+msgstr "Your FindUs Dashboard - Find and manage trusted professionals"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Cerca servizi..."
+msgstr "Search for services..."
+
+msgid "Cerca servizi"
+msgstr "Search services"
+
+msgid "Salvati"
+msgstr "Saved"
+
+msgid "I miei messaggi"
+msgstr "My Messages"
+
+msgid "Questa funzione è in fase di sviluppo"
+msgstr "This feature is in progress"
+
+msgid "Profilo"
+msgstr "Profile"
+
+msgid "I miei annunci"
+msgstr "My Adverts"
+
+msgid "Esci"
+msgstr "Logout"
+
+
+msgid "Regione"
+msgstr "Region"
+
+msgid "Categoria"
+msgstr "Category"
+
+msgid "Categoria servizio"
+msgstr "Service Category"
+
+msgid "Disponibile"
+msgstr "Available"
+
+msgid "Messaggi"
+msgstr "Messages"
+
+msgid "Tutti i diritti riservati."
+msgstr "All rights reserved."
+
+# ============== DASHBOARD RESULTS ==============
+msgid "Pagine dei risultati"
+msgstr "Search results pages"
+
+msgid "Pagina precedente"
+msgstr "Previous page"
+
+msgid "Pagina successiva"
+msgstr "Next page"
+
+msgid "A partire da"
+msgstr "Starting at"
+
+msgid "ora"
+msgstr "hr"
+
+msgid "Contattaci per il prezzo"
+msgstr "Contact for price"
+
+msgid "Materiali inclusi"
+msgstr "Materials Included"
+
+
+msgid "Visualizza"
+msgstr "View"
+
+msgid "Non autorizzato"
+msgstr "Not Licensed"
+
+# ============== PROFILE PAGE ==============
+msgid "Gestisci il tuo profilo FindUs e le impostazioni dell'account"
+msgstr "Manage your FindUs profile and account settings"
+
+msgid "Info account"
+msgstr "Account Info"
+
+msgid "Azioni rapide"
+msgstr "Quick Actions"
+
+msgid "Servizi salvati"
+msgstr "Saved Services"
+
+msgid "Informazioni account"
+msgstr "Account Information"
+
+msgid "Gestisci i tuoi dati personali"
+msgstr "Manage your personal details"
+
+msgid "Nome"
+msgstr "First Name"
+
+msgid "Cognome"
+msgstr "Last Name"
+
+msgid "Salva modifiche"
+msgstr "Save Changes"
+
+msgid "Sicurezza"
+msgstr "Security"
+
+msgid "Gestisci sicurezza"
+msgstr "Manage Security"
+
+msgid "Ultima modifica 3 mesi fa"
+msgstr "Last changed 3 months ago"
+
+msgid "Cambia password"
+msgstr "Change Password"
+
+msgid "Password attuale"
+msgstr "Current Password"
+
+msgid "Nuova password"
+msgstr "New Password"
+
+msgid "Conferma nuova password"
+msgstr "Confirm New Password"
+
+msgid "Aggiorna password"
+msgstr "Update Password"
+
+# ============== SAVED SERVICES PAGE ==============
+msgid "I tuoi professionisti salvati su FindUs"
+msgstr "Your saved professionals on FindUs"
+
+msgid "Professionisti salvati"
+msgstr "Saved Professionals"
+
+msgid "Hai <strong>%(counter)s</strong> professionista salvato"
+msgid_plural "Hai <strong>%(counter)s</strong> professionisti salvati"
+msgstr[0] "You have <strong>%(counter)s</strong> saved professional"
+msgstr[1] "You have <strong>%(counter)s</strong> saved professionals"
+
+msgid "Nessun professionista salvato"
+msgstr "No saved professionals yet"
+
+msgid "Esplora i nostri professionisti fidati e salvali qui per accedervi rapidamente in seguito."
+msgstr "Browse our trusted professionals and save them here for quick access later."
+
+msgid "Cerca professionisti"
+msgstr "Browse Professionals"
+
+msgid "Rimuovi dai salvati"
+msgstr "Remove from saved"
+
+# ============== CRAFTSMAN DASHBOARD ==============
+
+
+msgid "Dashboard Professionista"
+msgstr "Provider Dashboard"
+
+msgid "Cerca i tuoi servizi..."
+msgstr "Search your services..."
+
+msgid "Aggiungi servizio"
+msgstr "Add Service"
+
+msgid "Testimonianze dei clienti"
+msgstr "Customer Testimonials"
+
+msgid "Cosa dicono i tuoi clienti dei tuoi servizi"
+msgstr "What your customers are saying about your services"
+
+msgid "Valutazione media"
+msgstr "Average Rating"
+
+msgid "Recensioni totali"
+msgstr "Total Reviews"
+
+msgid "Raccomanderebbero"
+msgstr "Would Recommend"
+
+msgid "\"Giulia ha trasformato il nostro soggiorno con una mano di vernice fresca. Veloce, pulita e un prezzo molto onesto.\""
+msgstr "\"Giulia transformed our living room with a fresh coat of paint. Fast, clean, and a very fair price.\""
+
+msgid "Decoratrice"
+msgstr "Decorator"
+
+msgid "\"Le persiane del mio balcone erano bloccate da settimane. Chiara le ha riparate facilmente. La consiglio vivamente per qualsiasi riparazione domestica.\""
+msgstr "\"My balcony shutters were stuck for weeks. Chiara fixed them easily. Highly recommend her for any home repairs.\""
+
+msgid "Riparazione persiane"
+msgstr "Shutter Repair"
+
+msgid "\"Il nostro giardino era un disordine dopo l'inverno. Valentina lo ha riportato in vita. Conosce davvero le sue piante.\""
+msgstr "\"Our garden was a mess after the winter. Valentina brought it back to life. She really knows her plants.\""
+
+msgid "Giardiniera"
+msgstr "Gardener"
+
+msgid "\"Usiamo Sofia per le pulizie del nostro Airbnb. È incredibilmente meticolosa e i nostri ospiti menzionano sempre quanto sia scintillante la casa.\""
+msgstr "\"We use Sofia for our Airbnb cleanings. She is incredibly thorough and our guests always mention how sparkling the place is.\""
+
+msgid "Pulizie"
+msgstr "Cleaning"
+
+msgid "\"Servizio HVAC incredibile! Ha riparato il mio condizionatore rapidamente e a un prezzo ragionevole. Competente.\""
+msgstr "\"Incredible HVAC service! Fixed my AC unit quickly and at a reasonable price. Knowledgeable.\""
+
+msgid "Traslochi"
+msgstr "Moving"
+
+msgid "\"Avevo una consegna IKEA enorme che non potevo gestire. Lorenzo ha montato tutto perfettamente in un pomeriggio.\""
+msgstr "\"Had a massive IKEA delivery that I couldn't handle. Lorenzo put everything together perfectly in one afternoon.\""
+
+msgid "Montaggio mobili"
+msgstr "Furniture Assembly"
+
+msgid "I miei servizi"
+msgstr "My Services"
+
+msgid "Gestisci e monitora il tuo %(counter)s servizio"
+msgid_plural "Gestisci e monitora i tuoi %(counter)s servizi"
+msgstr[0] "Manage and track your %(counter)s service"
+msgstr[1] "Manage and track your %(counter)s services"
+
+msgid "Aggiungi il tuo primo servizio per iniziare"
+msgstr "Add your first service to get started"
+
+msgid "Tutti i servizi"
+msgstr "All Services"
+
+msgid "Attivi"
+msgstr "Active"
+
+msgid "In evidenza"
+msgstr "Boosted"
+
+msgid "Elimina servizio"
+msgstr "Delete Service"
+
+
+msgid "Questa azione non può essere annullata. Il servizio verrà eliminato permanentemente."
+msgstr "This action cannot be undone. The service will be permanently deleted."
+
+msgid "Modifica servizio"
+msgstr "Edit Service"
+
+msgid "Titolo servizio"
+msgstr "Service Title"
+
+
+msgid "Tipo di prezzo"
+msgstr "Pricing Type"
+
+msgid "Tariffa oraria (€)"
+msgstr "Hourly Rate (€)"
+
+msgid "Prezzo fisso (€)"
+msgstr "Fixed Price (€)"
+
+msgid "Seleziona regione"
+msgstr "Select Region"
+
+msgid "Metti in evidenza il tuo servizio"
+msgstr "Boost Your Service"
+
+msgid "Boost Base"
+msgstr "Basic Boost"
+
+msgid "3x più visibilità"
+msgstr "3x more visibility"
+
+
+
+msgid "Badge priorità"
+msgstr "Priority badge"
+
+msgid "Seleziona piano"
+msgstr "Select Plan"
+
+msgid "Più popolare"
+msgstr "Most Popular"
+
+msgid "Boost Pro"
+msgstr "Pro Boost"
+
+msgid "5x più visibilità"
+msgstr "5x more visibility"
+
+msgid "In cima a tutte le categorie"
+msgstr "Top of all categories"
+
+msgid "Badge in evidenza"
+msgstr "Featured badge"
+
+msgid "Promozione via email"
+msgstr "Email promotion"
+
+msgid "Boost Premium"
+msgstr "Premium Boost"
+
+msgid "10x più visibilità"
+msgstr "10x more visibility"
+
+msgid "In evidenza sulla homepage"
+msgstr "Homepage feature"
+
+msgid "Badge verificato"
+msgstr "Verified badge"
+
+msgid "Supporto prioritario"
+msgstr "Priority support"
+
+msgid "Notifiche SMS"
+msgstr "SMS notifications"
+
+msgid "Piano selezionato"
+msgstr "Selected Plan"
+
+msgid "per"
+msgstr "for"
+
+msgid "giorni"
+msgstr "days"
+
+msgid "Carica prova di pagamento"
+msgstr "Upload Payment Proof"
+
+msgid "Clicca per caricare ricevuta (JPG, PNG, PDF - max 5MB)"
+msgstr "Click to upload receipt (JPG, PNG, PDF - max 5MB)"
+
+msgid "Note (opzionale)"
+msgstr "Notes (Optional)"
+
+msgid "Aggiungi note sul tuo pagamento..."
+msgstr "Add any notes about your payment..."
+
+msgid "Informazioni di pagamento per bonifico internazionale"
+msgstr "Payment Information for International Transfer"
+
+msgid "Nome beneficiario:"
+msgstr "Beneficiary Name:"
+
+msgid "Copia negli appunti"
+msgstr "Copy to clipboard"
+
+msgid "Indirizzo banca:"
+msgstr "Bank Address:"
+
+msgid "BIC banca corrispondente:"
+msgstr "Correspondent Bank BIC:"
+
+msgid "per bonifici EUR"
+msgstr "for EUR transfers"
+
+msgid "Riferimento:"
+msgstr "Reference:"
+
+msgid "Copia riferimento negli appunti"
+msgstr "Copy reference to clipboard"
+
+msgid "Importo:"
+msgstr "Amount:"
+
+msgid "Copia importo negli appunti"
+msgstr "Copy amount to clipboard"
+
+msgid "Copia tutti i dettagli"
+msgstr "Copy All Details"
+
+msgid "Note importanti per le banche italiane:"
+msgstr "Important Notes for Italian Banks:"
+
+msgid "Usa"
+msgstr "Use"
+
+msgid "come codice SWIFT/BIC"
+msgstr "as the SWIFT/BIC code"
+
+msgid "Per bonifici in EUR, includi la banca corrispondente"
+msgstr "For EUR transfers, include correspondent bank"
+
+msgid "Includi sempre il"
+msgstr "Always include the"
+
+msgid "numero di riferimento"
+msgstr "reference number"
+
+msgid "nella descrizione del bonifico"
+msgstr "in the transfer description"
+
+msgid "Assicurati di trasferire in"
+msgstr "Make sure to transfer in"
+
+msgid "EURO (€)"
+msgstr "EURO (€)"
+
+msgid "Potresti dover specificare"
+msgstr "You may need to specify"
+
+msgid "'Nessuna spesa per il beneficiario'"
+msgstr "\"No charges for beneficiary\""
+
+msgid "Il bonifico internazionale richiede 1-3 giorni lavorativi"
+msgstr "International transfer takes 1-3 business days"
+
+msgid "Conserva la ricevuta di pagamento per i tuoi archivi"
+msgstr "Keep the payment receipt for your records"
+
+msgid "Invia richiesta boost"
+msgstr "Submit Boost Request"
+
+# ============== CRAFTSMAN PROFILE PAGE ==============
+msgid "Nome attività"
+msgstr "Business Name"
+
+msgid "Seleziona anni"
+msgstr "Select years"
+
+msgid "Numero licenza (opzionale)"
+msgstr "License Number (Optional)"
+
+msgid "Foto attuale"
+msgstr "Current photo"
+
+# ============== CRAFTSMAN PUBLIC PROFILE ==============
+msgid "%(name)s - Professionista su FindUs"
+msgstr "%(name)s - Professional on FindUs"
+
+msgid "%(years)s+ anni su FindUs"
+msgstr "%(years)s+ years on FindUs"
+
+msgid "Professionista FindUs"
+msgstr "FindUs Professional"
+
+msgid "ID verificato"
+msgstr "Verified ID"
+
+msgid "Visto l'ultima volta 1 ora fa"
+msgstr "Last seen 1 hour ago"
+
+msgid "Su FindUs"
+msgstr "On FindUs"
+
+msgid "anni"
+msgstr "years"
+
+msgid "Verifica"
+msgstr "Verification"
+
+msgid "Servizi"
+msgstr "Services"
+
+msgid "Mostra contatto"
+msgstr "Show Contact"
+
+msgid "Invia messaggio"
+msgstr "Send Message"
+
+msgid "Chi sono"
+msgstr "About Me"
+
+msgid "Nessuna descrizione fornita."
+msgstr "No description provided yet."
+
+msgid "Servizi offerti"
+msgstr "Services Offered"
+
+msgid "%(counter)s servizio"
+msgid_plural "%(counter)s servizi"
+msgstr[0] "%(counter)s service"
+msgstr[1] "%(counter)s services"
+
+msgid "Nessun servizio"
+msgstr "No Services Yet"
+
+msgid "Questo professionista non ha ancora elencato alcun servizio."
+msgstr "This provider hasn't listed any services yet."
+
+# ============== SERVICE DETAIL PAGE ==============
+msgid "/ora"
+msgstr "/hr"
+
+msgid "prezzo fisso"
+msgstr "fixed price"
+
+msgid "Contatta"
+msgstr "Contact"
+
+msgid "per il prezzo"
+msgstr "for price"
+
+msgid "Tariffa oraria"
+msgstr "Hourly Rate"
+
+msgid "Prezzo fisso"
+msgstr "Fixed Price"
+
+msgid "Non specificato"
+msgstr "Not specified"
+
+msgid "%(years)s di esperienza"
+msgstr "%(years)s years experience"
+
+msgid "Chiama"
+msgstr "Call"
+
+msgid "Registrati per chiamare"
+msgstr "Register to Call"
+
+msgid "Condividi"
+msgstr "Share"
+
+msgid "Condividi servizio"
+msgstr "Share Service"
+
+msgid "Link copiato!"
+msgstr "Link copied!"
+
+msgid "Errore durante la copia"
+msgstr "Error copying"
+
+msgid "Descrizione del servizio"
+msgstr "Service Description"
+
+msgid "Caratteristiche principali"
+msgstr "Key Features"
+
+msgid "Garanzia sul lavoro"
+msgstr "Warranty on Work"
+
+msgid "Dettagli del servizio"
+msgstr "Service Details"
+
+msgid "Durata stimata"
+msgstr "Estimated Duration"
+
+msgid "Spese di trasferta"
+msgstr "Travel Fee"
+
+msgid "Recensioni"
+msgstr "Reviews"
+
+msgid "Anni exp"
+msgstr "Years Exp"
+
+msgid "Recensioni dei clienti (%(count)s)"
+msgstr "Customer Reviews (%(count)s)"
+
+msgid "Scrivi una recensione"
+msgstr "Write a Review"
+
+msgid "Titolo"
+msgstr "Title"
+
+msgid "Breve riassunto"
+msgstr "Brief summary"
+
+msgid "La tua recensione"
+msgstr "Your Review"
+
+msgid "Condividi i dettagli..."
+msgstr "Share details..."
+
+msgid "Invia recensione"
+msgstr "Submit Review"
+
+msgid "Ancora nessuna recensione. Sii il primo a recensire questo servizio!"
+msgstr "No reviews yet. Be the first to review this service!"
+
+msgid "recensioni"
+msgstr "reviews"
+
+msgid "Membro dal %(date)s"
+msgstr "Member since %(date)s"
+
+msgid "%(years)s anni di esperienza"
+msgstr "%(years)s years experience"
+
+msgid "Registrati per contattare"
+msgstr "Register to Contact"
+
+msgid "Consigli di sicurezza"
+msgstr "Safety Tips"
+
+msgid "Incontrarsi sempre prima in un luogo pubblico"
+msgstr "Always meet in public first"
+
+msgid "Controlla le valutazioni e le recensioni del professionista"
+msgstr "Check craftsman's ratings and reviews"
+
+msgid "Non pagare ingenti somme in anticipo"
+msgstr "Don't pay large amounts upfront"
+
+msgid "Ottieni un accordo scritto per lavori importanti"
+msgstr "Get a written agreement for large jobs"
+
+# ============== SERVICE WIZARD PAGE ==============
+msgid "Aggiungi nuovo servizio"
+msgstr "Add New Service"
+
+msgid "Passo %(current)s di %(total)s"
+msgstr "Step %(current)s of %(total)s"
+
+msgid "Annuncio base"
+msgstr "Basic Ad"
+
+msgid "Luogo e prezzo"
+msgstr "Location & Money"
+
+msgid "Completamento"
+msgstr "Finish"
+
+msgid "Correggi gli errori qui sotto."
+msgstr "Please correct the errors below."
+
+msgid "Foto del tuo lavoro"
+msgstr "Photo of Your Work"
+
+msgid "Clicca per caricare la foto del tuo lavoro"
+msgstr "Click to upload your work photo"
+
+msgid "JPG o PNG • Max 5MB"
+msgstr "JPG or PNG • Max 5MB"
+
+msgid "Dove lavori?"
+msgstr "Where do you work?"
+
+msgid "Come fai pagare?"
+msgstr "How do you charge?"
+
+msgid "Tempo stimato"
+msgstr "Estimated Time"
+
+msgid "totale"
+msgstr "total"
+
+msgid "Spese di trasferta (opzionale)"
+msgstr "Travel Fee (Optional)"
+
+msgid "Quanto velocemente puoi presentarti?"
+msgstr "How fast can you show up?"
+
+msgid "Materiali inclusi nel prezzo"
+msgstr "Materials included in price"
+
+msgid "Pronto per pubblicare?"
+msgstr "Ready to publish?"
+
+msgid "Il tuo servizio sarà pubblicato immediatamente. Potrai modificarlo in qualsiasi momento dalla tua dashboard."
+msgstr "Your service will go live immediately. You can edit it anytime from your dashboard."
+
+msgid "Indietro"
+msgstr "Back"
+
+msgid "Continua"
+msgstr "Continue"
+
+msgid "Pubblica servizio"
+msgstr "Publish Service"
+
+# ============== SAVE BUTTON ==============
+
+
+msgid "Salva servizio"
+msgstr "Save Service"
+
+msgid "Accedi per salvare"
+msgstr "Login to Save"
+
+# ============== WAITLIST SECTION ==============
+msgid "Nessun servizio trovato per i tuoi filtri. Prova con categorie o regioni diverse."
+msgstr "No services found for your filters. Try different categories or regions."
+
+msgid "Iscriviti alla lista d'attesa"
+msgstr "Join the Waiting List"
+
+msgid "Sii tra i primi ad accedere a professionisti verificati quando lanceremo."
+msgstr "Be among the first to access verified professionals when we launch."
+
+msgid "Mario Rossi"
+msgstr "John Doe"
+
+msgid "mario@example.com"
+msgstr "john@example.com"
+
+msgid "La tua città"
+msgstr "Your city"
+
+msgid "+39 123 456 7890"
+msgstr "+1 (555) 123-4567"
+
+msgid "Idraulico"
+msgstr "Plumber"
+
+msgid "Elettricista"
+msgstr "Electrician"
+
+msgid "Tecnico AC"
+msgstr "AC Technician"
+
+msgid "Carpentiere"
+msgstr "Carpenter"
+
+msgid "Pavimentista"
+msgstr "Tiler"
+
+msgid "Pittore"
+msgstr "Painter"
+
+msgid "Falegname"
+msgstr "Furniture Maker"
+
+msgid "Disinfestatore"
+msgstr "Fumigator"
+
+msgid "Tecnico DSTV"
+msgstr "DSTV Technician"
+
+msgid "Tecnico elettrodomestici a gas"
+msgstr "Gas Appliance Technician"
+
+msgid "Operatore POP"
+msgstr "POP Worker"
+
+msgid "Addetto alle pulizie"
+msgstr "Cleaner"
+
+msgid "Operatore alluminio"
+msgstr "Aluminium Worker"
+
+msgid "Saldatore"
+msgstr "Welder"
+
+msgid "Tecnico tetti"
+msgstr "Roof Technician"
+
+msgid "Tecnico fotovoltaico"
+msgstr "Solar Power Technician"
+
+msgid "Muratore"
+msgstr "Mason"
+
+msgid "Operatore vetro/divisioni"
+msgstr "Glass/Partitioning Worker"
+
+msgid "Muratore / Intonacatore"
+msgstr "Bricklayer / Plasterer"
+
+msgid "Capocantiere"
+msgstr "Foreman"
+
+msgid "Giardinaggio"
+msgstr "Landscaping"
+
+msgid "Riparazione elettrodomestici"
+msgstr "Appliance Repair"
+
+msgid "Servizi HVAC"
+msgstr "HVAC Services"
+
+msgid "Tecnico CCTV / Sistemi di sicurezza"
+msgstr "CCTV / Security System Technician"
+
+msgid "Tecnico gruppi elettrogeni"
+msgstr "Generator Technician"
+
+msgid "Interior designer"
+msgstr "Interior Designer"
+
+msgid "Pavimentazione / Lavori in epossidica"
+msgstr "Flooring / Epoxy Work"
+
+msgid "Lavorazione metalli"
+msgstr "Metal Fabrication"
+
+msgid "Specialista impermeabilizzazione"
+msgstr "Waterproofing Specialist"
+
+msgid "Disinfestazione"
+msgstr "Pest Control"
+
+msgid "Operatore ponteggi"
+msgstr "Scaffolding Worker"
+
+msgid "Supervisore di cantiere"
+msgstr "Site Supervisor"
+
+msgid "Altro"
+msgstr "Other"
+
+# ============== SERVICE GRID PARTIAL ==============
+msgid "Attivo"
+msgstr "Active"
+
+msgid "In pausa"
+msgstr "Paused"
+
+
+
+
+msgid "+€%(fee)s Trasferta"
+msgstr "+€%(fee)s Travel"
+
+msgid "Trasferta gratuita"
+msgstr "Free Travel"
+
+
+msgid "Modifica"
+msgstr "Edit"
+
+
+msgid "Elimina"
+msgstr "Delete"
+
+msgid "Precedente"
+msgstr "Previous"
+
+msgid "Pagina {{ current }} di {{ total }}"
+msgstr "Page {{ current }} of {{ total }}"
+
+msgid "Successiva"
+msgstr "Next"
+
+msgid "Nessun servizio trovato con questo filtro."
+msgstr "No services found with this filter."
+
+msgid "Nessun servizio trovato."
+msgstr "No services found."
+
+# ============== MOBILE INLINE FILTERS ==============
+
+msgid "Seleziona categoria"
+msgstr "Select Category"
+
+msgid "Seleziona disponibilità"
+msgstr "Select Availability"
+
+# ============== OFFLINE PAGE ==============
+msgid "Sei offline"
+msgstr "You're Offline"
+
+msgid "Controlla la tua connessione internet e riprova."
+msgstr "Please check your internet connection and try again."
+
+msgid "Riprova"
+msgstr "Try Again"
+
+# ============== REGION CHOICES ==============
+msgid "Abruzzo"
+msgstr "Abruzzo"
+
+msgid "Aosta Valley (Valle d'Aosta)"
+msgstr "Aosta Valley"
+
+msgid "Apulia (Puglia)"
+msgstr "Apulia"
+
+msgid "Basilicata"
+msgstr "Basilicata"
+
+msgid "Calabria"
+msgstr "Calabria"
+
+msgid "Campania"
+msgstr "Campania"
+
+msgid "Emilia-Romagna"
+msgstr "Emilia-Romagna"
+
+msgid "Friuli-Venezia Giulia"
+msgstr "Friuli-Venezia Giulia"
+
+msgid "Lazio"
+msgstr "Lazio"
+
+msgid "Liguria"
+msgstr "Liguria"
+
+msgid "Lombardy (Lombardia)"
+msgstr "Lombardy"
+
+msgid "Marche"
+msgstr "Marche"
+
+msgid "Molise"
+msgstr "Molise"
+
+msgid "Piedmont (Piemonte)"
+msgstr "Piedmont"
+
+msgid "Sardinia (Sardegna)"
+msgstr "Sardinia"
+
+msgid "Sicily (Sicilia)"
+msgstr "Sicily"
+
+msgid "Trentino-South Tyrol (Trentino-Alto Adige)"
+msgstr "Trentino-South Tyrol"
+
+msgid "Tuscany (Toscana)"
+msgstr "Tuscany"
+
+msgid "Umbria"
+msgstr "Umbria"
+
+msgid "Veneto"
+msgstr "Veneto"
+
+# ============== AVAILABILITY CHOICES ==============
+msgid "Immediate"
+msgstr "Immediate"
+
+msgid "24_hours"
+msgstr "Within 24 Hours"
+
+msgid "48_hours"
+msgstr "Within 48 Hours"
+
+msgid "scheduled"
+msgstr "Scheduled"
+
+# ============== SERVICE SCOPE CHOICES ==============
+msgid "small"
+msgstr "Small"
+
+msgid "medium"
+msgstr "Medium"
+
+msgid "large"
+msgstr "Large"
+
+msgid "project"
+msgstr "Project"
+
+# ============== USER TYPE CHOICES ==============
+msgid "customer"
+msgstr "Customer"
+
+msgid "craftsman"
+msgstr "Craftsman"
+
+# ============== RATING CHOICES ==============
+msgid "1"
+msgstr "1 Star"
+
+msgid "2"
+msgstr "2 Stars"
+
+msgid "3"
+msgstr "3 Stars"
+
+msgid "4"
+msgstr "4 Stars"
+
+msgid "5"
+msgstr "5 Stars"
+
+# ============== BOOST STATUS CHOICES ==============
+msgid "pending"
+msgstr "Pending"
+
+msgid "approved"
+msgstr "Approved"
+
+msgid "rejected"
+msgstr "Rejected"
+
+msgid "expired"
+msgstr "Expired"
+
+# ============== IOS INSTALL BANNER ==============
+msgid "Installa l'app FindUs"
+msgstr "Install FindUs App"
+
+msgid "Tocca qui per le istruzioni"
+msgstr "Tap here for instructions"
+
+msgid "Per installare:"
+msgstr "To install:"
+
+msgid "Tocca il pulsante Condividi (📤)"
+msgstr "Tap the Share button (📤)"
+
+msgid "Scorri verso il basso"
+msgstr "Scroll down"
+
+msgid "Tocca \"Aggiungi alla schermata Home\""
+msgstr "Tap \"Add to Home Screen\""
+
+msgid "Tocca \"Aggiungi\""
+msgstr "Tap \"Add\""
+
+#: templates/home.html
+msgid "Che tu abbia bisogno di un idraulico o di un pittore, FidaMano ti aiuta a fare il lavoro nel modo giusto."
+msgstr "Whether you need a plumber or a painter, FidaMano helps you get the job done right."

@@ -346,3 +346,71 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// Add this to your main.js file
+document.addEventListener('DOMContentLoaded', function() {
+  const button = document.getElementById('language-button');
+  const dropdown = document.getElementById('language-dropdown');
+  
+  // Only run if these elements exist (prevent errors on pages without language switcher)
+  if (!button || !dropdown) return;
+  
+  const options = dropdown.querySelectorAll('.language-option');
+  const form = document.getElementById('language-form');
+  
+  // Toggle dropdown
+  button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const expanded = this.getAttribute('aria-expanded') === 'true' ? false : true;
+      this.setAttribute('aria-expanded', expanded);
+      dropdown.classList.toggle('open', expanded);
+  });
+  
+  // Handle option selection
+  options.forEach(function(option) {
+      option.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Update button display
+          const flag = this.querySelector('.fi').className;
+          const label = this.textContent.trim();
+          
+          button.querySelector('.fi').className = flag;
+          button.querySelector('.language-label').textContent = label;
+          
+          // Update active state
+          options.forEach(function(opt) {
+              opt.classList.remove('active');
+          });
+          this.classList.add('active');
+          
+          // Submit the form with the selected language
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'language';
+          input.value = this.getAttribute('data-value');
+          form.appendChild(input);
+          form.submit();
+          
+          // Close dropdown
+          dropdown.classList.remove('open');
+          button.setAttribute('aria-expanded', 'false');
+      });
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+      if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+          button.setAttribute('aria-expanded', 'false');
+      }
+  });
+  
+  // Close on escape key
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          dropdown.classList.remove('open');
+          button.setAttribute('aria-expanded', 'false');
+      }
+  });
+});

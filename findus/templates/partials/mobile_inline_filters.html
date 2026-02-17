@@ -1,25 +1,26 @@
 <!-- templates/partials/mobile_inline_filters.html -->
 {% load static %}
+{% load i18n %}
 
 <div class="mobile-inline-filters">
     <!-- Filter Buttons -->
     <div class="filter-chips-container">
         <button type="button" class="filter-chip" onclick="openFilterModal('region')">
-            <span>{% if selected_region %}{{ selected_region }}{% else %}Region{% endif %}</span>
+            <span>{% if selected_region %}{{ selected_region }}{% else %}{% trans "Regione" %}{% endif %}</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
         </button>
         
         <button type="button" class="filter-chip" onclick="openFilterModal('category')">
-            <span>{% if selected_category %}{{ selected_category }}{% else %}Category{% endif %}</span>
+            <span>{% if selected_category %}{{ selected_category }}{% else %}{% trans "Categoria" %}{% endif %}</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
         </button>
         
         <button type="button" class="filter-chip" onclick="openFilterModal('availability')">
-            <span>{% if availability %}Available{% else %}Availability{% endif %}</span>
+            <span>{% if availability %}{% trans "Disponibile" %}{% else %}{% trans "Disponibilità" %}{% endif %}</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
@@ -27,7 +28,7 @@
         
         {% if selected_region or selected_category or availability %}
         <button type="button" class="filter-chip-clear" onclick="window.location.href='{% url 'customer_dashboard' %}';">
-            Clear All
+            {% trans "Cancella tutto" %}
         </button>
         {% endif %}
     </div>
@@ -37,7 +38,7 @@
 <div class="filter-modal" id="region-modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h4>Select Region</h4>
+            <h4>{% trans "Seleziona regione" %}</h4>
             <button type="button" class="modal-close" onclick="closeFilterModal('region')">×</button>
         </div>
         <form id="region-form">
@@ -53,8 +54,8 @@
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="modal-btn-cancel" onclick="closeFilterModal('region')">Cancel</button>
-                <button type="submit" class="modal-btn-apply">Apply</button>
+                <button type="button" class="modal-btn-cancel" onclick="closeFilterModal('region')">{% trans "Annulla" %}</button>
+                <button type="submit" class="modal-btn-apply">{% trans "Applica" %}</button>
             </div>
         </form>
     </div>
@@ -63,7 +64,7 @@
 <div class="filter-modal" id="category-modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h4>Select Category</h4>
+            <h4>{% trans "Seleziona categoria" %}</h4>
             <button type="button" class="modal-close" onclick="closeFilterModal('category')">×</button>
         </div>
         <form id="category-form">
@@ -79,8 +80,8 @@
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="modal-btn-cancel" onclick="closeFilterModal('category')">Cancel</button>
-                <button type="submit" class="modal-btn-apply">Apply</button>
+                <button type="button" class="modal-btn-cancel" onclick="closeFilterModal('category')">{% trans "Annulla" %}</button>
+                <button type="submit" class="modal-btn-apply">{% trans "Applica" %}</button>
             </div>
         </form>
     </div>
@@ -89,7 +90,7 @@
 <div class="filter-modal" id="availability-modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h4>Select Availability</h4>
+            <h4>{% trans "Seleziona disponibilità" %}</h4>
             <button type="button" class="modal-close" onclick="closeFilterModal('availability')">×</button>
         </div>
         <form id="availability-form">
@@ -105,8 +106,8 @@
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="modal-btn-cancel" onclick="closeFilterModal('availability')">Cancel</button>
-                <button type="submit" class="modal-btn-apply">Apply</button>
+                <button type="button" class="modal-btn-cancel" onclick="closeFilterModal('availability')">{% trans "Annulla" %}</button>
+                <button type="submit" class="modal-btn-apply">{% trans "Applica" %}</button>
             </div>
         </form>
     </div>
