@@ -82,8 +82,10 @@
       <header class="main-header">
          <div class="header-content">
             <a href="{% url 'home' %}" class="logo" aria-label="FidaMano Home">
-            <span class="logo-text">FidaMano</span>
+               <img src="{% static 'assets/img/fidamano-logo.png' %}" alt="FidaMano" style="height: 40px; margin-right: 2px;">
+               <span class="logo-text">FidaMano</span>
             </a>
+            
             <nav class="nav-menu" id="nav-menu">
                <a href="{% url 'register' %}" class="nav-link">{% trans "Registrati" %}</a>
                <a href="{% url 'register_as_a_craftsman' %}" class="nav-link">
@@ -447,6 +449,13 @@
                   </button>
                   <button 
                      type="button" 
+                     class="btn-clear-mobile" 
+                     onclick="window.location.href='{% url 'home' %}'"
+                     >
+                  {% trans "Cancella tutto" %}
+                  </button>
+                  <button 
+                     type="button" 
                      class="btn-apply-mobile" 
                      id="btn-apply-filters"
                      onclick="document.querySelector('.filter-form').requestSubmit()"
@@ -630,6 +639,12 @@
                </div>
             </section>
             {% else %}
+            {% if filters_active %}
+            <div class="active-filters-bar">
+               <span>{% trans "Filtri attivi" %}</span>
+               <a href="{% url 'home' %}" class="btn-clear">{% trans "Cancella tutto" %}</a>
+            </div>
+            {% endif %}
             <section class="search-results">
                <header class="results-header">
                   <div class="results-meta">

@@ -267,36 +267,45 @@ def signin(request):
     return render(request, "signin.html", {"username_value": ""})
 
 
-def _profile_redirect(request):
-    """Redirect to the correct profile (craftsman or customer) after password change."""
-    return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
+def _get_dashboard_redirect(user):
+    """Get redirect URL based on user type."""
+    if hasattr(user, "userprofile"):
+        try:
+            user.userprofile.craftsmanprofile
+            return redirect("craftsman_dashboard")
+        except:
+            return redirect("customer_dashboard")
+    return redirect("customer_dashboard")
 
 
 @login_required
+@require_http_methods(["POST"])
 def change_password(request):
     """Change user password"""
-    
-    if request.method != "POST":
-        return _profile_redirect(request)
     
     current = request.POST.get("current_password")
     new = request.POST.get("new_password")
     confirm = request.POST.get("confirm_password")
+    
+    # Validate fields are not empty
+    if not all([current, new, confirm]):
+        messages.error(request, "All password fields are required")
+        return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
 
     # Validate current password
     if not request.user.check_password(current):
         messages.error(request, "Current password is incorrect")
-        return _profile_redirect(request)
+        return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
 
     # Validate new password length
     if len(new) < 6:
         messages.error(request, "New password must be at least 6 characters")
-        return _profile_redirect(request)
+        return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
 
     # Validate password confirmation
     if new != confirm:
         messages.error(request, "New passwords do not match")
-        return _profile_redirect(request)
+        return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
 
     # Update password
     request.user.set_password(new)
@@ -312,9 +321,11 @@ def change_password(request):
     logger.info(f"Password changed for user: {request.user.username}")
     messages.success(request, "Password updated successfully")
 
-    return _profile_redirect(request)
+    return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
 
 
+@login_required
+@require_http_methods(["POST"])
 def user_logout(request):
     """User logout"""
     
@@ -325,4 +336,5 @@ def user_logout(request):
         logger.info(f"User logged out: {request.user.username}")
     
     auth_logout(request)
+    messages.success(request, "You have been logged out successfully.")
     return redirect("home")

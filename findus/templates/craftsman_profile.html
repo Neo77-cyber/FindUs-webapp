@@ -100,18 +100,21 @@
                      <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                </a>
-               <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="{% trans 'I miei annunci' %}">
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                     <polyline points="16 17 21 12 16 7"></polyline>
-                     <line x1="21" y1="12" x2="9" y2="12"></line>
-                  </svg>
-               </a>
+               <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}" style="background: none; border: none; cursor: pointer;">
+                     <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        >
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                     </svg>
+                  </button>
+               </form>
             </nav>
             <a href="{% url 'service_wizard' %}" class="dashboard-cta">
                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -151,14 +154,17 @@
                   <div class="profile-quick-actions">
                      <h3 class="quick-actions-title">{% trans "Azioni rapide" %}</h3>
                      <div class="quick-actions-grid">
-                        <a href="{% url 'logout' %}" class="btn-quick-action danger">
-                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                              <polyline points="16 17 21 12 16 7"></polyline>
-                              <line x1="21" y1="12" x2="9" y2="12"></line>
-                           </svg>
-                           {% trans "Esci" %}
-                        </a>
+                        <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                           {% csrf_token %}
+                           <button type="submit" class="btn-quick-action danger" style="background: none; border: none; cursor: pointer; width: 100%; text-align: left;">
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                 <polyline points="16 17 21 12 16 7"></polyline>
+                                 <line x1="21" y1="12" x2="9" y2="12"></line>
+                              </svg>
+                              {% trans "Esci" %}
+                           </button>
+                        </form>
                      </div>
                   </div>
                </div>
@@ -343,14 +349,17 @@
             </svg>
             <span>{% trans "Profilo" %}</span>
          </a>
-         <a href="{% url 'logout' %}" class="bottom-nav-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-               <polyline points="16 17 21 12 16 7"></polyline>
-               <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-            <span>{% trans "Esci" %}</span>
-         </a>
+         <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="bottom-nav-item" style="background: none; border: none; cursor: pointer; width: 100%;">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+               </svg>
+               <span>{% trans "Esci" %}</span>
+            </button>
+         </form>
       </nav>
       <footer class="site-footer">
          <div class="footer-container">

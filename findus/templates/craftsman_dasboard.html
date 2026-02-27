@@ -134,18 +134,21 @@
                      <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                </a>
-               <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}">
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                     <polyline points="16 17 21 12 16 7"></polyline>
-                     <line x1="21" y1="12" x2="9" y2="12"></line>
-                  </svg>
-               </a>
+               <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}" style="background: none; border: none; cursor: pointer;">
+                     <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        >
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                     </svg>
+                  </button>
+               </form>
             </nav>
             <!-- Change from button to link -->
             <a href="{% url 'service_wizard' %}" class="dashboard-cta">
@@ -159,7 +162,7 @@
       </header>
       <main class="dashboard-main">
          <div class="provider-dashboard-container">
-            <section class="provider-section testimonials-section">
+            <section class="provider-section testimonials-section" style="background: rgba(247, 231, 181, 0.1);">
                <header class="provider-section-header">
                   <div>
                      <h2 class="provider-section-title">{% trans "Testimonianze dei clienti" %}</h2>
@@ -903,14 +906,17 @@
             </svg>
             <span>{% trans "Profilo" %}</span>
          </a>
-         <a href="{% url 'logout' %}" class="bottom-nav-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-               <polyline points="16 17 21 12 16 7"></polyline>
-               <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-            <span>{% trans "Esci" %}</span>
-         </a>
+         <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="bottom-nav-item" style="background: none; border: none; cursor: pointer; width: 100%;">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+               </svg>
+               <span>{% trans 'Esci' %}</span>
+            </button>
+         </form>
       </nav>
       <footer class="site-footer">
          <div class="footer-container">
