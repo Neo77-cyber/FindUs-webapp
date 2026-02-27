@@ -148,41 +148,38 @@ deleteServiceForm.addEventListener('submit', function(e) {
     submitBtn.innerHTML = 'Deleting...';
     submitBtn.disabled = true;
     
-    // Get form data
+    // Get form data (includes CSRF from form)
     const formData = new FormData(this);
     
-    // Send AJAX request
+    // CSRF header for Django (in case form token is not picked up)
+    const csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    const headers = { 'X-Requested-With': 'XMLHttpRequest' };
+    if (csrfInput) headers['X-CSRFToken'] = csrfInput.value;
+    
     fetch(this.action, {
         method: 'POST',
         body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
+        headers: headers
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Close modal
+    .then(function(response) {
+        return response.text().then(function(text) {
+            var data;
+            try { data = JSON.parse(text); } catch (err) { data = {}; }
+            return { ok: response.ok, status: response.status, data: data };
+        });
+    })
+    .then(function(result) {
+        if (result.ok && result.data.success) {
             closeDeleteModal();
-            
-            // Show success message
-            alert('Service deleted successfully!');
-            
-            // Option 1: Reload the page
             window.location.reload();
-            
-            // Option 2: Remove the service card without reloading
-            // const serviceCard = document.querySelector(`[data-service-id="${serviceId}"]`).closest('.service-card');
-            // if (serviceCard) {
-            //     serviceCard.remove();
-            // }
-        } else {
-            alert('Error: ' + (data.error || 'Failed to delete service'));
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
+            return;
         }
+        var msg = (result.data && result.data.error) ? result.data.error : 'Failed to delete service';
+        alert('Error: ' + msg);
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
     })
-    .catch(error => {
+    .catch(function(error) {
         alert('Error deleting service');
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
@@ -227,20 +224,22 @@ if (priceFixed) priceFixed.addEventListener('change', updatePriceFields);
 
 // Show modal function
 function showEditModal() {
+    editModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    editModal.classList.add('active');
+    setTimeout(() => editModal.classList.add('active'), 10);
 }
 
 // Close modal function
 function closeEditModal() {
     editModal.classList.remove('active');
     setTimeout(() => {
+        editModal.style.display = 'none';
         document.body.style.overflow = '';
         // Reset form
         if (editForm) {
             editForm.reset();
-            hourlyRateGroup.style.display = 'none';
-            fixedPriceGroup.style.display = 'none';
+            if (hourlyRateGroup) hourlyRateGroup.style.display = 'none';
+            if (fixedPriceGroup) fixedPriceGroup.style.display = 'none';
         }
     }, 300);
 }
@@ -267,46 +266,45 @@ document.querySelectorAll('.provider-action-btn.edit').forEach(btn => {
         e.preventDefault();
         e.stopPropagation();
         
-        const serviceId = this.dataset.serviceId;
+        const serviceId = this.getAttribute('data-service-id');
+        if (!serviceId) return;
         
-        
-        // Show loading state
         showEditModal();
         
-        // Fetch service data
-        fetch(`/edit-service/?service_id=${serviceId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const service = data.service;
-                    
-                    // Fill form fields
-                    document.getElementById('edit-service-id').value = service.id;
-                    document.getElementById('edit-title').value = service.title;
-                    document.getElementById('edit-category').value = service.category;
-                    document.getElementById('edit-description').value = service.description;
-                    document.getElementById('edit-region').value = service.region || '';
-                    document.getElementById('edit-availability').value = service.availability;
-                    
-                    // Set price type
-                    if (service.price_type === 'hourly') {
-                        priceHourly.checked = true;
-                        document.getElementById('edit-hourly-rate').value = service.hourly_rate;
-                    } else {
-                        priceFixed.checked = true;
-                        document.getElementById('edit-fixed-price').value = service.fixed_price;
-                    }
-                    
-                    // Update price fields visibility
-                    updatePriceFields();
-                    
-                } else {
-                    alert('Error: ' + data.error);
-                    closeEditModal();
-                }
+        var editUrl = (editForm && editForm.action) ? editForm.action : '/edit-service/';
+        fetch(editUrl + (editUrl.indexOf('?') >= 0 ? '&' : '?') + 'service_id=' + encodeURIComponent(serviceId))
+            .then(function(response) {
+                return response.text().then(function(text) {
+                    var data;
+                    try { data = JSON.parse(text); } catch (err) { data = {}; }
+                    return { ok: response.ok, data: data };
+                });
             })
-            .catch(error => {
+            .then(function(result) {
+                if (!result.ok || !result.data.success) {
+                    alert('Error: ' + (result.data.error || 'Could not load service'));
+                    closeEditModal();
+                    return;
+                }
+                var service = result.data.service;
                 
+                document.getElementById('edit-service-id').value = service.id;
+                document.getElementById('edit-title').value = service.title || '';
+                document.getElementById('edit-category').value = service.category || '';
+                document.getElementById('edit-description').value = service.description || '';
+                document.getElementById('edit-region').value = service.region || '';
+                document.getElementById('edit-availability').value = service.availability || 'immediate';
+                
+                if (service.price_type === 'hourly') {
+                    if (priceHourly) priceHourly.checked = true;
+                    document.getElementById('edit-hourly-rate').value = service.hourly_rate || '';
+                } else {
+                    if (priceFixed) priceFixed.checked = true;
+                    document.getElementById('edit-fixed-price').value = service.fixed_price || '';
+                }
+                updatePriceFields();
+            })
+            .catch(function() {
                 alert('Error loading service details');
                 closeEditModal();
             });
@@ -320,38 +318,40 @@ if (editForm) {
         
         if (!saveBtn) return;
         
-        const originalText = saveBtn.innerHTML;
-        const originalState = saveBtn.disabled;
+        var originalText = saveBtn.innerHTML;
+        var originalState = saveBtn.disabled;
         
-        // Show loading
         saveBtn.innerHTML = 'Saving...';
         saveBtn.disabled = true;
         
-        const formData = new FormData(this);
+        var formData = new FormData(this);
+        var headers = { 'X-Requested-With': 'XMLHttpRequest' };
+        var csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+        if (csrfInput) headers['X-CSRFToken'] = csrfInput.value;
         
-        fetch('/edit-service/', {
+        fetch(editForm.action, {
             method: 'POST',
             body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+            headers: headers
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Service updated successfully!');
+        .then(function(response) {
+            return response.text().then(function(text) {
+                var data;
+                try { data = JSON.parse(text); } catch (err) { data = {}; }
+                return { ok: response.ok, data: data };
+            });
+        })
+        .then(function(result) {
+            if (result.ok && result.data.success) {
                 closeEditModal();
-                setTimeout(() => {
-                    window.location.reload();
-                }, 500);
-            } else {
-                alert('Error: ' + data.error);
-                saveBtn.innerHTML = originalText;
-                saveBtn.disabled = originalState;
+                window.location.reload();
+                return;
             }
+            alert('Error: ' + (result.data && result.data.error ? result.data.error : 'Failed to save'));
+            saveBtn.innerHTML = originalText;
+            saveBtn.disabled = originalState;
         })
-        .catch(error => {
-            
+        .catch(function() {
             alert('Error saving changes');
             saveBtn.innerHTML = originalText;
             saveBtn.disabled = originalState;
@@ -519,60 +519,58 @@ if (modalOverlay) {
 }
 
 // 5. SUBMIT FORM - when user clicks "Submit Boost Request"
-const submitBtn = document.querySelector('.btn-confirm-boost');
-if (submitBtn) {
-  submitBtn.addEventListener('click', function(e) {
+var boostSubmitBtn = document.querySelector('.btn-confirm-boost');
+if (boostSubmitBtn) {
+  boostSubmitBtn.addEventListener('click', function(e) {
       e.preventDefault();
       
-      // CHECK 1: Is a plan selected?
       if (!document.querySelector('.boost-plan.selected')) {
-          alert(' Please select a boost plan first');
+          alert('Please select a boost plan first');
           return;
       }
       
-      // CHECK 2: Is file uploaded?
-      const fileInput = document.getElementById('payment-proof');
+      var fileInput = document.getElementById('payment-proof');
       if (!fileInput || !fileInput.files.length) {
-          alert(' Please upload payment proof');
+          alert('Please upload payment proof');
           return;
       }
       
-      // Show loading
-      const originalText = this.innerHTML;
+      var originalText = this.innerHTML;
       this.innerHTML = 'Submitting...';
       this.disabled = true;
       
-      // Get form data
-      const form = document.getElementById('boost-service-form');
-      const formData = new FormData(form);
+      var form = document.getElementById('boost-service-form');
+      var formData = new FormData(form);
+      var headers = { 'X-Requested-With': 'XMLHttpRequest' };
+      var csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+      if (csrfInput) headers['X-CSRFToken'] = csrfInput.value;
       
-      // Send to server
-      fetch('/boost-service/', {
+      fetch(form.action || '/boost-service/', {
           method: 'POST',
           body: formData,
-          headers: {
-              'X-Requested-With': 'XMLHttpRequest'
-          }
+          headers: headers
       })
-      .then(response => response.json())
-      .then(data => {
-          if (data.success) {
-              alert(' ' + data.message);
+      .then(function(response) {
+          return response.text().then(function(text) {
+              var data;
+              try { data = JSON.parse(text); } catch (err) { data = {}; }
+              return { ok: response.ok, data: data };
+          });
+      })
+      .then(function(result) {
+          if (result.ok && result.data && result.data.success) {
               closeModal();
-              // Reload page after 1 second
-              setTimeout(() => {
-                  window.location.reload();
-              }, 1000);
-          } else {
-              alert(' Error: ' + (data.message || data.error || 'Unknown error'));
-              this.innerHTML = originalText;
-              this.disabled = false;
+              window.location.reload();
+              return;
           }
+          alert('Error: ' + (result.data && (result.data.error || result.data.message) ? (result.data.error || result.data.message) : 'Failed to submit boost'));
+          boostSubmitBtn.innerHTML = originalText;
+          boostSubmitBtn.disabled = false;
       })
-      .catch(error => {
-          alert(' Network error. Please try again.');
-          this.innerHTML = originalText;
-          this.disabled = false;
+      .catch(function() {
+          alert('Network error. Please try again.');
+          boostSubmitBtn.innerHTML = originalText;
+          boostSubmitBtn.disabled = false;
       });
   });
 } else {
@@ -582,6 +580,35 @@ if (submitBtn) {
 // Initialize copy buttons
 initializeCopyButtons();
 });
+
+// Global: used by inline onchange="validateFile(this)" on payment-proof input
+window.validateFile = function(input) {
+  var allowed = ['.jpg', '.jpeg', '.png', '.pdf'];
+  var maxBytes = 5 * 1024 * 1024; // 5MB
+  var fileError = document.getElementById('file-error');
+  var fileNameEl = document.getElementById('file-name');
+  if (!input || !input.files || !input.files.length) {
+    if (fileError) { fileError.style.display = 'none'; fileError.textContent = ''; }
+    if (fileNameEl) fileNameEl.textContent = '';
+    return;
+  }
+  var file = input.files[0];
+  var ext = (file.name.indexOf('.') >= 0) ? ('.' + file.name.split('.').pop().toLowerCase()) : '';
+  if (allowed.indexOf(ext) === -1) {
+    if (fileError) { fileError.textContent = 'Invalid file type. Use JPG, PNG or PDF.'; fileError.style.display = 'block'; }
+    input.value = '';
+    if (fileNameEl) fileNameEl.textContent = '';
+    return;
+  }
+  if (file.size > maxBytes) {
+    if (fileError) { fileError.textContent = 'File must be under 5MB.'; fileError.style.display = 'block'; }
+    input.value = '';
+    if (fileNameEl) fileNameEl.textContent = '';
+    return;
+  }
+  if (fileError) { fileError.style.display = 'none'; fileError.textContent = ''; }
+  if (fileNameEl) fileNameEl.textContent = file.name + ' (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB)';
+};
 
 // Copy to clipboard functions - Define them globally
 function showCopyFeedback(text) {

@@ -1144,8 +1144,6 @@ msgid "In pausa"
 msgstr "Paused"
 
 
-
-
 msgid "+€%(fee)s Trasferta"
 msgstr "+€%(fee)s Travel"
 

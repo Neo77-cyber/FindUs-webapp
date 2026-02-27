@@ -272,7 +272,3 @@ LOGGING = {
     },
 }
 
-MIDDLEWARE.append('findus.middleware.SimpleDBMiddleware')
-
-
-

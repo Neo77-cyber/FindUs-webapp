@@ -24,7 +24,61 @@
          href="{% static 'assets/icons/find-su-logo.png' %}"
          rel="apple-touch-icon"
          />
+      <link rel="manifest" href="{% static 'manifest.json' %}">
+      <meta name="theme-color" content="#077f46">
       <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+      <script>
+         // Register Service Worker with update handling
+         if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+               navigator.serviceWorker.register('/static/service-worker.js')
+                  .then((registration) => {
+                     console.log('SW Registered');
+                     
+                     // Check for updates
+                     registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                              // New version available
+                              showUpdateBanner();
+                           }
+                        });
+                     });
+                  })
+                  .catch(err => console.log('SW Registration Failed:', err));
+               
+               // Listen for messages from SW
+               navigator.serviceWorker.addEventListener('message', (event) => {
+                  if (event.data === 'UPDATE_AVAILABLE') {
+                     showUpdateBanner();
+                  }
+               });
+            });
+         }
+         
+         // Show update banner
+         function showUpdateBanner() {
+            const banner = document.createElement('div');
+            banner.id = 'update-banner';
+            banner.innerHTML = `
+               <div style="position:fixed;top:0;left:0;right:0;background:#077f46;color:white;padding:12px 20px;text-align:center;z-index:9999;display:flex;justify-content:center;align-items:center;gap:15px;font-family:-apple-system,sans-serif;">
+                  <span>Nuova versione disponibile</span>
+                  <button onclick="updateApp()" style="background:white;color:#077f46;border:none;padding:8px 16px;border-radius:4px;font-weight:600;cursor:pointer;">Aggiorna</button>
+                  <button onclick="this.parentElement.remove()" style="background:transparent;color:white;border:1px solid white;padding:8px 16px;border-radius:4px;cursor:pointer;">Più tardi</button>
+               </div>
+            `;
+            document.body.appendChild(banner);
+         }
+         
+         // Trigger update
+         function updateApp() {
+            navigator.serviceWorker.ready.then((registration) => {
+               registration.waiting?.postMessage('skipWaiting');
+               window.location.reload();
+            });
+         }
+      </script>
    </head>
    <body>
       <div class="language-switcher-fixed">
@@ -270,7 +324,7 @@
                      {% include 'partials/save_button.html' %}
                      <!-- Mobile View Button (updated to match web sidebar style) -->
                      <button class="btn-mobile-secondary btn-outline btn-full"
-                        onclick="document.getElementById('shareModal').style.display='flex'">
+                        onclick="document.getElementById('shareModalMobile').style.display='flex'">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                            <circle cx="18" cy="5" r="3"></circle>
                            <circle cx="6" cy="12" r="3"></circle>
@@ -281,7 +335,7 @@
                         {% trans "Condividi" %}
                      </button>
                      <!-- Share Modal (Same as web view) -->
-                     <div id="shareModal" class="modal" style="display:none;">
+                     <div id="shareModalMobile" class="modal" style="display:none;">
                         <div class="modal-content">
                            <div class="modal-header">
                               <h4>{% trans "Condividi servizio" %}</h4>
@@ -307,14 +361,14 @@
                               WhatsApp
                               </a>
                               <!-- Copy Link -->
-                              <button onclick="copyToClipboard()" class="share-btn copy-link">
+                              <button onclick="copyToClipboardMobile()" class="share-btn copy-link">
                               {% trans "Copia link" %}
                               </button>
                            </div>
                         </div>
                      </div>
                      <script>
-                        function copyToClipboard() {
+                        function copyToClipboardMobile() {
                         navigator.clipboard.writeText(window.location.href)
                             .then(() => alert('{% trans "Link copiato!" %}'))
                             .catch(err => alert('{% trans "Errore durante la copia" %}'));
@@ -322,7 +376,7 @@
                         
                         // Close modal when clicking outside
                         window.onclick = function(event) {
-                        const modal = document.getElementById('shareModal');
+                        const modal = document.getElementById('shareModalMobile');
                         if (event.target == modal) {
                             modal.style.display = 'none';
                         }
@@ -498,7 +552,7 @@
                               <span class="close" onclick="document.getElementById('reviewModal').style.display='none'">&times;</span>
                            </div>
                            <form method="POST" 
-                              action="{% url 'submit_review' service.id %}"
+                              action="{% if service.slug %}{% url 'submit_review' service.slug %}{% else %}#{% endif %}"
                               class="review-form">
                               {% csrf_token %}
                               <div class="form-group">

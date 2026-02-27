@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
 
 # Translate all choice labels
 CATEGORY_CHOICES = [
@@ -112,6 +113,7 @@ BOOST_STATUS_CHOICES = [
 class Service(models.Model):
     craftsman = models.ForeignKey("CraftsmanProfile", on_delete=models.CASCADE, verbose_name=_("craftsman"))
     title = models.CharField(_("title"), max_length=100)
+    slug = models.SlugField(_("slug"), max_length=120, blank=True, null=True)
     category = models.CharField(_("category"), max_length=50, choices=CATEGORY_CHOICES)
     region = models.CharField(
         _("region"),
@@ -162,6 +164,32 @@ class Service(models.Model):
     def __str__(self):
         return f"{self.title} - {self.get_category_display()}"
 
+    def save(self, *args, **kwargs):
+        if not self.slug or self.slug == '':
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            # Exclude self when checking for existing slugs
+            existing = Service.objects.filter(slug=slug)
+            if self.pk:
+                existing = existing.exclude(pk=self.pk)
+            while existing.exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+                existing = Service.objects.filter(slug=slug)
+                if self.pk:
+                    existing = existing.exclude(pk=self.pk)
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    @property
+    def latest_boost_status_display(self):
+        """Label for annotated latest_boost_status (used in craftsman dashboard grid)."""
+        status = getattr(self, "latest_boost_status", None)
+        if not status:
+            return ""
+        return dict(BOOST_STATUS_CHOICES).get(status, str(status))
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("user"))
@@ -193,6 +221,7 @@ class CustomerProfile(models.Model):
 class CraftsmanProfile(models.Model):
     user_profile = models.OneToOneField("UserProfile", on_delete=models.CASCADE, verbose_name=_("user profile"))
     business_name = models.CharField(_("business name"), max_length=255)
+    slug = models.SlugField(_("slug"), max_length=260, blank=True, null=True)
     years_of_experience = models.CharField(_("years of experience"), max_length=20, choices=EXPERIENCE_CHOICES)
     profile_photo = models.ImageField(
         _("profile photo"), upload_to="craftsman_profiles/", null=True, blank=True
@@ -211,6 +240,24 @@ class CraftsmanProfile(models.Model):
 
     def __str__(self):
         return f"{self.user_profile.user.username}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug or self.slug == '':
+            base_slug = slugify(self.business_name)
+            slug = base_slug
+            counter = 1
+            # Exclude self when checking for existing slugs
+            existing = CraftsmanProfile.objects.filter(slug=slug)
+            if self.pk:
+                existing = existing.exclude(pk=self.pk)
+            while existing.exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+                existing = CraftsmanProfile.objects.filter(slug=slug)
+                if self.pk:
+                    existing = existing.exclude(pk=self.pk)
+            self.slug = slug
+        super().save(*args, **kwargs)
 
     def has_complete_profile(self):
         required_fields = [

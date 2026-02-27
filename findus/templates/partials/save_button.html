@@ -3,7 +3,7 @@
 {% if request.user.is_authenticated %}
 <button 
    class="save-service-btn btn-outline btn-full {% if is_saved %}saved-active{% endif %}"
-   hx-get="{% url 'save_service' service.id %}"
+   hx-get="{% url 'save_service' service.slug %}"
    hx-target="this"
    hx-swap="outerHTML"
    {% if is_saved %}data-saved="true"{% endif %}

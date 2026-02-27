@@ -134,7 +134,7 @@
                      <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                </a>
-               <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="{% trans 'I miei annunci' %}">
+               <a href="{% url 'logout' %}" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}">
                   <svg
                      viewBox="0 0 24 24"
                      fill="none"
@@ -538,7 +538,7 @@
          </div>
       </div>
       <!-- Edit Service Modal -->
-      <div class="edit-modal-overlay" id="edit-modal-overlay" >
+      <div class="edit-modal-overlay" id="edit-modal-overlay" style="display: none;">
          <div class="edit-modal-container">
             <header class="edit-modal-header">
                <h2 class="edit-modal-title">{% trans "Modifica servizio" %}</h2>
@@ -550,7 +550,7 @@
                </button>
             </header>
             <div class="edit-modal-body">
-               <form method="post" id="edit-service-form" enctype="multipart/form-data">
+               <form method="post" id="edit-service-form" action="{% url 'edit_service' %}" enctype="multipart/form-data">
                   {% csrf_token %}
                   <input type="hidden" name="service_id" id="edit-service-id">
                   <div class="form-group">
@@ -635,7 +635,7 @@
                </button>
             </header>
             <div class="boost-modal-body">
-               <form method="post" id="boost-service-form" enctype="multipart/form-data">
+               <form method="post" id="boost-service-form" action="{% url 'boost_service' %}" enctype="multipart/form-data">
                   {% csrf_token %}
                   <input type="hidden" name="service_id" id="boost-service-id">
                   <div class="boost-plans">

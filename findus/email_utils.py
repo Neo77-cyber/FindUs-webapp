@@ -66,7 +66,7 @@ def send_customer_welcome_email(user_email):
         </div>
         
         <p style="text-align: center;">
-            <a href="https://yourdomain.com/customer-dashboard/" class="button">Find a Craftsman Near Me</a>
+            <a href="https://fidamano.com/customer-dashboard/" class="button">Find a Craftsman Near Me</a>
         </p>
         
         <p>Happy building,<br>

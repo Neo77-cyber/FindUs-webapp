@@ -266,7 +266,7 @@
                            <span>{{ service.get_availability_display }}</span>
                         </div>
                         <div class="provider-card-actions">
-                           <a href="{% url 'service_detail' service.id %}" class="provider-action-btn view" 
+                           <a href="{% url 'service_detail' service.slug %}" class="provider-action-btn view" 
                               title="{% trans 'Vedi dettagli' %}">
                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>

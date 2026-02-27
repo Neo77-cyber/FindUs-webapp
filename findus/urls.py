@@ -1,55 +1,61 @@
 from django.urls import path
-from . import views
 from django.contrib.staticfiles.views import serve
 from django.views.decorators.cache import never_cache
-from django.views.generic import TemplateView
-from .views import ServiceWizardView
 
-
+# Import from the new views structure
+from .views import (
+    # Auth views
+    register, register_craftsman, signin, user_logout, change_password,
+    # Customer views
+    customer_dashboard, service_detail, customer_profile, saved_services,
+    save_service, submit_review,
+    # Craftsman views
+    craftsman_dashboard, delete_service, craftsman_profile,
+    check_boost_status, boost_service, edit_service,
+    # Public views
+    home, add_to_waiting_list, craftsman_public_profile, offline_page,
+    # Wizard
+    service_wizard_view
+)
 
 urlpatterns = [
-    path("", views.home, name="home"),
-    path("waiting-list/", views.add_to_waiting_list, name="add_to_waiting_list"),
-    path("signin/", views.signin, name="signin"),
-    path(
-        "register-as-a-craftsman/",
-        views.register_craftsman,
-        name="register_as_a_craftsman",
-    ),
-    path("register/", views.register, name="register"),
-    path("change-password/", views.change_password, name="change_password"),
-    path("customer-dashboard/", views.customer_dashboard, name="customer_dashboard"),
-    path("service/<int:service_id>/", views.service_detail, name="service_detail"),
-    path("customer-profile/", views.customer_profile, name="customer_profile"),
-    path("craftsman-dashboard/", views.craftsman_dashboard, name="craftsman_dashboard"),
-    path('services/add/', ServiceWizardView.as_view(), name='service_wizard'),
-    path("craftsman-profile/", views.craftsman_profile, name="craftsman_profile"),
-    path('craftsman/<int:pk>/', views.craftsman_public_profile, name='craftsman_public_profile'),
+    # ============== PUBLIC ROUTES ==============
+    path("", home, name="home"),
+    path("waiting-list/", add_to_waiting_list, name="add_to_waiting_list"),
+    path('offline/', offline_page, name='offline'),
+    path('craftsman/<slug:craftsman_slug>/', craftsman_public_profile, name='craftsman_public_profile'),
     
-    path("saved-services/", views.saved_services, name="saved_services"),
-    path("save-service/<int:service_id>/", views.save_service, name="save_service"),
-    path(
-        "service/<int:service_id>/create-review/",
-        views.create_review,
-        name="create_review",
-    ),
-    path(
-        "service/<int:service_id>/submit-review/",
-        views.submit_review,
-        name="submit_review",
-    ),
-    path('services/delete/', views.delete_service, name='delete_service'),
-    path('edit-service/', views.edit_service, name='edit_service'),
-    path('check-boost-status/<int:service_id>/', views.check_boost_status, name='check_boost_status'),
-
-
+    # ============== AUTH ROUTES ==============
+    path("signin/", signin, name="signin"),
+    path("register/", register, name="register"),
+    path("register-as-a-craftsman/", register_craftsman, name="register_as_a_craftsman"),
+    path("logout", user_logout, name="logout"),
+    path("change-password/", change_password, name="change_password"),
     
-    path("boost-service/", views.boost_service, name="boost_service"),
-    path("logout", views.user_logout, name="logout"),
+    # ============== CUSTOMER ROUTES ==============
+    path("customer-dashboard/", customer_dashboard, name="customer_dashboard"),
+    path("customer-profile/", customer_profile, name="customer_profile"),
+    path("saved-services/", saved_services, name="saved_services"),
+    path("save-service/<slug:service_slug>/", save_service, name="save_service"),
+    
+    # ============== SERVICE ROUTES ==============
+    path("service/<slug:service_slug>/", service_detail, name="service_detail"),
+    path("service/<slug:service_slug>/submit-review/", submit_review, name="submit_review"),
+    
+    # ============== CRAFTSMAN ROUTES ==============
+    path("craftsman-dashboard/", craftsman_dashboard, name="craftsman_dashboard"),
+    path("craftsman-profile/", craftsman_profile, name="craftsman_profile"),
+    
+    # Service management
+    path('services/add/', service_wizard_view, name='service_wizard'),
+    path('services/delete/', delete_service, name='delete_service'),
+    path('edit-service/', edit_service, name='edit_service'),
+    
+    # Boost management
+    path("boost-service/", boost_service, name="boost_service"),
+    path('check-boost-status/<int:service_id>/', check_boost_status, name='check_boost_status'),
+    
+    # ============== PWA ROUTES ==============
     path("manifest.json", never_cache(serve), {"path": "manifest.json"}),
     path("service-worker.js", never_cache(serve), {"path": "service-worker.js"}),
-    path('offline/', views.offline_page, name='offline'),
-    
-    
-    
 ]

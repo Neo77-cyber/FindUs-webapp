@@ -1,8 +1,13 @@
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'handyman_project.settings')
+django.setup()
+
 from django.contrib.auth.models import User
 from findus.models import UserProfile, CraftsmanProfile, Service, CustomerProfile
 import random
 from decimal import Decimal
-from django.utils import timezone
 
 print("=== CREATING TEST DATA WITH ALL FIELDS ===")
 
