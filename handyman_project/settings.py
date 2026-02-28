@@ -92,15 +92,15 @@ WSGI_APPLICATION = 'handyman_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Your current code
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600,  
-        ssl_require=True,
-        
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600, 
+        ssl_require=True   
     )
 }
+
+
 
 
 # Password validation

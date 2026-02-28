@@ -62,7 +62,8 @@
       <header class="dashboard-header">
          <div class="dashboard-header-content">
             <a href="{% url 'craftsman_dashboard' %}" class="logo" aria-label="FidaMano Home">
-               <span class="logo-text">FidaMano</span>
+            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="height: 40px; margin-right:-12px;">
+            <span class="logo-text">FidaMano</span>
             </a>
             
             <div class="dashboard-search">
@@ -162,7 +163,7 @@
       </header>
       <main class="dashboard-main">
          <div class="provider-dashboard-container">
-            <section class="provider-section testimonials-section" style="background: rgba(247, 231, 181, 0.1);">
+            <section class="provider-section testimonials-section" style="background: rgba(247, 231, 181, 1);">
                <header class="provider-section-header">
                   <div>
                      <h2 class="provider-section-title">{% trans "Testimonianze dei clienti" %}</h2>

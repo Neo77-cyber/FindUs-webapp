@@ -27,8 +27,8 @@ def craftsman_dashboard(request):
     # Get craftsman profile
     craftsman_profile = get_craftsman_profile(request.user)
     if not craftsman_profile:
-        messages.info(request, "Please complete your provider profile")
-        return redirect("provider_onboarding")
+        
+        return redirect("craftsman_dashboard")
     
     try:
         # Get filters

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FindUs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-27 02:35+0100\n"
+"POT-Creation-Date: 2026-02-15 12:00+0100\n"
 "PO-Revision-Date: 2026-02-15 12:00+0100\n"
 "Last-Translator: FindUs Team\n"
 "Language-Team: English\n"
@@ -17,2774 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: findus/models.py:8
-msgid "Plumber"
-msgstr ""
-
-#: findus/models.py:9
-#, fuzzy
-#| msgid "Elettricista"
-msgid "Electrician"
-msgstr "Electrician"
-
-#: findus/models.py:10
-msgid "AC Technician"
-msgstr ""
-
-#: findus/models.py:11
-#, fuzzy
-#| msgid "Carpentiere"
-msgid "Carpenter"
-msgstr "Carpenter"
-
-#: findus/models.py:12
-msgid "Tiler"
-msgstr ""
-
-#: findus/models.py:13
-msgid "Painter"
-msgstr ""
-
-#: findus/models.py:14
-msgid "Furniture Maker"
-msgstr ""
-
-#: findus/models.py:15
-msgid "Fumigator"
-msgstr ""
-
-#: findus/models.py:16
-msgid "DSTV Technician"
-msgstr ""
-
-#: findus/models.py:17
-msgid "Gas Appliance Technician"
-msgstr ""
-
-#: findus/models.py:18
-msgid "POP Worker"
-msgstr ""
-
-#: findus/models.py:19
-msgid "Cleaner"
-msgstr ""
-
-#: findus/models.py:20
-msgid "Aluminium Worker"
-msgstr ""
-
-#: findus/models.py:21
-msgid "Welder"
-msgstr ""
-
-#: findus/models.py:22
-msgid "Roof Technician"
-msgstr ""
-
-#: findus/models.py:23
-msgid "Solar Power Technician"
-msgstr ""
-
-#: findus/models.py:24
-msgid "Mason"
-msgstr ""
-
-#: findus/models.py:25
-msgid "Glass/Partitioning Worker"
-msgstr ""
-
-#: findus/models.py:26
-msgid "Bricklayer / Plasterer"
-msgstr ""
-
-#: findus/models.py:27
-msgid "Foreman"
-msgstr ""
-
-#: findus/models.py:28
-msgid "Landscaping"
-msgstr ""
-
-#: findus/models.py:29
-#, fuzzy
-#| msgid "Applica"
-msgid "Appliance Repair"
-msgstr "Apply"
-
-#: findus/models.py:30
-msgid "HVAC Services"
-msgstr ""
-
-#: findus/models.py:31
-msgid "CCTV / Security System Technician"
-msgstr ""
-
-#: findus/models.py:32
-msgid "Generator Technician"
-msgstr ""
-
-#: findus/models.py:33
-#, fuzzy
-#| msgid "Interior designer"
-msgid "Interior Designer"
-msgstr "Interior Designer"
-
-#: findus/models.py:34
-msgid "Flooring / Epoxy Work"
-msgstr ""
-
-#: findus/models.py:35
-msgid "Metal Fabrication"
-msgstr ""
-
-#: findus/models.py:36
-msgid "Waterproofing Specialist"
-msgstr ""
-
-#: findus/models.py:37
-msgid "Pest Control"
-msgstr ""
-
-#: findus/models.py:38
-msgid "Scaffolding Worker"
-msgstr ""
-
-#: findus/models.py:39
-msgid "Site Supervisor"
-msgstr ""
-
-#: findus/models.py:40
-msgid "Other"
-msgstr ""
-
-# ============== REGION CHOICES ==============
-#: findus/models.py:44
-msgid "Abruzzo"
-msgstr "Abruzzo"
-
-#: findus/models.py:45
-msgid "Aosta Valley (Valle d'Aosta)"
-msgstr "Aosta Valley"
-
-#: findus/models.py:46
-msgid "Apulia (Puglia)"
-msgstr "Apulia"
-
-#: findus/models.py:47
-msgid "Basilicata"
-msgstr "Basilicata"
-
-#: findus/models.py:48
-msgid "Calabria"
-msgstr "Calabria"
-
-#: findus/models.py:49
-msgid "Campania"
-msgstr "Campania"
-
-#: findus/models.py:50
-msgid "Emilia-Romagna"
-msgstr "Emilia-Romagna"
-
-#: findus/models.py:51
-msgid "Friuli-Venezia Giulia"
-msgstr "Friuli-Venezia Giulia"
-
-#: findus/models.py:52
-msgid "Lazio"
-msgstr "Lazio"
-
-#: findus/models.py:53
-msgid "Liguria"
-msgstr "Liguria"
-
-#: findus/models.py:54
-msgid "Lombardy (Lombardia)"
-msgstr "Lombardy"
-
-#: findus/models.py:55
-msgid "Marche"
-msgstr "Marche"
-
-#: findus/models.py:56
-msgid "Molise"
-msgstr "Molise"
-
-#: findus/models.py:57
-msgid "Piedmont (Piemonte)"
-msgstr "Piedmont"
-
-#: findus/models.py:58
-msgid "Sardinia (Sardegna)"
-msgstr "Sardinia"
-
-#: findus/models.py:59
-msgid "Sicily (Sicilia)"
-msgstr "Sicily"
-
-#: findus/models.py:60
-msgid "Trentino-South Tyrol (Trentino-Alto Adige)"
-msgstr "Trentino-South Tyrol"
-
-#: findus/models.py:61
-msgid "Tuscany (Toscana)"
-msgstr "Tuscany"
-
-#: findus/models.py:62
-msgid "Umbria"
-msgstr "Umbria"
-
-#: findus/models.py:63
-msgid "Veneto"
-msgstr "Veneto"
-
-#: findus/models.py:67
-msgid "Hourly Rate"
-msgstr ""
-
-#: findus/models.py:68
-msgid "Fixed Price"
-msgstr ""
-
-# ============== AVAILABILITY CHOICES ==============
-#: findus/models.py:72
-#, fuzzy
-#| msgid "Immediate"
-msgid "Immediately Available"
-msgstr "Immediate"
-
-#: findus/models.py:73
-msgid "Within 24 Hours"
-msgstr ""
-
-#: findus/models.py:74
-msgid "Within 48 Hours"
-msgstr ""
-
-#: findus/models.py:75
-msgid "By Appointment Only"
-msgstr ""
-
-#: findus/models.py:79
-msgid "Small Job (1-2 hours)"
-msgstr ""
-
-#: findus/models.py:80
-msgid "Medium Job (Half day)"
-msgstr ""
-
-#: findus/models.py:81
-msgid "Large Job (Full day+)"
-msgstr ""
-
-#: findus/models.py:82
-msgid "Multi-day Project"
-msgstr ""
-
-#: findus/models.py:86
-msgid "0-1 years"
-msgstr ""
-
-#: findus/models.py:87
-msgid "1-3 years"
-msgstr ""
-
-#: findus/models.py:88
-msgid "3-5 years"
-msgstr ""
-
-#: findus/models.py:89
-msgid "5+ years"
-msgstr ""
-
-# ============== USER TYPE CHOICES ==============
-#: findus/models.py:93
-#, fuzzy
-#| msgid "customer"
-msgid "Customer"
-msgstr "Customer"
-
-#: findus/models.py:94
-#, fuzzy
-#| msgid "craftsman"
-msgid "Craftsman"
-msgstr "Craftsman"
-
-#: findus/models.py:98
-msgid "1 Star"
-msgstr ""
-
-#: findus/models.py:99
-msgid "2 Stars"
-msgstr ""
-
-#: findus/models.py:100
-msgid "3 Stars"
-msgstr ""
-
-#: findus/models.py:101
-msgid "4 Stars"
-msgstr ""
-
-#: findus/models.py:102
-msgid "5 Stars"
-msgstr ""
-
-# ============== BOOST STATUS CHOICES ==============
-#: findus/models.py:106
-#, fuzzy
-#| msgid "pending"
-msgid "Pending"
-msgstr "Pending"
-
-#: findus/models.py:107
-#, fuzzy
-#| msgid "approved"
-msgid "Approved"
-msgstr "Approved"
-
-#: findus/models.py:108
-#, fuzzy
-#| msgid "rejected"
-msgid "Rejected"
-msgstr "Rejected"
-
-#: findus/models.py:109
-#, fuzzy
-#| msgid "expired"
-msgid "Expired"
-msgstr "Expired"
-
-#: findus/models.py:114
-msgid "craftsman"
-msgstr "Craftsman"
-
-#: findus/models.py:115 findus/models.py:280
-msgid "title"
-msgstr ""
-
-#: findus/models.py:116 findus/models.py:224
-msgid "slug"
-msgstr ""
-
-#: findus/models.py:117 findus/models.py:324
-#, fuzzy
-#| msgid "Categoria"
-msgid "category"
-msgstr "Category"
-
-#: findus/models.py:119
-#, fuzzy
-#| msgid "Regione"
-msgid "region"
-msgstr "Region"
-
-#: findus/models.py:122
-msgid "Select the region where you provide this service"
-msgstr ""
-
-#: findus/models.py:126
-msgid "description"
-msgstr ""
-
-#: findus/models.py:127
-msgid "price type"
-msgstr ""
-
-#: findus/models.py:129
-msgid "hourly rate"
-msgstr ""
-
-#: findus/models.py:132
-msgid "fixed price"
-msgstr ""
-
-#: findus/models.py:134
-msgid "estimated duration"
-msgstr ""
-
-#: findus/models.py:135
-msgid "minimum hours"
-msgstr ""
-
-#: findus/models.py:136
-msgid "image"
-msgstr ""
-
-#: findus/models.py:138
-msgid "availability"
-msgstr ""
-
-#: findus/models.py:141
-msgid "job size"
-msgstr ""
-
-#: findus/models.py:143
-#, fuzzy
-#| msgid "Materiali inclusi"
-msgid "materials included"
-msgstr "Materials Included"
-
-#: findus/models.py:145
-msgid "travel fee"
-msgstr ""
-
-#: findus/models.py:147
-msgid "features"
-msgstr ""
-
-#: findus/models.py:148
-msgid "service status"
-msgstr ""
-
-#: findus/models.py:149 findus/models.py:233 findus/models.py:282
-#: findus/models.py:308 findus/models.py:329
-msgid "created at"
-msgstr ""
-
-#: findus/models.py:150 findus/models.py:234 findus/models.py:283
-msgid "updated at"
-msgstr ""
-
-#: findus/models.py:153 findus/models.py:274 findus/models.py:298
-msgid "service"
-msgstr ""
-
-#: findus/models.py:154
-msgid "services"
-msgstr ""
-
-#: findus/models.py:195 findus/models.py:300
-msgid "user"
-msgstr ""
-
-#: findus/models.py:196
-msgid "user type"
-msgstr ""
-
-#: findus/models.py:199 findus/models.py:207 findus/models.py:222
-msgid "user profile"
-msgstr ""
-
-#: findus/models.py:200
-msgid "user profiles"
-msgstr ""
-
-#: findus/models.py:208 findus/models.py:235 findus/models.py:322
-msgid "phone"
-msgstr ""
-
-#: findus/models.py:210
-msgid "saved services"
-msgstr ""
-
-# ============== USER TYPE CHOICES ==============
-#: findus/models.py:214
-#, fuzzy
-#| msgid "customer"
-msgid "customer profile"
-msgstr "Customer"
-
-# ============== USER TYPE CHOICES ==============
-#: findus/models.py:215
-#, fuzzy
-#| msgid "customer"
-msgid "customer profiles"
-msgstr "Customer"
-
-#: findus/models.py:223
-msgid "business name"
-msgstr ""
-
-#: findus/models.py:225
-#, fuzzy
-#| msgid "%(years)s di esperienza"
-msgid "years of experience"
-msgstr "%(years)s years experience"
-
-#: findus/models.py:227
-#, fuzzy
-#| msgid "Profilo"
-msgid "profile photo"
-msgstr "Profile"
-
-#: findus/models.py:229
-msgid "has license"
-msgstr ""
-
-#: findus/models.py:230
-msgid "license number"
-msgstr ""
-
-#: findus/models.py:231 findus/models.py:284
-msgid "is verified"
-msgstr ""
-
-#: findus/models.py:232 findus/models.py:279
-msgid "rating"
-msgstr ""
-
-#: findus/models.py:238
-#, fuzzy
-#| msgid "craftsman"
-msgid "craftsman profile"
-msgstr "Craftsman"
-
-#: findus/models.py:239
-#, fuzzy
-#| msgid "craftsman"
-msgid "craftsman profiles"
-msgstr "Craftsman"
-
-# ============== USER TYPE CHOICES ==============
-#: findus/models.py:277
-msgid "customer"
-msgstr "Customer"
-
-#: findus/models.py:281
-#, fuzzy
-#| msgid "Prossimamente"
-msgid "comment"
-msgstr "Coming Soon"
-
-#: findus/models.py:289
-msgid "review"
-msgstr ""
-
-#: findus/models.py:290
-msgid "reviews"
-msgstr ""
-
-#: findus/models.py:301
-msgid "price"
-msgstr ""
-
-#: findus/models.py:302
-msgid "duration days"
-msgstr ""
-
-#: findus/models.py:303
-msgid "payment proof"
-msgstr ""
-
-#: findus/models.py:304 findus/models.py:328
-msgid "notes"
-msgstr ""
-
-#: findus/models.py:306
-msgid "status"
-msgstr ""
-
-#: findus/models.py:309
-#, fuzzy
-#| msgid "expired"
-msgid "expires at"
-msgstr "Expired"
-
-#: findus/models.py:312
-#, fuzzy
-#| msgid "Boost Premium"
-msgid "boost request"
-msgstr "Premium Boost"
-
-#: findus/models.py:313
-msgid "boost requests"
-msgstr ""
-
-#: findus/models.py:320
-#, fuzzy
-#| msgid "Falegname"
-msgid "name"
-msgstr "Furniture Maker"
-
-#: findus/models.py:321
-#, fuzzy
-#| msgid "Email"
-msgid "email"
-msgstr "Email"
-
-#: findus/models.py:326
-msgid "location"
-msgstr ""
-
-#: findus/models.py:327
-msgid "service needed"
-msgstr ""
-
-#: findus/models.py:332
-msgid "waiting list entry"
-msgstr ""
-
-#: findus/models.py:333
-msgid "waiting list entries"
-msgstr ""
-
-# ============== CRAFTSMAN REGISTER PAGE ==============
-#: findus/templates/craftsman_dasboard.html:10
-#, fuzzy
-#| msgid ""
-#| "Iscriviti a FindUs come professionista - Fai crescere la tua attività"
-msgid "Gestisci i tuoi servizi FidaMano e fai crescere la tua attività"
-msgstr "Join FindUs as a service provider - Grow your business"
-
-# ============== CRAFTSMAN DASHBOARD ==============
-#: findus/templates/craftsman_dasboard.html:12
-msgid "Dashboard Professionista"
-msgstr "Provider Dashboard"
-
-#: findus/templates/craftsman_dasboard.html:84
-msgid "Cerca i tuoi servizi..."
-msgstr "Search your services..."
-
-#: findus/templates/craftsman_dasboard.html:85
-#: findus/templates/customer_dashboard.html:87
-msgid "Cerca servizi"
-msgstr "Search services"
-
-#: findus/templates/craftsman_dasboard.html:92
-#: findus/templates/craftsman_dasboard.html:870
-#: findus/templates/craftsman_profile.html:67
-#: findus/templates/craftsman_profile.html:317
-#: findus/templates/craftsman_public_profile.html:311
-#: findus/templates/customer_dashboard.html:12
-#: findus/templates/customer_dashboard.html:433
-#: findus/templates/customer_profile.html:270
-#: findus/templates/saved_services.html:314
-#: findus/templates/service_detail.html:858
-msgid "Dashboard"
-msgstr "Dashboard"
-
-#: findus/templates/craftsman_dasboard.html:106
-#: findus/templates/craftsman_dasboard.html:872
-#: findus/templates/craftsman_profile.html:80
-#: findus/templates/craftsman_profile.html:319
-#: findus/templates/craftsman_public_profile.html:71
-#: findus/templates/craftsman_public_profile.html:196
-#: findus/templates/craftsman_public_profile.html:324
-#: findus/templates/customer_dashboard.html:107
-#: findus/templates/customer_dashboard.html:446
-#: findus/templates/customer_profile.html:69
-#: findus/templates/customer_profile.html:278
-#: findus/templates/saved_services.html:80
-#: findus/templates/saved_services.html:327
-#: findus/templates/service_detail.html:160
-#: findus/templates/service_detail.html:871
-msgid "Questa funzione è in fase di sviluppo"
-msgstr "This feature is in progress"
-
-#: findus/templates/craftsman_dasboard.html:108
-#: findus/templates/craftsman_public_profile.html:71
-#: findus/templates/customer_dashboard.html:107
-#: findus/templates/customer_profile.html:69
-#: findus/templates/saved_services.html:80
-#: findus/templates/service_detail.html:160
-msgid "I miei messaggi"
-msgstr "My Messages"
-
-#: findus/templates/craftsman_dasboard.html:125
-#: findus/templates/craftsman_dasboard.html:904
-#: findus/templates/craftsman_profile.html:9
-#: findus/templates/craftsman_profile.html:91
-#: findus/templates/craftsman_profile.html:344
-#: findus/templates/craftsman_public_profile.html:77
-#: findus/templates/craftsman_public_profile.html:348
-#: findus/templates/customer_dashboard.html:123
-#: findus/templates/customer_dashboard.html:470
-#: findus/templates/customer_profile.html:9
-#: findus/templates/customer_profile.html:75
-#: findus/templates/customer_profile.html:290
-#: findus/templates/saved_services.html:96
-#: findus/templates/saved_services.html:351
-#: findus/templates/service_detail.html:166
-#: findus/templates/service_detail.html:895
-msgid "Profilo"
-msgstr "Profile"
-
-#: findus/templates/craftsman_dasboard.html:137
-#: findus/templates/craftsman_dasboard.html:912
-#: findus/templates/craftsman_profile.html:160
-#: findus/templates/craftsman_profile.html:352
-#: findus/templates/craftsman_public_profile.html:83
-#: findus/templates/craftsman_public_profile.html:356
-#: findus/templates/customer_dashboard.html:478
-#: findus/templates/customer_profile.html:81
-#: findus/templates/customer_profile.html:142
-#: findus/templates/customer_profile.html:298
-#: findus/templates/saved_services.html:108
-#: findus/templates/saved_services.html:359
-#: findus/templates/service_detail.html:172
-#: findus/templates/service_detail.html:903
-msgid "Esci"
-msgstr "Logout"
-
-#: findus/templates/craftsman_dasboard.html:156
-#: findus/templates/craftsman_dasboard.html:892
-#: findus/templates/craftsman_profile.html:121
-msgid "Aggiungi servizio"
-msgstr "Add Service"
-
-#: findus/templates/craftsman_dasboard.html:165
-msgid "Testimonianze dei clienti"
-msgstr "Customer Testimonials"
-
-#: findus/templates/craftsman_dasboard.html:167
-msgid "Cosa dicono i tuoi clienti dei tuoi servizi"
-msgstr "What your customers are saying about your services"
-
-#: findus/templates/craftsman_dasboard.html:178
-msgid "Valutazione media"
-msgstr "Average Rating"
-
-#: findus/templates/craftsman_dasboard.html:199
-msgid "Recensioni totali"
-msgstr "Total Reviews"
-
-#: findus/templates/craftsman_dasboard.html:203
-msgid "Raccomanderebbero"
-msgstr "Would Recommend"
-
-#: findus/templates/craftsman_dasboard.html:230
-msgid ""
-"\"Giulia ha trasformato il nostro soggiorno con una mano di vernice fresca. "
-"Veloce, pulita e un prezzo molto onesto.\""
-msgstr ""
-"\"Giulia transformed our living room with a fresh coat of paint. Fast, "
-"clean, and a very fair price.\""
-
-#: findus/templates/craftsman_dasboard.html:236
-msgid "Decoratrice"
-msgstr "Decorator"
-
-#: findus/templates/craftsman_dasboard.html:260
-msgid ""
-"\"Le persiane del mio balcone erano bloccate da settimane. Chiara le ha "
-"riparate facilmente. La consiglio vivamente per qualsiasi riparazione "
-"domestica.\""
-msgstr ""
-"\"My balcony shutters were stuck for weeks. Chiara fixed them easily. Highly "
-"recommend her for any home repairs.\""
-
-#: findus/templates/craftsman_dasboard.html:266
-msgid "Riparazione persiane"
-msgstr "Shutter Repair"
-
-#: findus/templates/craftsman_dasboard.html:290
-msgid "\"Il nostro giardino era un disordine dopo l\\"
-msgstr ""
-
-#: findus/templates/craftsman_dasboard.html:296
-msgid "Giardiniera"
-msgstr "Gardener"
-
-#: findus/templates/craftsman_dasboard.html:319
-msgid ""
-"\"Usiamo Sofia per le pulizie del nostro Airbnb. È incredibilmente "
-"meticolosa e i nostri ospiti menzionano sempre quanto sia scintillante la "
-"casa.\""
-msgstr ""
-"\"We use Sofia for our Airbnb cleanings. She is incredibly thorough and our "
-"guests always mention how sparkling the place is.\""
-
-#: findus/templates/craftsman_dasboard.html:325 findus/templates/home.html:580
-msgid "Pulizie"
-msgstr "Cleaning"
-
-#: findus/templates/craftsman_dasboard.html:354
-msgid ""
-"\"Servizio HVAC incredibile! Ha riparato il mio condizionatore rapidamente e "
-"a un prezzo ragionevole. Competente.\""
-msgstr ""
-"\"Incredible HVAC service! Fixed my AC unit quickly and at a reasonable "
-"price. Knowledgeable.\""
-
-#: findus/templates/craftsman_dasboard.html:360
-msgid "HVAC"
-msgstr ""
-
-#: findus/templates/craftsman_dasboard.html:384
-#: findus/templates/craftsman_dasboard.html:443
-msgid ""
-"\"Ha traslocato tutta la mia casa di 3 camere senza un graffio. "
-"Professionale e attento. 10/10!\""
-msgstr ""
-
-#: findus/templates/craftsman_dasboard.html:390
-#: findus/templates/craftsman_dasboard.html:449
-msgid "Traslochi"
-msgstr "Moving"
-
-#: findus/templates/craftsman_dasboard.html:414
-msgid ""
-"\"Avevo una consegna IKEA enorme che non potevo gestire. Lorenzo ha montato "
-"tutto perfettamente in un pomeriggio.\""
-msgstr ""
-"\"Had a massive IKEA delivery that I couldn't handle. Lorenzo put everything "
-"together perfectly in one afternoon.\""
-
-#: findus/templates/craftsman_dasboard.html:420
-msgid "Montaggio mobili"
-msgstr "Furniture Assembly"
-
-#: findus/templates/craftsman_dasboard.html:465
-msgid "I miei servizi"
-msgstr "My Services"
-
-#: findus/templates/craftsman_dasboard.html:468
-#, fuzzy, python-format
-#| msgid "Gestisci e monitora il tuo %(counter)s servizio"
-#| msgid_plural "Gestisci e monitora i tuoi %(counter)s servizi"
-msgid ""
-"\n"
-"                        Gestisci e monitora il tuo %(counter)s servizio\n"
-"                        "
-msgid_plural ""
-"\n"
-"                        Gestisci e monitora i tuoi %(counter)s servizi\n"
-"                        "
-msgstr[0] "Manage and track your %(counter)s service"
-msgstr[1] "Manage and track your %(counter)s services"
-
-#: findus/templates/craftsman_dasboard.html:474
-msgid "Aggiungi il tuo primo servizio per iniziare"
-msgstr "Add your first service to get started"
-
-#: findus/templates/craftsman_dasboard.html:485
-msgid "Tutti i servizi"
-msgstr "All Services"
-
-#: findus/templates/craftsman_dasboard.html:486
-msgid "Attivi"
-msgstr "Active"
-
-#: findus/templates/craftsman_dasboard.html:487
-#: findus/templates/craftsman_public_profile.html:235
-#: findus/templates/partials/service_grid.html:63
-msgid "In evidenza"
-msgstr "Boosted"
-
-#: findus/templates/craftsman_dasboard.html:502
-#: findus/templates/craftsman_dasboard.html:534
-#: findus/templates/partials/service_grid.html:66
-msgid "Elimina servizio"
-msgstr "Delete Service"
-
-#: findus/templates/craftsman_dasboard.html:518
-msgid "Sei sicuro?"
-msgstr ""
-
-#: findus/templates/craftsman_dasboard.html:519
-msgid ""
-"Questa azione non può essere annullata. Il servizio verrà eliminato "
-"permanentemente."
-msgstr "This action cannot be undone. The service will be permanently deleted."
-
-#: findus/templates/craftsman_dasboard.html:525
-#: findus/templates/craftsman_dasboard.html:613
-#: findus/templates/craftsman_dasboard.html:846
-#: findus/templates/craftsman_profile.html:297
-#: findus/templates/customer_dashboard.html:388
-#: findus/templates/customer_profile.html:254 findus/templates/home.html:446
-#: findus/templates/partials/mobile_inline_filters.html:57
-#: findus/templates/partials/mobile_inline_filters.html:83
-#: findus/templates/partials/mobile_inline_filters.html:109
-#: findus/templates/service_detail.html:614
-#: findus/templates/service_wizard_page.html:53
-#: findus/templates/service_wizard_page.html:242
-msgid "Annulla"
-msgstr "Cancel"
-
-#: findus/templates/craftsman_dasboard.html:544
-#: findus/templates/partials/service_grid.html:49
-msgid "Modifica servizio"
-msgstr "Edit Service"
-
-#: findus/templates/craftsman_dasboard.html:557
-msgid "Titolo servizio"
-msgstr "Service Title"
-
-#: findus/templates/craftsman_dasboard.html:561
-#: findus/templates/partials/mobile_inline_filters.html:16
-#: findus/templates/service_wizard_page.html:99
-msgid "Categoria"
-msgstr "Category"
-
-#: findus/templates/craftsman_dasboard.html:569
-#: findus/templates/service_wizard_page.html:106
-#, fuzzy
-#| msgid "Descrizione del servizio"
-msgid "Descrizione"
-msgstr "Service Description"
-
-#: findus/templates/craftsman_dasboard.html:573
-#: findus/templates/service_detail.html:505
-msgid "Tipo di prezzo"
-msgstr "Pricing Type"
-
-#: findus/templates/craftsman_dasboard.html:577
-#: findus/templates/service_detail.html:272
-#: findus/templates/service_wizard_page.html:164
-msgid "Tariffa oraria"
-msgstr "Hourly Rate"
-
-#: findus/templates/craftsman_dasboard.html:581
-#: findus/templates/service_detail.html:272
-#: findus/templates/service_wizard_page.html:186
-msgid "Prezzo fisso"
-msgstr "Fixed Price"
-
-#: findus/templates/craftsman_dasboard.html:586
-msgid "Tariffa oraria (€)"
-msgstr "Hourly Rate (€)"
-
-#: findus/templates/craftsman_dasboard.html:590
-msgid "Prezzo fisso (€)"
-msgstr "Fixed Price (€)"
-
-#: findus/templates/craftsman_dasboard.html:594
-#: findus/templates/customer_dashboard.html:206
-#: findus/templates/partials/mobile_inline_filters.html:9
-msgid "Regione"
-msgstr "Region"
-
-#: findus/templates/craftsman_dasboard.html:596
-#: findus/templates/partials/mobile_inline_filters.html:41
-msgid "Seleziona regione"
-msgstr "Select Region"
-
-#: findus/templates/craftsman_dasboard.html:603
-#: findus/templates/customer_dashboard.html:305 findus/templates/home.html:351
-#: findus/templates/partials/mobile_inline_filters.html:23
-#: findus/templates/service_detail.html:519
-msgid "Disponibilità"
-msgstr "Availability"
-
-#: findus/templates/craftsman_dasboard.html:620
-#: findus/templates/craftsman_profile.html:234
-#: findus/templates/customer_profile.html:193
-msgid "Salva modifiche"
-msgstr "Save Changes"
-
-#: findus/templates/craftsman_dasboard.html:629
-msgid "Metti in evidenza il tuo servizio"
-msgstr "Boost Your Service"
-
-#: findus/templates/craftsman_dasboard.html:644
-msgid "Boost Base"
-msgstr "Basic Boost"
-
-#: findus/templates/craftsman_dasboard.html:647
-#: findus/templates/craftsman_dasboard.html:661
-#: findus/templates/craftsman_dasboard.html:675
-#: findus/templates/craftsman_dasboard.html:689
-msgid "giorni"
-msgstr "days"
-
-#: findus/templates/craftsman_dasboard.html:649
-msgid "3x più visibilità"
-msgstr "3x more visibility"
-
-#: findus/templates/craftsman_dasboard.html:650
-#, fuzzy
-#| msgid "In cima a tutte le categorie"
-msgid "In cima alla categoria"
-msgstr "Top of all categories"
-
-#: findus/templates/craftsman_dasboard.html:651
-msgid "Badge priorità"
-msgstr "Priority badge"
-
-#: findus/templates/craftsman_dasboard.html:653
-#: findus/templates/craftsman_dasboard.html:668
-#: findus/templates/craftsman_dasboard.html:683
-msgid "Seleziona piano"
-msgstr "Select Plan"
-
-#: findus/templates/craftsman_dasboard.html:656
-msgid "Più popolare"
-msgstr "Most Popular"
-
-#: findus/templates/craftsman_dasboard.html:658
-msgid "Boost Pro"
-msgstr "Pro Boost"
-
-#: findus/templates/craftsman_dasboard.html:663
-msgid "5x più visibilità"
-msgstr "5x more visibility"
-
-#: findus/templates/craftsman_dasboard.html:664
-msgid "In cima a tutte le categorie"
-msgstr "Top of all categories"
-
-#: findus/templates/craftsman_dasboard.html:665
-msgid "Badge in evidenza"
-msgstr "Featured badge"
-
-#: findus/templates/craftsman_dasboard.html:666
-msgid "Promozione via email"
-msgstr "Email promotion"
-
-#: findus/templates/craftsman_dasboard.html:672
-msgid "Boost Premium"
-msgstr "Premium Boost"
-
-#: findus/templates/craftsman_dasboard.html:677
-msgid "10x più visibilità"
-msgstr "10x more visibility"
-
-#: findus/templates/craftsman_dasboard.html:678
-msgid "In evidenza sulla homepage"
-msgstr "Homepage feature"
-
-#: findus/templates/craftsman_dasboard.html:679
-msgid "Badge verificato"
-msgstr "Verified badge"
-
-#: findus/templates/craftsman_dasboard.html:680
-msgid "Supporto prioritario"
-msgstr "Priority support"
-
-#: findus/templates/craftsman_dasboard.html:681
-msgid "Notifiche SMS"
-msgstr "SMS notifications"
-
-#: findus/templates/craftsman_dasboard.html:687
-msgid "Piano selezionato"
-msgstr "Selected Plan"
-
-#: findus/templates/craftsman_dasboard.html:689
-msgid "per"
-msgstr "for"
-
-#: findus/templates/craftsman_dasboard.html:694
-msgid "Carica prova di pagamento"
-msgstr "Upload Payment Proof"
-
-#: findus/templates/craftsman_dasboard.html:706
-msgid "Clicca per caricare ricevuta (JPG, PNG, PDF - max 5MB)"
-msgstr "Click to upload receipt (JPG, PNG, PDF - max 5MB)"
-
-#: findus/templates/craftsman_dasboard.html:713
-msgid "Note (opzionale)"
-msgstr "Notes (Optional)"
-
-#: findus/templates/craftsman_dasboard.html:714
-msgid "Aggiungi note sul tuo pagamento..."
-msgstr "Add any notes about your payment..."
-
-#: findus/templates/craftsman_dasboard.html:720
-msgid "Informazioni di pagamento per bonifico internazionale"
-msgstr "Payment Information for International Transfer"
-
-#: findus/templates/craftsman_dasboard.html:725
-msgid "Nome beneficiario:"
-msgstr "Beneficiary Name:"
-
-#: findus/templates/craftsman_dasboard.html:726
-#: findus/templates/craftsman_dasboard.html:739
-#: findus/templates/craftsman_dasboard.html:752
-#: findus/templates/craftsman_dasboard.html:765
-#: findus/templates/craftsman_dasboard.html:778
-msgid "Copia negli appunti"
-msgstr "Copy to clipboard"
-
-#: findus/templates/craftsman_dasboard.html:764
-msgid "Indirizzo banca:"
-msgstr "Bank Address:"
-
-#: findus/templates/craftsman_dasboard.html:777
-msgid "BIC banca corrispondente:"
-msgstr "Correspondent Bank BIC:"
-
-#: findus/templates/craftsman_dasboard.html:785
-msgid "per bonifici EUR"
-msgstr "for EUR transfers"
-
-#: findus/templates/craftsman_dasboard.html:790
-msgid "Riferimento:"
-msgstr "Reference:"
-
-#: findus/templates/craftsman_dasboard.html:791
-msgid "Copia riferimento negli appunti"
-msgstr "Copy reference to clipboard"
-
-#: findus/templates/craftsman_dasboard.html:803
-msgid "Importo:"
-msgstr "Amount:"
-
-#: findus/templates/craftsman_dasboard.html:804
-msgid "Copia importo negli appunti"
-msgstr "Copy amount to clipboard"
-
-#: findus/templates/craftsman_dasboard.html:820
-msgid "Copia tutti i dettagli"
-msgstr "Copy All Details"
-
-#: findus/templates/craftsman_dasboard.html:831
-msgid "Note importanti per le banche italiane:"
-msgstr "Important Notes for Italian Banks:"
-
-#: findus/templates/craftsman_dasboard.html:834
-msgid "Usa"
-msgstr "Use"
-
-#: findus/templates/craftsman_dasboard.html:834
-msgid "come codice SWIFT/BIC"
-msgstr "as the SWIFT/BIC code"
-
-#: findus/templates/craftsman_dasboard.html:835
-msgid "Per bonifici in EUR, includi la banca corrispondente"
-msgstr "For EUR transfers, include correspondent bank"
-
-#: findus/templates/craftsman_dasboard.html:836
-msgid "Includi sempre il"
-msgstr "Always include the"
-
-#: findus/templates/craftsman_dasboard.html:836
-msgid "numero di riferimento"
-msgstr "reference number"
-
-#: findus/templates/craftsman_dasboard.html:836
-msgid "nella descrizione del bonifico"
-msgstr "in the transfer description"
-
-#: findus/templates/craftsman_dasboard.html:837
-msgid "Assicurati di trasferire in"
-msgstr "Make sure to transfer in"
-
-#: findus/templates/craftsman_dasboard.html:837
-msgid "EURO (€)"
-msgstr "EURO (€)"
-
-#: findus/templates/craftsman_dasboard.html:838
-msgid "Potresti dover specificare"
-msgstr "You may need to specify"
-
-#: findus/templates/craftsman_dasboard.html:838
-msgid "'Nessuna spesa per il beneficiario'"
-msgstr "\"No charges for beneficiary\""
-
-#: findus/templates/craftsman_dasboard.html:839
-msgid "Il bonifico internazionale richiede 1-3 giorni lavorativi"
-msgstr "International transfer takes 1-3 business days"
-
-#: findus/templates/craftsman_dasboard.html:840
-msgid "Conserva la ricevuta di pagamento per i tuoi archivi"
-msgstr "Keep the payment receipt for your records"
-
-#: findus/templates/craftsman_dasboard.html:852
-msgid "Invia richiesta boost"
-msgstr "Submit Boost Request"
-
-#: findus/templates/craftsman_dasboard.html:883
-#: findus/templates/craftsman_profile.html:82
-#: findus/templates/craftsman_profile.html:332
-#: findus/templates/craftsman_public_profile.html:335
-#: findus/templates/customer_dashboard.html:457
-#: findus/templates/customer_profile.html:282
-#: findus/templates/saved_services.html:338
-#: findus/templates/service_detail.html:882
-msgid "Messaggi"
-msgstr "Messages"
-
-#: findus/templates/craftsman_dasboard.html:917
-#: findus/templates/craftsman_profile.html:357
-#: findus/templates/craftsman_public_profile.html:362
-#: findus/templates/customer_dashboard.html:483
-#: findus/templates/customer_profile.html:304 findus/templates/home.html:760
-#: findus/templates/saved_services.html:364
-#: findus/templates/service_detail.html:909
-msgid "Tutti i diritti riservati."
-msgstr "All rights reserved."
-
-# ============== PROFILE PAGE ==============
-#: findus/templates/craftsman_profile.html:8
-#: findus/templates/customer_profile.html:8
-#, fuzzy
-#| msgid "Gestisci il tuo profilo FindUs e le impostazioni dell'account"
-msgid "Gestisci il tuo profilo FidaMano e le impostazioni dell\\"
-msgstr "Manage your FindUs profile and account settings"
-
-#: findus/templates/craftsman_profile.html:103
-#: findus/templates/customer_dashboard.html:135
-msgid "I miei annunci"
-msgstr "My Adverts"
-
-#: findus/templates/craftsman_profile.html:148
-#: findus/templates/customer_profile.html:124
-msgid "Info account"
-msgstr "Account Info"
-
-#: findus/templates/craftsman_profile.html:152
-#: findus/templates/customer_profile.html:128
-msgid "Azioni rapide"
-msgstr "Quick Actions"
-
-#: findus/templates/craftsman_profile.html:169
-#: findus/templates/customer_profile.html:151
-msgid "Informazioni account"
-msgstr "Account Information"
-
-#: findus/templates/craftsman_profile.html:170
-#: findus/templates/customer_profile.html:152
-msgid "Gestisci i tuoi dati personali"
-msgstr "Manage your personal details"
-
-#: findus/templates/craftsman_profile.html:186
-#: findus/templates/customer_profile.html:171
-msgid "Nome"
-msgstr "First Name"
-
-#: findus/templates/craftsman_profile.html:190
-#: findus/templates/customer_profile.html:175
-msgid "Cognome"
-msgstr "Last Name"
-
-#: findus/templates/craftsman_profile.html:196
-#: findus/templates/customer_profile.html:182 findus/templates/home.html:536
-#: findus/templates/partials/waitlist_section-homepage.html:66
-#: findus/templates/partials/waitlist_section.html:66
-msgid "Indirizzo email"
-msgstr "Email Address"
-
-#: findus/templates/craftsman_profile.html:200
-#: findus/templates/customer_profile.html:187 findus/templates/home.html:558
-#: findus/templates/partials/waitlist_section-homepage.html:76
-#: findus/templates/partials/waitlist_section.html:76
-#: findus/templates/register.html:114
-#: findus/templates/register_craftsman.html:120
-msgid "Numero di telefono"
-msgstr "Phone Number"
-
-# ============== CRAFTSMAN PROFILE PAGE ==============
-#: findus/templates/craftsman_profile.html:205
-msgid "Nome attività"
-msgstr "Business Name"
-
-#: findus/templates/craftsman_profile.html:210
-#: findus/templates/register_craftsman.html:135
-msgid "Anni di esperienza"
-msgstr "Years of experience"
-
-#: findus/templates/craftsman_profile.html:212
-msgid "Seleziona anni"
-msgstr "Select years"
-
-#: findus/templates/craftsman_profile.html:213
-#: findus/templates/register_craftsman.html:137
-msgid "0-1 anni"
-msgstr "0-1 years"
-
-#: findus/templates/craftsman_profile.html:214
-#: findus/templates/register_craftsman.html:138
-msgid "1-3 anni"
-msgstr "1-3 years"
-
-#: findus/templates/craftsman_profile.html:215
-#: findus/templates/register_craftsman.html:139
-msgid "3-5 anni"
-msgstr "3-5 years"
-
-#: findus/templates/craftsman_profile.html:216
-#: findus/templates/register_craftsman.html:140
-msgid "5+ anni"
-msgstr "5+ years"
-
-#: findus/templates/craftsman_profile.html:220
-msgid "Numero licenza (opzionale)"
-msgstr "License Number (Optional)"
-
-#: findus/templates/craftsman_profile.html:225
-#: findus/templates/register_craftsman.html:221
-msgid "Foto profilo"
-msgstr "Profile Photo"
-
-#: findus/templates/craftsman_profile.html:228
-msgid "Foto attuale"
-msgstr "Current photo"
-
-#: findus/templates/craftsman_profile.html:240
-#: findus/templates/customer_profile.html:201
-msgid "Sicurezza"
-msgstr "Security"
-
-#: findus/templates/craftsman_profile.html:241
-#: findus/templates/customer_profile.html:202
-msgid "Gestisci sicurezza"
-msgstr "Manage Security"
-
-#: findus/templates/craftsman_profile.html:251
-#: findus/templates/customer_profile.html:212 findus/templates/home.html:700
-#: findus/templates/register.html:132
-#: findus/templates/register_craftsman.html:150 findus/templates/signin.html:91
-msgid "Password"
-msgstr "Password"
-
-#: findus/templates/craftsman_profile.html:252
-#: findus/templates/customer_profile.html:213
-msgid "Ultima modifica 3 mesi fa"
-msgstr "Last changed 3 months ago"
-
-#: findus/templates/craftsman_profile.html:255
-#: findus/templates/craftsman_profile.html:262
-#: findus/templates/customer_profile.html:216
-#: findus/templates/customer_profile.html:225
-msgid "Cambia password"
-msgstr "Change Password"
-
-#: findus/templates/craftsman_profile.html:269
-#: findus/templates/customer_profile.html:232
-msgid "Password attuale"
-msgstr "Current Password"
-
-#: findus/templates/craftsman_profile.html:278
-#: findus/templates/customer_profile.html:239
-msgid "Nuova password"
-msgstr "New Password"
-
-#: findus/templates/craftsman_profile.html:287
-#: findus/templates/customer_profile.html:246
-msgid "Conferma nuova password"
-msgstr "Confirm New Password"
-
-#: findus/templates/craftsman_profile.html:296
-#: findus/templates/customer_profile.html:253
-msgid "Aggiorna password"
-msgstr "Update Password"
-
-# ============== CRAFTSMAN PUBLIC PROFILE ==============
-#: findus/templates/craftsman_public_profile.html:8
-#, fuzzy, python-format
-#| msgid "%(name)s - Professionista su FindUs"
-msgid "%(name)s - Professionista su FidaMano"
-msgstr "%(name)s - Professional on FindUs"
-
-#: findus/templates/craftsman_public_profile.html:66
-#: findus/templates/craftsman_public_profile.html:322
-#: findus/templates/customer_dashboard.html:94
-#: findus/templates/customer_dashboard.html:444
-#: findus/templates/customer_profile.html:64
-#: findus/templates/customer_profile.html:276
-#: findus/templates/saved_services.html:9
-#: findus/templates/saved_services.html:67
-#: findus/templates/saved_services.html:325
-#: findus/templates/service_detail.html:155
-#: findus/templates/service_detail.html:869
-msgid "Salvati"
-msgstr "Saved"
-
-#: findus/templates/craftsman_public_profile.html:94
-#: findus/templates/home.html:88 findus/templates/home.html:735
-#: findus/templates/register.html:12 findus/templates/service_detail.html:183
-#: findus/templates/signin.html:131
-msgid "Registrati"
-msgstr "Register"
-
-#: findus/templates/craftsman_public_profile.html:95
-#: findus/templates/home.html:90 findus/templates/service_detail.html:184
-#, fuzzy
-#| msgid "Diventa un Professionista"
-msgid "Diventa un professionista"
-msgstr "Become a Service Provider"
-
-#: findus/templates/craftsman_public_profile.html:97
-#: findus/templates/home.html:93 findus/templates/home.html:723
-#: findus/templates/register.html:226
-#: findus/templates/register_craftsman.html:298
-#: findus/templates/service_detail.html:186 findus/templates/signin.html:12
-#: findus/templates/signin.html:121
-msgid "Accedi"
-msgstr "Sign in"
-
-#: findus/templates/craftsman_public_profile.html:137
-#, fuzzy, python-format
-#| msgid "%(years)s+ anni su FindUs"
-msgid "%(years)s+ anni su FidaMano"
-msgstr "%(years)s+ years on FindUs"
-
-#: findus/templates/craftsman_public_profile.html:139
-#, fuzzy
-#| msgid "Professionista FindUs"
-msgid "Professionista FidaMano"
-msgstr "FindUs Professional"
-
-#: findus/templates/craftsman_public_profile.html:146
-msgid "ID verificato"
-msgstr "Verified ID"
-
-#: findus/templates/craftsman_public_profile.html:155
-msgid "Visto l'ultima volta 1 ora fa"
-msgstr "Last seen 1 hour ago"
-
-#: findus/templates/craftsman_public_profile.html:160
-#, fuzzy
-#| msgid "Su FindUs"
-msgid "Su FidaMano"
-msgstr "On FindUs"
-
-#: findus/templates/craftsman_public_profile.html:163
-#: findus/templates/craftsman_public_profile.html:165
-msgid "anni"
-msgstr "years"
-
-#: findus/templates/craftsman_public_profile.html:170
-msgid "Verifica"
-msgstr "Verification"
-
-#: findus/templates/craftsman_public_profile.html:172
-#: findus/templates/customer_dashboard.html:346 findus/templates/home.html:393
-#: findus/templates/partials/dashboard_results.html:80
-#: findus/templates/partials/filtered_results.html:44
-#: findus/templates/saved_services.html:228
-#: findus/templates/service_detail.html:258
-#: findus/templates/service_detail.html:289
-#: findus/templates/service_detail.html:441
-#: findus/templates/service_detail.html:683
-msgid "Professionista verificato"
-msgstr "Verified Pro"
-
-#: findus/templates/craftsman_public_profile.html:176
-msgid "Servizi"
-msgstr "Services"
-
-#: findus/templates/craftsman_public_profile.html:186
-#: findus/templates/partials/dashboard_results.html:143
-#: findus/templates/partials/filtered_results.html:107
-#: findus/templates/partials/filtered_results.html:114
-#: findus/templates/saved_services.html:284
-#: findus/templates/service_detail.html:740
-#, fuzzy
-#| msgid "Chiama"
-msgid "Chiama ora"
-msgstr "Call"
-
-#: findus/templates/craftsman_public_profile.html:193
-msgid "Mostra contatto"
-msgstr "Show Contact"
-
-#: findus/templates/craftsman_public_profile.html:200
-msgid "Invia messaggio"
-msgstr "Send Message"
-
-#: findus/templates/craftsman_public_profile.html:209
-msgid "Chi sono"
-msgstr "About Me"
-
-#: findus/templates/craftsman_public_profile.html:211
-msgid "Nessuna descrizione fornita."
-msgstr "No description provided yet."
-
-#: findus/templates/craftsman_public_profile.html:217
-msgid "Servizi offerti"
-msgstr "Services Offered"
-
-#: findus/templates/craftsman_public_profile.html:218
-#, python-format
-msgid "%(counter)s servizio"
-msgid_plural "%(counter)s servizi"
-msgstr[0] "%(counter)s service"
-msgstr[1] "%(counter)s services"
-
-# ============== SERVICE GRID PARTIAL ==============
-#: findus/templates/craftsman_public_profile.html:232
-#: findus/templates/partials/service_grid.html:15
-msgid "Attivo"
-msgstr "Active"
-
-#: findus/templates/craftsman_public_profile.html:232
-#: findus/templates/partials/service_grid.html:15
-msgid "In pausa"
-msgstr "Paused"
-
-#: findus/templates/craftsman_public_profile.html:270
-#: findus/templates/craftsman_public_profile.html:275
-#, fuzzy
-#| msgid "Condividi i dettagli..."
-msgid "Vedi dettagli"
-msgstr "Share details..."
-
-#: findus/templates/craftsman_public_profile.html:291
-msgid "Nessun servizio"
-msgstr "No Services Yet"
-
-#: findus/templates/craftsman_public_profile.html:292
-msgid "Questo professionista non ha ancora elencato alcun servizio."
-msgstr "This provider hasn't listed any services yet."
-
-# ============== DASHBOARD ==============
-#: findus/templates/customer_dashboard.html:10
-#, fuzzy
-#| msgid "La tua dashboard FindUs - Trova e gestisci professionisti fidati"
-msgid "La tua dashboard FidaMano - Trova e gestisci professionisti fidati"
-msgstr "Your FindUs Dashboard - Find and manage trusted professionals"
-
-#: findus/templates/customer_dashboard.html:86
-msgid "Cerca servizi..."
-msgstr "Search for services..."
-
-#: findus/templates/customer_dashboard.html:159
-#: findus/templates/customer_profile.html:95 findus/templates/home.html:739
-#: findus/templates/register.html:229 findus/templates/saved_services.html:127
-#: findus/templates/signin.html:134
-msgid "Diventa professionista"
-msgstr "Join as provider"
-
-#: findus/templates/customer_dashboard.html:192
-#: findus/templates/customer_dashboard.html:410 findus/templates/home.html:266
-#: findus/templates/home.html:482
-msgid "Filtri"
-msgstr "Filters"
-
-#: findus/templates/customer_dashboard.html:200 findus/templates/home.html:274
-#: findus/templates/partials/mobile_inline_filters.html:31
-msgid "Cancella tutto"
-msgstr "Clear All"
-
-#: findus/templates/customer_dashboard.html:222
-msgid "Categoria servizio"
-msgstr "Service Category"
-
-#: findus/templates/customer_dashboard.html:238 findus/templates/home.html:280
-msgid "Fascia di prezzo"
-msgstr "Price Range"
-
-#: findus/templates/customer_dashboard.html:244 findus/templates/home.html:286
-msgid "Min"
-msgstr "Min"
-
-#: findus/templates/customer_dashboard.html:248 findus/templates/home.html:291
-msgid "a"
-msgstr "to"
-
-#: findus/templates/customer_dashboard.html:253 findus/templates/home.html:296
-msgid "Max"
-msgstr "Max"
-
-#: findus/templates/customer_dashboard.html:261 findus/templates/home.html:304
-#: findus/templates/service_detail.html:555
-#: findus/templates/service_detail.html:593
-msgid "Valutazione"
-msgstr "Rating"
-
-#: findus/templates/customer_dashboard.html:270 findus/templates/home.html:314
-msgid "5 stelle"
-msgstr "5 stars"
-
-#: findus/templates/customer_dashboard.html:280 findus/templates/home.html:325
-msgid "4+ stelle"
-msgstr "4+ stars"
-
-#: findus/templates/customer_dashboard.html:290 findus/templates/home.html:336
-msgid "3+ stelle"
-msgstr "3+ stars"
-
-#: findus/templates/customer_dashboard.html:300 findus/templates/home.html:347
-msgid "Qualsiasi valutazione"
-msgstr "Any rating"
-
-#: findus/templates/customer_dashboard.html:321 findus/templates/home.html:367
-#: findus/templates/service_detail.html:545
-msgid "Dimensione lavoro"
-msgstr "Job Size"
-
-#: findus/templates/customer_dashboard.html:337 findus/templates/home.html:383
-msgid "Caratteristiche"
-msgstr "Features"
-
-#: findus/templates/customer_dashboard.html:356 findus/templates/home.html:404
-#: findus/templates/partials/dashboard_results.html:85
-#: findus/templates/partials/filtered_results.html:49
-#: findus/templates/saved_services.html:232
-#: findus/templates/service_detail.html:262
-#: findus/templates/service_detail.html:449
-msgid "Autorizzato"
-msgstr "Licensed"
-
-#: findus/templates/customer_dashboard.html:366 findus/templates/home.html:415
-#: findus/templates/service_detail.html:457
-msgid "Assicurato"
-msgstr "Insured"
-
-#: findus/templates/customer_dashboard.html:376 findus/templates/home.html:426
-msgid "Offre garanzia"
-msgstr "Offers Warranty"
-
-#: findus/templates/customer_dashboard.html:382 findus/templates/home.html:440
-msgid "Caricamento..."
-msgstr "Loading..."
-
-#: findus/templates/customer_profile.html:134
-msgid "Servizi salvati"
-msgstr "Saved Services"
-
-#: findus/templates/customer_profile.html:184
-msgid "L'email non può essere modificata"
-msgstr ""
-
-#: findus/templates/home.html:10
-msgid ""
-"FidaMano - Trova professionisti di fiducia per tutte le tue esigenze "
-"domestiche e lavorative"
-msgstr ""
-
-# ============== HOME PAGE ==============
-#: findus/templates/home.html:109
-msgid "Cosa stai cercando?"
-msgstr "What are you looking for?"
-
-#: findus/templates/home.html:110
-msgid ""
-"Che tu abbia bisogno di un idraulico o di un pittore, FidaMano ti aiuta a "
-"fare il lavoro nel modo giusto."
-msgstr ""
-"Whether you need a plumber or a painter, FidaMano helps you get the job done "
-"right."
-
-#: findus/templates/home.html:130 findus/templates/home.html:153
-msgid "Tutte le regioni"
-msgstr "All Regions"
-
-#: findus/templates/home.html:178 findus/templates/home.html:201
-msgid "Tutte le categorie"
-msgstr "All Categories"
-
-#: findus/templates/home.html:223
-msgid "Sto cercando..."
-msgstr "I am looking for..."
-
-#: findus/templates/home.html:235
-msgid "Cerca"
-msgstr "Search"
-
-#: findus/templates/home.html:276
-#: findus/templates/partials/mobile_inline_filters.html:58
-#: findus/templates/partials/mobile_inline_filters.html:84
-#: findus/templates/partials/mobile_inline_filters.html:110
-msgid "Applica"
-msgstr "Apply"
-
-#: findus/templates/home.html:454
-msgid "Mostra risultati"
-msgstr "Show Results"
-
-#: findus/templates/home.html:498
-msgid "Prossimamente"
-msgstr "Coming Soon"
-
-#: findus/templates/home.html:499
-msgid "Nessun servizio nella tua zona"
-msgstr "No services in your area yet"
-
-#: findus/templates/home.html:501
-#, fuzzy
-#| msgid ""
-#| "Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a "
-#| "sapere quando FindUs arriva nel tuo quartiere."
-msgid ""
-"Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a "
-"sapere quando FidaMano arriva nel tuo quartiere."
-msgstr ""
-"We're expanding! Join our waiting list to be the first to know when FindUs "
-"launches in your neighborhood."
-
-#: findus/templates/home.html:507 findus/templates/home.html:617
-#: findus/templates/partials/waitlist_section-homepage.html:45
-#: findus/templates/partials/waitlist_section-homepage.html:140
-#: findus/templates/partials/waitlist_section.html:45
-#: findus/templates/partials/waitlist_section.html:140
-msgid "Iscriviti alla lista d'attesa"
-msgstr "Join the Waiting List"
-
-#: findus/templates/home.html:509
-#: findus/templates/partials/waitlist_section-homepage.html:46
-#: findus/templates/partials/waitlist_section.html:46
-msgid ""
-"Sii tra i primi ad accedere a professionisti verificati quando lanceremo."
-msgstr "Be among the first to access verified professionals when we launch."
-
-#: findus/templates/home.html:526
-#: findus/templates/partials/waitlist_section-homepage.html:62
-#: findus/templates/partials/waitlist_section.html:62
-msgid "Nome completo"
-msgstr "Full Name"
-
-#: findus/templates/home.html:531
-#: findus/templates/partials/waitlist_section-homepage.html:63
-#: findus/templates/partials/waitlist_section.html:63
-msgid "Mario Rossi"
-msgstr "John Doe"
-
-#: findus/templates/home.html:541
-#: findus/templates/partials/waitlist_section-homepage.html:67
-#: findus/templates/partials/waitlist_section.html:67
-msgid "mario@example.com"
-msgstr "john@example.com"
-
-#: findus/templates/home.html:548
-#: findus/templates/partials/waitlist_section-homepage.html:72
-#: findus/templates/partials/waitlist_section.html:72
-msgid "Località"
-msgstr "Location"
-
-#: findus/templates/home.html:553
-#: findus/templates/partials/waitlist_section-homepage.html:73
-#: findus/templates/partials/waitlist_section.html:73
-msgid "La tua città"
-msgstr "Your city"
-
-#: findus/templates/home.html:563
-msgid "+39 123 456 7890"
-msgstr "+1 (555) 123-4567"
-
-#: findus/templates/home.html:569
-#: findus/templates/partials/waitlist_section-homepage.html:82
-#: findus/templates/partials/waitlist_section.html:82
-msgid "Servizio necessario"
-msgstr "Service Needed"
-
-#: findus/templates/home.html:571
-#: findus/templates/partials/waitlist_section-homepage.html:84
-#: findus/templates/partials/waitlist_section.html:84
-msgid "Seleziona un servizio"
-msgstr "Select a service"
-
-#: findus/templates/home.html:572
-#: findus/templates/partials/waitlist_section-homepage.html:85
-#: findus/templates/partials/waitlist_section.html:85
-msgid "Idraulico"
-msgstr "Plumber"
-
-#: findus/templates/home.html:573
-#: findus/templates/partials/waitlist_section-homepage.html:86
-#: findus/templates/partials/waitlist_section.html:86
-msgid "Elettricista"
-msgstr "Electrician"
-
-#: findus/templates/home.html:574
-#: findus/templates/partials/waitlist_section-homepage.html:87
-#: findus/templates/partials/waitlist_section.html:87
-msgid "Tecnico AC"
-msgstr "AC Technician"
-
-#: findus/templates/home.html:575
-#: findus/templates/partials/waitlist_section-homepage.html:88
-#: findus/templates/partials/waitlist_section.html:88
-msgid "Carpentiere"
-msgstr "Carpenter"
-
-#: findus/templates/home.html:576
-#: findus/templates/partials/waitlist_section-homepage.html:89
-#: findus/templates/partials/waitlist_section.html:89
-msgid "Pavimentista"
-msgstr "Tiler"
-
-#: findus/templates/home.html:577
-#: findus/templates/partials/waitlist_section-homepage.html:90
-#: findus/templates/partials/waitlist_section.html:90
-msgid "Pittore"
-msgstr "Painter"
-
-#: findus/templates/home.html:578
-#: findus/templates/partials/waitlist_section-homepage.html:91
-#: findus/templates/partials/waitlist_section.html:91
-msgid "Falegname"
-msgstr "Furniture Maker"
-
-#: findus/templates/home.html:579
-#: findus/templates/partials/waitlist_section-homepage.html:92
-#: findus/templates/partials/waitlist_section.html:92
-msgid "Disinfestatore"
-msgstr "Fumigator"
-
-#: findus/templates/home.html:581
-#: findus/templates/partials/waitlist_section-homepage.html:98
-#: findus/templates/partials/waitlist_section.html:98
-msgid "Saldatore"
-msgstr "Welder"
-
-#: findus/templates/home.html:582
-msgid "Tetto"
-msgstr ""
-
-#: findus/templates/home.html:583
-#, fuzzy
-#| msgid "Tecnico AC"
-msgid "Tecnico solare"
-msgstr "AC Technician"
-
-#: findus/templates/home.html:584
-#: findus/templates/partials/waitlist_section-homepage.html:101
-#: findus/templates/partials/waitlist_section.html:101
-msgid "Muratore"
-msgstr "Mason"
-
-#: findus/templates/home.html:585
-#, fuzzy
-#| msgid "Giardiniera"
-msgid "Giardiniere"
-msgstr "Gardener"
-
-#: findus/templates/home.html:586
-#, fuzzy
-#| msgid "Valutazione"
-msgid "Climatizzazione"
-msgstr "Rating"
-
-#: findus/templates/home.html:587
-#: findus/templates/partials/waitlist_section-homepage.html:110
-#: findus/templates/partials/waitlist_section.html:110
-msgid "Interior designer"
-msgstr "Interior Designer"
-
-#: findus/templates/home.html:588
-msgid "Controllo parassiti"
-msgstr ""
-
-#: findus/templates/home.html:589
-#: findus/templates/partials/waitlist_section-homepage.html:117
-#: findus/templates/partials/waitlist_section.html:117
-msgid "Altro"
-msgstr "Other"
-
-#: findus/templates/home.html:594
-#: findus/templates/partials/waitlist_section-homepage.html:122
-#: findus/templates/partials/waitlist_section.html:122
-msgid "Note aggiuntive"
-msgstr "Additional Notes"
-
-#: findus/templates/home.html:599
-#: findus/templates/partials/waitlist_section-homepage.html:127
-#: findus/templates/partials/waitlist_section.html:127
-msgid "Dicci di più su cosa stai cercando..."
-msgstr "Tell us more about what you're looking for..."
-
-#: findus/templates/home.html:612
-#, fuzzy
-#| msgid ""
-#| "Accetto di ricevere aggiornamenti sul lancio di FindUs e offerte "
-#| "esclusive di accesso anticipato."
-msgid ""
-"Accetto di ricevere aggiornamenti sul lancio di FidaMano e offerte esclusive "
-"di accesso anticipato."
-msgstr ""
-"I agree to receive updates about FindUs launch and exclusive early access "
-"offers."
-
-#: findus/templates/home.html:626
-#: findus/templates/partials/waitlist_section-homepage.html:149
-#: findus/templates/partials/waitlist_section.html:149
-msgid "Le tue informazioni sono al sicuro e non verranno mai condivise."
-msgstr "Your information is secure and will never be shared."
-
-#: findus/templates/home.html:637
-#: findus/templates/partials/dashboard_results.html:8
-msgid "Professionisti vicino a te"
-msgstr "Professionals Near You"
-
-#: findus/templates/home.html:637
-msgid "Professionisti più votati"
-msgstr "Top Rated Professionals"
-
-#: findus/templates/home.html:640
-#: findus/templates/partials/dashboard_results.html:9
-msgid "Mostrando"
-msgstr "Showing"
-
-#: findus/templates/home.html:641
-msgid "risultato"
-msgid_plural "risultati"
-msgstr[0] "result"
-msgstr[1] "results"
-
-#: findus/templates/home.html:641
-msgid "professionisti"
-msgstr "professionals"
-
-#: findus/templates/home.html:645
-#: findus/templates/partials/dashboard_results.html:18
-msgid "Ordina per"
-msgstr "Sort by"
-
-#: findus/templates/home.html:659
-#: findus/templates/partials/dashboard_results.html:32
-msgid "Più rilevanti"
-msgstr "Most Relevant"
-
-#: findus/templates/home.html:660
-#: findus/templates/partials/dashboard_results.html:33
-msgid "Più votati"
-msgstr "Highest Rated"
-
-#: findus/templates/home.html:661
-#: findus/templates/partials/dashboard_results.html:34
-msgid "Prezzo: dal più basso"
-msgstr "Price: Low to High"
-
-#: findus/templates/home.html:662
-#: findus/templates/partials/dashboard_results.html:35
-msgid "Prezzo: dal più alto"
-msgstr "Price: High to Low"
-
-#: findus/templates/home.html:663
-#: findus/templates/partials/dashboard_results.html:36
-msgid "Più vicini"
-msgstr "Nearest"
-
-#: findus/templates/home.html:674
-msgid "Chiudi"
-msgstr ""
-
-#: findus/templates/home.html:682 findus/templates/signin.html:64
-msgid "Bentornato"
-msgstr "Welcome back"
-
-#: findus/templates/home.html:683 findus/templates/signin.html:65
-msgid "Accedi al tuo account"
-msgstr "Sign in to your account"
-
-#: findus/templates/home.html:689 findus/templates/signin.html:79
-msgid "Nome utente o email"
-msgstr "Username or Email"
-
-#: findus/templates/home.html:694 findus/templates/signin.html:84
-msgid "Inserisci il tuo nome utente o email"
-msgstr "Enter your username or email"
-
-#: findus/templates/home.html:706 findus/templates/signin.html:97
-msgid "Inserisci la tua password"
-msgstr "Enter your password"
-
-#: findus/templates/home.html:712 findus/templates/register.html:145
-#: findus/templates/register.html:179
-#: findus/templates/register_craftsman.html:163
-#: findus/templates/register_craftsman.html:197
-#: findus/templates/signin.html:104
-msgid "Mostra password"
-msgstr "Show password"
-
-#: findus/templates/home.html:728 findus/templates/signin.html:126
-msgid "Accesso in corso..."
-msgstr "Signing in..."
-
-#: findus/templates/home.html:734 findus/templates/signin.html:131
-msgid "Non hai un account?"
-msgstr "Don't have an account?"
-
-#: findus/templates/home.html:738 findus/templates/register.html:228
-#: findus/templates/signin.html:133
-msgid "Vuoi offrire servizi?"
-msgstr "Want to offer services?"
-
-# ============== IOS INSTALL BANNER ==============
-#: findus/templates/home.html:780
-#, fuzzy
-#| msgid "Installa l'app FindUs"
-msgid "Installa l'app FidaMano"
-msgstr "Install FindUs App"
-
-#: findus/templates/home.html:786
-msgid "Tocca qui per le istruzioni"
-msgstr "Tap here for instructions"
-
-#: findus/templates/home.html:807
-msgid "Per installare:"
-msgstr "To install:"
-
-#: findus/templates/home.html:808
-#, fuzzy
-#| msgid "Tocca il pulsante Condividi (📤)"
-msgid "Tocca Condividi (📤)"
-msgstr "Tap the Share button (📤)"
-
-#: findus/templates/home.html:809
-msgid "Scorri verso il basso"
-msgstr "Scroll down"
-
-#: findus/templates/home.html:810
-#, fuzzy
-#| msgid "Tocca \"Aggiungi alla schermata Home\""
-msgid "Aggiungi alla Home"
-msgstr "Tap \"Add to Home Screen\""
-
-#: findus/templates/home.html:811
-#, fuzzy
-#| msgid "Conferma password"
-msgid "Conferma"
-msgstr "Confirm Password"
-
-# ============== OFFLINE PAGE ==============
-#: findus/templates/offline.html:7 findus/templates/offline.html:48
-msgid "Sei offline"
-msgstr "You're Offline"
-
-#: findus/templates/offline.html:49
-msgid "Controlla la tua connessione internet e riprova."
-msgstr "Please check your internet connection and try again."
-
-#: findus/templates/offline.html:50
-msgid "Riprova"
-msgstr "Try Again"
-
-#: findus/templates/partials/dashboard_results.html:10
-msgid ""
-"\n"
-"                    risultato\n"
-"                "
-msgid_plural ""
-"\n"
-"                    risultati\n"
-"                "
-msgstr[0] ""
-msgstr[1] ""
-
-#: findus/templates/partials/dashboard_results.html:87
-#: findus/templates/partials/filtered_results.html:51
-#: findus/templates/saved_services.html:234
-#: findus/templates/service_detail.html:264
-msgid "Non autorizzato"
-msgstr "Not Licensed"
-
-#: findus/templates/partials/dashboard_results.html:115
-#: findus/templates/partials/filtered_results.html:79
-#: findus/templates/saved_services.html:259
-msgid "A partire da"
-msgstr "Starting at"
-
-#: findus/templates/partials/dashboard_results.html:118
-#: findus/templates/partials/filtered_results.html:82
-#: findus/templates/saved_services.html:262
-#: findus/templates/service_wizard_page.html:168
-msgid "ora"
-msgstr "hr"
-
-#: findus/templates/partials/dashboard_results.html:122
-#: findus/templates/partials/filtered_results.html:86
-#: findus/templates/saved_services.html:266
-msgid "Contattaci per il prezzo"
-msgstr "Contact for price"
-
-#: findus/templates/partials/dashboard_results.html:133
-#: findus/templates/partials/filtered_results.html:97
-#: findus/templates/partials/service_grid.html:31
-#: findus/templates/saved_services.html:276
-#: findus/templates/service_detail.html:476
-msgid "Materiali inclusi"
-msgstr "Materials Included"
-
-#: findus/templates/partials/dashboard_results.html:153
-#: findus/templates/partials/filtered_results.html:124
-#: findus/templates/partials/filtered_results.html:132
-#: findus/templates/saved_services.html:291
-msgid "Visualizza"
-msgstr "View"
-
-# ============== DASHBOARD RESULTS ==============
-#: findus/templates/partials/dashboard_results.html:163
-#: findus/templates/partials/filtered_results.html:144
-msgid "Pagine dei risultati"
-msgstr "Search results pages"
-
-#: findus/templates/partials/dashboard_results.html:173
-#: findus/templates/partials/filtered_results.html:153
-msgid "Pagina precedente"
-msgstr "Previous page"
-
-#: findus/templates/partials/dashboard_results.html:210
-#: findus/templates/partials/filtered_results.html:189
-msgid "Pagina successiva"
-msgstr "Next page"
-
-#: findus/templates/partials/mobile_inline_filters.html:23
-msgid "Disponibile"
-msgstr "Available"
-
-# ============== MOBILE INLINE FILTERS ==============
-#: findus/templates/partials/mobile_inline_filters.html:67
-msgid "Seleziona categoria"
-msgstr "Select Category"
-
-#: findus/templates/partials/mobile_inline_filters.html:93
-msgid "Seleziona disponibilità"
-msgstr "Select Availability"
-
-#: findus/templates/partials/save_button.html:16
-#: findus/templates/saved_services.html:186
-msgid "Rimuovi dai salvati"
-msgstr "Remove from saved"
-
-# ============== SAVE BUTTON ==============
-#: findus/templates/partials/save_button.html:22
-msgid "Salva servizio"
-msgstr "Save Service"
-
-#: findus/templates/partials/save_button.html:33
-msgid "Accedi per salvare"
-msgstr "Login to Save"
-
-#: findus/templates/partials/service_grid.html:31
-msgid "Solo manodopera"
-msgstr ""
-
-#: findus/templates/partials/service_grid.html:37
-#, python-format
-msgid "+€%(fee)s Trasferta"
-msgstr "+€%(fee)s Travel"
-
-#: findus/templates/partials/service_grid.html:37
-msgid "Trasferta gratuita"
-msgstr "Free Travel"
-
-#: findus/templates/partials/service_grid.html:55
-msgid "Modifica"
-msgstr "Edit"
-
-#: findus/templates/partials/service_grid.html:76
-msgid "Elimina"
-msgstr "Delete"
-
-#: findus/templates/partials/service_grid.html:93
-msgid "Precedente"
-msgstr "Previous"
-
-#: findus/templates/partials/service_grid.html:97
-#, fuzzy, python-format
-#| msgid "Passo %(current)s di %(total)s"
-msgid "Pagina %(current)s di %(total)s"
-msgstr "Step %(current)s of %(total)s"
-
-#: findus/templates/partials/service_grid.html:106
-msgid "Successiva"
-msgstr "Next"
-
-#: findus/templates/partials/service_grid.html:113
-msgid "Nessun servizio trovato con questo filtro."
-msgstr "No services found with this filter."
-
-#: findus/templates/partials/service_grid.html:113
-msgid "Nessun servizio trovato."
-msgstr "No services found."
-
-# ============== WAITLIST SECTION ==============
-#: findus/templates/partials/waitlist_section-homepage.html:37
-#: findus/templates/partials/waitlist_section.html:37
-msgid ""
-"Nessun servizio trovato per i tuoi filtri. Prova con categorie o regioni "
-"diverse."
-msgstr ""
-"No services found for your filters. Try different categories or regions."
-
-#: findus/templates/partials/waitlist_section-homepage.html:39
-#: findus/templates/partials/waitlist_section.html:39
-#, fuzzy
-#| msgid ""
-#| "Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a "
-#| "sapere quando FindUs arriva nel tuo quartiere."
-msgid ""
-"Ci stiamo espandendo! Iscriviti alla nostra lista d'attesa per essere il "
-"primo a sapere quando FindUs arriva nella tua zona."
-msgstr ""
-"We're expanding! Join our waiting list to be the first to know when FindUs "
-"launches in your neighborhood."
-
-#: findus/templates/partials/waitlist_section-homepage.html:93
-#: findus/templates/partials/waitlist_section.html:93
-msgid "Tecnico DSTV"
-msgstr "DSTV Technician"
-
-#: findus/templates/partials/waitlist_section-homepage.html:94
-#: findus/templates/partials/waitlist_section.html:94
-msgid "Tecnico elettrodomestici a gas"
-msgstr "Gas Appliance Technician"
-
-#: findus/templates/partials/waitlist_section-homepage.html:95
-#: findus/templates/partials/waitlist_section.html:95
-msgid "Operatore POP"
-msgstr "POP Worker"
-
-#: findus/templates/partials/waitlist_section-homepage.html:96
-#: findus/templates/partials/waitlist_section.html:96
-msgid "Addetto alle pulizie"
-msgstr "Cleaner"
-
-#: findus/templates/partials/waitlist_section-homepage.html:97
-#: findus/templates/partials/waitlist_section.html:97
-msgid "Operatore alluminio"
-msgstr "Aluminium Worker"
-
-#: findus/templates/partials/waitlist_section-homepage.html:99
-#: findus/templates/partials/waitlist_section.html:99
-msgid "Tecnico tetti"
-msgstr "Roof Technician"
-
-#: findus/templates/partials/waitlist_section-homepage.html:100
-#: findus/templates/partials/waitlist_section.html:100
-msgid "Tecnico fotovoltaico"
-msgstr "Solar Power Technician"
-
-#: findus/templates/partials/waitlist_section-homepage.html:102
-#: findus/templates/partials/waitlist_section.html:102
-msgid "Operatore vetro/divisioni"
-msgstr "Glass/Partitioning Worker"
-
-#: findus/templates/partials/waitlist_section-homepage.html:103
-#: findus/templates/partials/waitlist_section.html:103
-msgid "Muratore / Intonacatore"
-msgstr "Bricklayer / Plasterer"
-
-#: findus/templates/partials/waitlist_section-homepage.html:104
-#: findus/templates/partials/waitlist_section.html:104
-msgid "Capocantiere"
-msgstr "Foreman"
-
-#: findus/templates/partials/waitlist_section-homepage.html:105
-#: findus/templates/partials/waitlist_section.html:105
-msgid "Giardinaggio"
-msgstr "Landscaping"
-
-#: findus/templates/partials/waitlist_section-homepage.html:106
-#: findus/templates/partials/waitlist_section.html:106
-msgid "Riparazione elettrodomestici"
-msgstr "Appliance Repair"
-
-#: findus/templates/partials/waitlist_section-homepage.html:107
-#: findus/templates/partials/waitlist_section.html:107
-msgid "Servizi HVAC"
-msgstr "HVAC Services"
-
-#: findus/templates/partials/waitlist_section-homepage.html:108
-#: findus/templates/partials/waitlist_section.html:108
-msgid "Tecnico CCTV / Sistemi di sicurezza"
-msgstr "CCTV / Security System Technician"
-
-#: findus/templates/partials/waitlist_section-homepage.html:109
-#: findus/templates/partials/waitlist_section.html:109
-msgid "Tecnico gruppi elettrogeni"
-msgstr "Generator Technician"
-
-#: findus/templates/partials/waitlist_section-homepage.html:111
-#: findus/templates/partials/waitlist_section.html:111
-msgid "Pavimentazione / Lavori in epossidica"
-msgstr "Flooring / Epoxy Work"
-
-#: findus/templates/partials/waitlist_section-homepage.html:112
-#: findus/templates/partials/waitlist_section.html:112
-msgid "Lavorazione metalli"
-msgstr "Metal Fabrication"
-
-#: findus/templates/partials/waitlist_section-homepage.html:113
-#: findus/templates/partials/waitlist_section.html:113
-msgid "Specialista impermeabilizzazione"
-msgstr "Waterproofing Specialist"
-
-#: findus/templates/partials/waitlist_section-homepage.html:114
-#: findus/templates/partials/waitlist_section.html:114
-msgid "Disinfestazione"
-msgstr "Pest Control"
-
-#: findus/templates/partials/waitlist_section-homepage.html:115
-#: findus/templates/partials/waitlist_section.html:115
-msgid "Operatore ponteggi"
-msgstr "Scaffolding Worker"
-
-#: findus/templates/partials/waitlist_section-homepage.html:116
-#: findus/templates/partials/waitlist_section.html:116
-msgid "Supervisore di cantiere"
-msgstr "Site Supervisor"
-
-#: findus/templates/partials/waitlist_section-homepage.html:135
-#: findus/templates/partials/waitlist_section.html:135
-msgid ""
-"Accetto di ricevere aggiornamenti sul lancio di FindUs e offerte esclusive "
-"di accesso anticipato."
-msgstr ""
-"I agree to receive updates about FindUs launch and exclusive early access "
-"offers."
-
-# ============== REGISTER PAGE ==============
-#: findus/templates/register.html:10
-#, fuzzy
-#| msgid "Crea il tuo account FindUs - Inizia oggi"
-msgid "Crea il tuo account FidaMano - Inizia oggi"
-msgstr "Create your FindUs account - Get started today"
-
-#: findus/templates/register.html:64 findus/templates/register.html:216
-msgid "Crea account"
-msgstr "Create account"
-
-#: findus/templates/register.html:65
-#, fuzzy
-#| msgid "Iscriviti a FindUs oggi"
-msgid "Iscriviti a FidaMano oggi"
-msgstr "Join FindUs today"
-
-#: findus/templates/register.html:84
-#: findus/templates/register_craftsman.html:87
-msgid "Nome utente"
-msgstr "Username"
-
-#: findus/templates/register.html:89
-#: findus/templates/register_craftsman.html:92
-msgid "Scegli un nome utente"
-msgstr "Choose a username"
-
-#: findus/templates/register.html:99
-#: findus/templates/register_craftsman.html:102
-msgid "Email"
-msgstr "Email"
-
-#: findus/templates/register.html:104
-#: findus/templates/register_craftsman.html:107
-msgid "Inserisci la tua email"
-msgstr "Enter your email"
-
-#: findus/templates/register.html:114
-#: findus/templates/register_craftsman.html:120
-msgid "formato italiano"
-msgstr "Italian format"
-
-#: findus/templates/register.html:125
-msgid "Inserisci cellulare italiano (inizia con 3) o fisso (inizia con 0)"
-msgstr "Enter Italian mobile (starts with 3) or landline (starts with 0)"
-
-#: findus/templates/register.html:138
-#: findus/templates/register_craftsman.html:156
-msgid "Crea una password"
-msgstr "Create a password"
-
-#: findus/templates/register.html:160
-#: findus/templates/register_craftsman.html:178
-msgid "Deve essere lunga almeno 8 caratteri"
-msgstr "Must be at least 8 characters"
-
-#: findus/templates/register.html:166
-#: findus/templates/register_craftsman.html:184
-msgid "Conferma password"
-msgstr "Confirm Password"
-
-#: findus/templates/register.html:172
-#: findus/templates/register_craftsman.html:190
-msgid "Conferma la tua password"
-msgstr "Confirm your password"
-
-#: findus/templates/register.html:207
-#: findus/templates/register_craftsman.html:282
-msgid "Accetto i"
-msgstr "I agree to the"
-
-#: findus/templates/register.html:207
-#: findus/templates/register_craftsman.html:282
-msgid "Termini di servizio"
-msgstr "Terms of Service"
-
-#: findus/templates/register.html:207
-#: findus/templates/register_craftsman.html:282
-msgid "e la"
-msgstr "and the"
-
-#: findus/templates/register.html:208
-#: findus/templates/register_craftsman.html:283
-msgid "Informativa sulla privacy"
-msgstr "Privacy Policy"
-
-#: findus/templates/register.html:221
-#: findus/templates/register_craftsman.html:293
-msgid "Elaborazione in corso..."
-msgstr "Processing..."
-
-#: findus/templates/register.html:226
-#: findus/templates/register_craftsman.html:298
-msgid "Hai già un account?"
-msgstr "Already have an account?"
-
-#: findus/templates/register.html:246 findus/templates/signin.html:151
-msgid "Torna alla home"
-msgstr "Back to Home"
-
-# ============== CRAFTSMAN REGISTER PAGE ==============
-#: findus/templates/register_craftsman.html:10
-#, fuzzy
-#| msgid ""
-#| "Iscriviti a FindUs come professionista - Fai crescere la tua attività"
-msgid "Iscriviti a FidaMano come professionista - Fai crescere la tua attività"
-msgstr "Join FindUs as a service provider - Grow your business"
-
-#: findus/templates/register_craftsman.html:12
-msgid "Diventa Professionista"
-msgstr "Become a Provider"
-
-#: findus/templates/register_craftsman.html:64
-msgid "Diventa un Professionista"
-msgstr "Become a Service Provider"
-
-#: findus/templates/register_craftsman.html:65
-msgid "Entra nella nostra rete di professionisti fidati"
-msgstr "Join our network of trusted professionals"
-
-#: findus/templates/register_craftsman.html:221
-#: findus/templates/register_craftsman.html:260
-msgid "opzionale"
-msgstr "Optional"
-
-#: findus/templates/register_craftsman.html:237
-msgid "Scegli foto profilo"
-msgstr "Choose Profile Photo"
-
-#: findus/templates/register_craftsman.html:238
-msgid "JPG, PNG fino a 5MB"
-msgstr "JPG, PNG up to 5MB"
-
-#: findus/templates/register_craftsman.html:241
-msgid "Anteprima"
-msgstr "Preview"
-
-#: findus/templates/register_craftsman.html:260
-msgid "Ho una licenza professionale"
-msgstr "I have a professional license"
-
-#: findus/templates/register_craftsman.html:268
-msgid "Inserisci il numero di licenza"
-msgstr "Enter license number"
-
-#: findus/templates/register_craftsman.html:288
-msgid "Crea account professionista"
-msgstr "Create Provider Account"
-
-#: findus/templates/register_craftsman.html:300
-msgid "Vuoi assumere?"
-msgstr "Looking to hire?"
-
-#: findus/templates/register_craftsman.html:300
-msgid "Registrati come cliente"
-msgstr "Sign up as customer"
-
-# ============== SAVED SERVICES PAGE ==============
-#: findus/templates/saved_services.html:8
-#, fuzzy
-#| msgid "I tuoi professionisti salvati su FindUs"
-msgid "I tuoi professionisti salvati su FidaMano"
-msgstr "Your saved professionals on FindUs"
-
-#: findus/templates/saved_services.html:134
-msgid "Professionisti salvati"
-msgstr "Saved Professionals"
-
-#: findus/templates/saved_services.html:136
-#, fuzzy, python-format
-#| msgid "Hai <strong>%(counter)s</strong> professionista salvato"
-#| msgid_plural "Hai <strong>%(counter)s</strong> professionisti salvati"
-msgid ""
-"\n"
-"                  Hai <strong>%(counter)s</strong> professionista salvato\n"
-"                  "
-msgid_plural ""
-"\n"
-"                  Hai <strong>%(counter)s</strong> professionisti salvati\n"
-"                  "
-msgstr[0] "You have <strong>%(counter)s</strong> saved professional"
-msgstr[1] "You have <strong>%(counter)s</strong> saved professionals"
-
-#: findus/templates/saved_services.html:158
-msgid "Nessun professionista salvato"
-msgstr "No saved professionals yet"
-
-#: findus/templates/saved_services.html:160
-msgid ""
-"Esplora i nostri professionisti fidati e salvali qui per accedervi "
-"rapidamente in seguito."
-msgstr ""
-"Browse our trusted professionals and save them here for quick access later."
-
-#: findus/templates/saved_services.html:174
-msgid "Cerca professionisti"
-msgstr "Browse Professionals"
-
-# ============== DASHBOARD ==============
-#: findus/templates/service_detail.html:10
-#, fuzzy, python-format
-#| msgid "La tua dashboard FindUs - Trova e gestisci professionisti fidati"
-msgid "%(title)s - Trova professionisti fidati"
-msgstr "Your FindUs Dashboard - Find and manage trusted professionals"
-
-# ============== SERVICE DETAIL PAGE ==============
-#: findus/templates/service_detail.html:234
-msgid "/ora"
-msgstr "/hr"
-
-#: findus/templates/service_detail.html:237
-msgid "prezzo fisso"
-msgstr "fixed price"
-
-#: findus/templates/service_detail.html:239
-msgid "Contatta"
-msgstr "Contact"
-
-#: findus/templates/service_detail.html:240
-msgid "per il prezzo"
-msgstr "for price"
-
-#: findus/templates/service_detail.html:336
-#, python-format
-msgid "%(years)s di esperienza"
-msgstr "%(years)s years experience"
-
-#: findus/templates/service_detail.html:347
-msgid "Chiama"
-msgstr "Call"
-
-#: findus/templates/service_detail.html:355
-msgid "Registrati per chiamare"
-msgstr "Register to Call"
-
-#: findus/templates/service_detail.html:369
-msgid "Condividi"
-msgstr "Share"
-
-#: findus/templates/service_detail.html:375
-#: findus/templates/service_detail.html:763
-#: findus/templates/service_detail.html:769
-msgid "Condividi servizio"
-msgstr "Share Service"
-
-#: findus/templates/service_detail.html:386
-#: findus/templates/service_detail.html:780
-#, python-format
-msgid "Check out this service: %(title)s"
-msgstr ""
-
-#: findus/templates/service_detail.html:392
-#: findus/templates/service_detail.html:786
-#, python-format
-msgid "Check out this service: %(title)s - %(url)s"
-msgstr ""
-
-#: findus/templates/service_detail.html:399
-#: findus/templates/service_detail.html:793
-#, fuzzy
-#| msgid "Copia negli appunti"
-msgid "Copia link"
-msgstr "Copy to clipboard"
-
-#: findus/templates/service_detail.html:407
-#: findus/templates/service_detail.html:801
-msgid "Link copiato!"
-msgstr "Link copied!"
-
-#: findus/templates/service_detail.html:408
-#: findus/templates/service_detail.html:802
-msgid "Errore durante la copia"
-msgstr "Error copying"
-
-#: findus/templates/service_detail.html:423
-msgid "Descrizione del servizio"
-msgstr "Service Description"
-
-#: findus/templates/service_detail.html:433
-msgid "Caratteristiche principali"
-msgstr "Key Features"
-
-#: findus/templates/service_detail.html:466
-msgid "Garanzia sul lavoro"
-msgstr "Warranty on Work"
-
-#: findus/templates/service_detail.html:483
-msgid "Dettagli del servizio"
-msgstr "Service Details"
-
-#: findus/templates/service_detail.html:493
-msgid "Durata stimata"
-msgstr "Estimated Duration"
-
-#: findus/templates/service_detail.html:532
-msgid "Spese di trasferta"
-msgstr "Travel Fee"
-
-#: findus/templates/service_detail.html:559
-msgid "Recensioni"
-msgstr "Reviews"
-
-#: findus/templates/service_detail.html:563
-msgid "Anni exp"
-msgstr "Years Exp"
-
-#: findus/templates/service_detail.html:569
-#, python-format
-msgid "Recensioni dei clienti (%(count)s)"
-msgstr "Customer Reviews (%(count)s)"
-
-#: findus/templates/service_detail.html:579
-#: findus/templates/service_detail.html:585
-msgid "Scrivi una recensione"
-msgstr "Write a Review"
-
-#: findus/templates/service_detail.html:602
-msgid "Titolo"
-msgstr "Title"
-
-#: findus/templates/service_detail.html:603
-msgid "Breve riassunto"
-msgstr "Brief summary"
-
-#: findus/templates/service_detail.html:606
-msgid "La tua recensione"
-msgstr "Your Review"
-
-#: findus/templates/service_detail.html:607
-msgid "Condividi i dettagli..."
-msgstr "Share details..."
-
-#: findus/templates/service_detail.html:610
-msgid "Invia recensione"
-msgstr "Submit Review"
-
-#: findus/templates/service_detail.html:663
-msgid "Ancora nessuna recensione. Sii il primo a recensire questo servizio!"
-msgstr "No reviews yet. Be the first to review this service!"
-
-#: findus/templates/service_detail.html:706
-msgid "recensioni"
-msgstr "reviews"
-
-#: findus/templates/service_detail.html:708
-#, python-format
-msgid "Membro dal %(date)s"
-msgstr "Member since %(date)s"
-
-#: findus/templates/service_detail.html:723
-msgid "Non specificato"
-msgstr "Not specified"
-
-#: findus/templates/service_detail.html:731
-#, python-format
-msgid "%(years)s anni di esperienza"
-msgstr "%(years)s years experience"
-
-#: findus/templates/service_detail.html:748
-msgid "Registrati per contattare"
-msgstr "Register to Contact"
-
-#: findus/templates/service_detail.html:813
-msgid "Consigli di sicurezza"
-msgstr "Safety Tips"
-
-#: findus/templates/service_detail.html:820
-msgid "Incontrarsi sempre prima in un luogo pubblico"
-msgstr "Always meet in public first"
-
-#: findus/templates/service_detail.html:826
-msgid "Controlla le valutazioni e le recensioni del professionista"
-msgstr "Check craftsman's ratings and reviews"
-
-#: findus/templates/service_detail.html:832
-msgid "Non pagare ingenti somme in anticipo"
-msgstr "Don't pay large amounts upfront"
-
-#: findus/templates/service_detail.html:838
-msgid "Ottieni un accordo scritto per lavori importanti"
-msgstr "Get a written agreement for large jobs"
-
-# ============== SERVICE WIZARD PAGE ==============
-#: findus/templates/service_wizard_page.html:8
-#: findus/templates/service_wizard_page.html:61
-msgid "Aggiungi nuovo servizio"
-msgstr "Add New Service"
-
-#: findus/templates/service_wizard_page.html:63
-#, python-format
-msgid "Passo %(current)s di %(total)s"
-msgstr "Step %(current)s of %(total)s"
-
-#: findus/templates/service_wizard_page.html:70
-msgid "Annuncio base"
-msgstr "Basic Ad"
-
-#: findus/templates/service_wizard_page.html:73
-msgid "Luogo e prezzo"
-msgstr "Location & Money"
-
-#: findus/templates/service_wizard_page.html:76
-msgid "Completamento"
-msgstr "Finish"
-
-#: findus/templates/service_wizard_page.html:85
-msgid "Correggi gli errori qui sotto."
-msgstr "Please correct the errors below."
-
-#: findus/templates/service_wizard_page.html:91
-#, fuzzy
-#| msgid "Titolo servizio"
-msgid "Titolo del servizio"
-msgstr "Service Title"
-
-#: findus/templates/service_wizard_page.html:114
-msgid "Foto del tuo lavoro"
-msgstr "Photo of Your Work"
-
-#: findus/templates/service_wizard_page.html:126
-msgid "Clicca per caricare la foto del tuo lavoro"
-msgstr "Click to upload your work photo"
-
-#: findus/templates/service_wizard_page.html:127
-msgid "JPG o PNG • Max 5MB"
-msgstr "JPG or PNG • Max 5MB"
-
-#: findus/templates/service_wizard_page.html:141
-msgid "Dove lavori?"
-msgstr "Where do you work?"
-
-#: findus/templates/service_wizard_page.html:148
-msgid "Come fai pagare?"
-msgstr "How do you charge?"
-
-#: findus/templates/service_wizard_page.html:176
-msgid "Tempo stimato"
-msgstr "Estimated Time"
-
-#: findus/templates/service_wizard_page.html:190
-msgid "totale"
-msgstr "total"
-
-#: findus/templates/service_wizard_page.html:199
-msgid "Spese di trasferta (opzionale)"
-msgstr "Travel Fee (Optional)"
-
-#: findus/templates/service_wizard_page.html:215
-msgid "Quanto velocemente puoi presentarti?"
-msgstr "How fast can you show up?"
-
-#: findus/templates/service_wizard_page.html:225
-msgid "Materiali inclusi nel prezzo"
-msgstr "Materials included in price"
-
-#: findus/templates/service_wizard_page.html:229
-msgid "Pronto per pubblicare?"
-msgstr "Ready to publish?"
-
-#: findus/templates/service_wizard_page.html:231
-msgid ""
-"Il tuo servizio sarà pubblicato immediatamente. Potrai modificarlo in "
-"qualsiasi momento dalla tua dashboard."
-msgstr ""
-"Your service will go live immediately. You can edit it anytime from your "
-"dashboard."
-
-#: findus/templates/service_wizard_page.html:239
-msgid "Indietro"
-msgstr "Back"
-
-#: findus/templates/service_wizard_page.html:247
-msgid "Continua"
-msgstr "Continue"
-
-#: findus/templates/service_wizard_page.html:254
-msgid "Pubblica servizio"
-msgstr "Publish Service"
-
-# ============== SIGNIN PAGE ==============
-#: findus/templates/signin.html:10
-#, fuzzy
-#| msgid "Accedi a FindUs - Accedi al tuo account"
-msgid "Accedi a FidaMano - Accedi al tuo account"
-msgstr "Sign in to FindUs - Access your account"
-
 #: handyman_project/settings.py:141
 msgid "Italiano"
 msgstr "Italian"
@@ -2793,53 +25,1320 @@ msgstr "Italian"
 msgid "English"
 msgstr "English"
 
-#~ msgid ""
-#~ "\"Il nostro giardino era un disordine dopo l'inverno. Valentina lo ha "
-#~ "riportato in vita. Conosce davvero le sue piante.\""
-#~ msgstr ""
-#~ "\"Our garden was a mess after the winter. Valentina brought it back to "
-#~ "life. She really knows her plants.\""
+# ============== HOME PAGE ==============
+msgid "Cosa stai cercando?"
+msgstr "What are you looking for?"
 
-#~ msgid "Pagina {{ current }} di {{ total }}"
-#~ msgstr "Page {{ current }} of {{ total }}"
+msgid "Tutte le regioni"
+msgstr "All Regions"
 
-#~ msgid "24_hours"
-#~ msgstr "Within 24 Hours"
+msgid "Tutte le categorie"
+msgstr "All Categories"
 
-#~ msgid "48_hours"
-#~ msgstr "Within 48 Hours"
+msgid "Sto cercando..."
+msgstr "I am looking for..."
 
-#~ msgid "scheduled"
-#~ msgstr "Scheduled"
+msgid "Cerca"
+msgstr "Search"
+
+msgid "Filtri"
+msgstr "Filters"
+
+msgid "Cancella tutto"
+msgstr "Clear All"
+
+msgid "Applica"
+msgstr "Apply"
+
+msgid "Fascia di prezzo"
+msgstr "Price Range"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "a"
+msgstr "to"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "Valutazione"
+msgstr "Rating"
+
+msgid "5 stelle"
+msgstr "5 stars"
+
+msgid "4+ stelle"
+msgstr "4+ stars"
+
+msgid "3+ stelle"
+msgstr "3+ stars"
+
+msgid "Qualsiasi valutazione"
+msgstr "Any rating"
+
+msgid "Disponibilità"
+msgstr "Availability"
+
+msgid "Dimensione lavoro"
+msgstr "Job Size"
+
+msgid "Caratteristiche"
+msgstr "Features"
+
+msgid "Professionista verificato"
+msgstr "Verified Pro"
+
+msgid "Autorizzato"
+msgstr "Licensed"
+
+msgid "Assicurato"
+msgstr "Insured"
+
+msgid "Offre garanzia"
+msgstr "Offers Warranty"
+
+msgid "Caricamento..."
+msgstr "Loading..."
+
+msgid "Annulla"
+msgstr "Cancel"
+
+msgid "Mostra risultati"
+msgstr "Show Results"
+
+msgid "Prossimamente"
+msgstr "Coming Soon"
+
+msgid "Nessun servizio nella tua zona"
+msgstr "No services in your area yet"
+
+msgid "Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a sapere quando FindUs arriva nel tuo quartiere."
+msgstr "We're expanding! Join our waiting list to be the first to know when FindUs launches in your neighborhood."
+
+msgid "Nome completo"
+msgstr "Full Name"
+
+msgid "Indirizzo email"
+msgstr "Email Address"
+
+msgid "Località"
+msgstr "Location"
+
+msgid "Numero di telefono"
+msgstr "Phone Number"
+
+msgid "Servizio necessario"
+msgstr "Service Needed"
+
+msgid "Seleziona un servizio"
+msgstr "Select a service"
+
+msgid "Note aggiuntive"
+msgstr "Additional Notes"
+
+msgid "Dicci di più su cosa stai cercando..."
+msgstr "Tell us more about what you're looking for..."
+
+msgid "Accetto di ricevere aggiornamenti sul lancio di FindUs e offerte esclusive di accesso anticipato."
+msgstr "I agree to receive updates about FindUs launch and exclusive early access offers."
+
+msgid "Le tue informazioni sono al sicuro e non verranno mai condivise."
+msgstr "Your information is secure and will never be shared."
+
+msgid "Professionisti vicino a te"
+msgstr "Professionals Near You"
+
+msgid "Professionisti più votati"
+msgstr "Top Rated Professionals"
+
+msgid "Mostrando"
+msgstr "Showing"
+
+msgid "risultato"
+msgid_plural "risultati"
+msgstr[0] "result"
+msgstr[1] "results"
+
+msgid "professionisti"
+msgstr "professionals"
+
+msgid "Ordina per"
+msgstr "Sort by"
+
+msgid "Più rilevanti"
+msgstr "Most Relevant"
+
+msgid "Più votati"
+msgstr "Highest Rated"
+
+msgid "Prezzo: dal più basso"
+msgstr "Price: Low to High"
+
+msgid "Prezzo: dal più alto"
+msgstr "Price: High to Low"
+
+msgid "Più vicini"
+msgstr "Nearest"
+
+# ============== REGISTER PAGE ==============
+msgid "Crea il tuo account FindUs - Inizia oggi"
+msgstr "Create your FindUs account - Get started today"
+
+msgid "Registrati"
+msgstr "Register"
+
+msgid "Crea account"
+msgstr "Create account"
+
+msgid "Iscriviti a FindUs oggi"
+msgstr "Join FindUs today"
+
+msgid "Nome utente"
+msgstr "Username"
+
+msgid "Scegli un nome utente"
+msgstr "Choose a username"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Inserisci la tua email"
+msgstr "Enter your email"
+
+msgid "formato italiano"
+msgstr "Italian format"
+
+msgid "Inserisci cellulare italiano (inizia con 3) o fisso (inizia con 0)"
+msgstr "Enter Italian mobile (starts with 3) or landline (starts with 0)"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Crea una password"
+msgstr "Create a password"
+
+msgid "Mostra password"
+msgstr "Show password"
+
+msgid "Deve essere lunga almeno 8 caratteri"
+msgstr "Must be at least 8 characters"
+
+msgid "Conferma password"
+msgstr "Confirm Password"
+
+msgid "Conferma la tua password"
+msgstr "Confirm your password"
+
+msgid "Accetto i"
+msgstr "I agree to the"
+
+msgid "Termini di servizio"
+msgstr "Terms of Service"
+
+msgid "e la"
+msgstr "and the"
+
+msgid "Informativa sulla privacy"
+msgstr "Privacy Policy"
+
+msgid "Elaborazione in corso..."
+msgstr "Processing..."
+
+msgid "Hai già un account?"
+msgstr "Already have an account?"
+
+msgid "Accedi"
+msgstr "Sign in"
+
+msgid "Vuoi offrire servizi?"
+msgstr "Want to offer services?"
+
+msgid "Diventa professionista"
+msgstr "Join as provider"
+
+msgid "Torna alla home"
+msgstr "Back to Home"
+
+# ============== CRAFTSMAN REGISTER PAGE ==============
+msgid "Iscriviti a FindUs come professionista - Fai crescere la tua attività"
+msgstr "Join FindUs as a service provider - Grow your business"
+
+msgid "Diventa Professionista"
+msgstr "Become a Provider"
+
+msgid "Diventa un Professionista"
+msgstr "Become a Service Provider"
+
+msgid "Entra nella nostra rete di professionisti fidati"
+msgstr "Join our network of trusted professionals"
+
+msgid "Anni di esperienza"
+msgstr "Years of experience"
+
+msgid "0-1 anni"
+msgstr "0-1 years"
+
+msgid "1-3 anni"
+msgstr "1-3 years"
+
+msgid "3-5 anni"
+msgstr "3-5 years"
+
+msgid "5+ anni"
+msgstr "5+ years"
+
+msgid "Foto profilo"
+msgstr "Profile Photo"
+
+msgid "opzionale"
+msgstr "Optional"
+
+msgid "Scegli foto profilo"
+msgstr "Choose Profile Photo"
+
+msgid "JPG, PNG fino a 5MB"
+msgstr "JPG, PNG up to 5MB"
+
+msgid "Anteprima"
+msgstr "Preview"
+
+msgid "Ho una licenza professionale"
+msgstr "I have a professional license"
+
+msgid "Inserisci il numero di licenza"
+msgstr "Enter license number"
+
+msgid "Crea account professionista"
+msgstr "Create Provider Account"
+
+msgid "Vuoi assumere?"
+msgstr "Looking to hire?"
+
+msgid "Registrati come cliente"
+msgstr "Sign up as customer"
+
+# ============== SIGNIN PAGE ==============
+msgid "Accedi a FindUs - Accedi al tuo account"
+msgstr "Sign in to FindUs - Access your account"
+
+
+msgid "Bentornato"
+msgstr "Welcome back"
+
+msgid "Accedi al tuo account"
+msgstr "Sign in to your account"
+
+msgid "Nome utente o email"
+msgstr "Username or Email"
+
+msgid "Inserisci il tuo nome utente o email"
+msgstr "Enter your username or email"
+
+msgid "Inserisci la tua password"
+msgstr "Enter your password"
+
+msgid "Accesso in corso..."
+msgstr "Signing in..."
+
+msgid "Non hai un account?"
+msgstr "Don't have an account?"
+
+# ============== DASHBOARD ==============
+msgid "La tua dashboard FindUs - Trova e gestisci professionisti fidati"
+msgstr "Your FindUs Dashboard - Find and manage trusted professionals"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Cerca servizi..."
+msgstr "Search for services..."
+
+msgid "Cerca servizi"
+msgstr "Search services"
+
+msgid "Salvati"
+msgstr "Saved"
+
+msgid "I miei messaggi"
+msgstr "My Messages"
+
+msgid "Questa funzione è in fase di sviluppo"
+msgstr "This feature is in progress"
+
+msgid "Profilo"
+msgstr "Profile"
+
+msgid "I miei annunci"
+msgstr "My Adverts"
+
+msgid "Esci"
+msgstr "Logout"
+
+
+msgid "Regione"
+msgstr "Region"
+
+msgid "Categoria"
+msgstr "Category"
+
+msgid "Categoria servizio"
+msgstr "Service Category"
+
+msgid "Disponibile"
+msgstr "Available"
+
+msgid "Messaggi"
+msgstr "Messages"
+
+msgid "Tutti i diritti riservati."
+msgstr "All rights reserved."
+
+# ============== DASHBOARD RESULTS ==============
+msgid "Pagine dei risultati"
+msgstr "Search results pages"
+
+msgid "Pagina precedente"
+msgstr "Previous page"
+
+msgid "Pagina successiva"
+msgstr "Next page"
+
+msgid "A partire da"
+msgstr "Starting at"
+
+msgid "ora"
+msgstr "hr"
+
+msgid "Contattaci per il prezzo"
+msgstr "Contact for price"
+
+msgid "Materiali inclusi"
+msgstr "Materials Included"
+
+
+msgid "Visualizza"
+msgstr "View"
+
+msgid "Non autorizzato"
+msgstr "Not Licensed"
+
+# ============== PROFILE PAGE ==============
+msgid "Gestisci il tuo profilo FindUs e le impostazioni dell'account"
+msgstr "Manage your FindUs profile and account settings"
+
+msgid "Info account"
+msgstr "Account Info"
+
+msgid "Azioni rapide"
+msgstr "Quick Actions"
+
+msgid "Servizi salvati"
+msgstr "Saved Services"
+
+msgid "Informazioni account"
+msgstr "Account Information"
+
+msgid "Gestisci i tuoi dati personali"
+msgstr "Manage your personal details"
+
+msgid "Nome"
+msgstr "First Name"
+
+msgid "Cognome"
+msgstr "Last Name"
+
+msgid "Salva modifiche"
+msgstr "Save Changes"
+
+msgid "Sicurezza"
+msgstr "Security"
+
+msgid "Gestisci sicurezza"
+msgstr "Manage Security"
+
+msgid "Ultima modifica 3 mesi fa"
+msgstr "Last changed 3 months ago"
+
+msgid "Cambia password"
+msgstr "Change Password"
+
+msgid "Password attuale"
+msgstr "Current Password"
+
+msgid "Nuova password"
+msgstr "New Password"
+
+msgid "Conferma nuova password"
+msgstr "Confirm New Password"
+
+msgid "Aggiorna password"
+msgstr "Update Password"
+
+# ============== SAVED SERVICES PAGE ==============
+msgid "I tuoi professionisti salvati su FindUs"
+msgstr "Your saved professionals on FindUs"
+
+msgid "Professionisti salvati"
+msgstr "Saved Professionals"
+
+msgid "Hai <strong>%(counter)s</strong> professionista salvato"
+msgid_plural "Hai <strong>%(counter)s</strong> professionisti salvati"
+msgstr[0] "You have <strong>%(counter)s</strong> saved professional"
+msgstr[1] "You have <strong>%(counter)s</strong> saved professionals"
+
+msgid "Nessun professionista salvato"
+msgstr "No saved professionals yet"
+
+msgid "Esplora i nostri professionisti fidati e salvali qui per accedervi rapidamente in seguito."
+msgstr "Browse our trusted professionals and save them here for quick access later."
+
+msgid "Cerca professionisti"
+msgstr "Browse Professionals"
+
+msgid "Rimuovi dai salvati"
+msgstr "Remove from saved"
+
+# ============== CRAFTSMAN DASHBOARD ==============
+
+
+msgid "Dashboard Professionista"
+msgstr "Provider Dashboard"
+
+msgid "Cerca i tuoi servizi..."
+msgstr "Search your services..."
+
+msgid "Aggiungi servizio"
+msgstr "Add Service"
+
+msgid "Testimonianze dei clienti"
+msgstr "Customer Testimonials"
+
+msgid "Cosa dicono i tuoi clienti dei tuoi servizi"
+msgstr "What your customers are saying about your services"
+
+msgid "Valutazione media"
+msgstr "Average Rating"
+
+msgid "Recensioni totali"
+msgstr "Total Reviews"
+
+msgid "Raccomanderebbero"
+msgstr "Would Recommend"
+
+msgid "\"Giulia ha trasformato il nostro soggiorno con una mano di vernice fresca. Veloce, pulita e un prezzo molto onesto.\""
+msgstr "\"Giulia transformed our living room with a fresh coat of paint. Fast, clean, and a very fair price.\""
+
+msgid "Decoratrice"
+msgstr "Decorator"
+
+msgid "\"Le persiane del mio balcone erano bloccate da settimane. Chiara le ha riparate facilmente. La consiglio vivamente per qualsiasi riparazione domestica.\""
+msgstr "\"My balcony shutters were stuck for weeks. Chiara fixed them easily. Highly recommend her for any home repairs.\""
+
+msgid "Riparazione persiane"
+msgstr "Shutter Repair"
+
+msgid "\"Il nostro giardino era un disordine dopo l'inverno. Valentina lo ha riportato in vita. Conosce davvero le sue piante.\""
+msgstr "\"Our garden was a mess after the winter. Valentina brought it back to life. She really knows her plants.\""
+
+msgid "Giardiniera"
+msgstr "Gardener"
+
+msgid "\"Usiamo Sofia per le pulizie del nostro Airbnb. È incredibilmente meticolosa e i nostri ospiti menzionano sempre quanto sia scintillante la casa.\""
+msgstr "\"We use Sofia for our Airbnb cleanings. She is incredibly thorough and our guests always mention how sparkling the place is.\""
+
+msgid "Pulizie"
+msgstr "Cleaning"
+
+msgid "\"Servizio HVAC incredibile! Ha riparato il mio condizionatore rapidamente e a un prezzo ragionevole. Competente.\""
+msgstr "\"Incredible HVAC service! Fixed my AC unit quickly and at a reasonable price. Knowledgeable.\""
+
+msgid "Traslochi"
+msgstr "Moving"
+
+msgid "\"Avevo una consegna IKEA enorme che non potevo gestire. Lorenzo ha montato tutto perfettamente in un pomeriggio.\""
+msgstr "\"Had a massive IKEA delivery that I couldn't handle. Lorenzo put everything together perfectly in one afternoon.\""
+
+msgid "Montaggio mobili"
+msgstr "Furniture Assembly"
+
+msgid "I miei servizi"
+msgstr "My Services"
+
+msgid "Gestisci e monitora il tuo %(counter)s servizio"
+msgid_plural "Gestisci e monitora i tuoi %(counter)s servizi"
+msgstr[0] "Manage and track your %(counter)s service"
+msgstr[1] "Manage and track your %(counter)s services"
+
+msgid "Aggiungi il tuo primo servizio per iniziare"
+msgstr "Add your first service to get started"
+
+msgid "Tutti i servizi"
+msgstr "All Services"
+
+msgid "Attivi"
+msgstr "Active"
+
+msgid "In evidenza"
+msgstr "Boosted"
+
+msgid "Elimina servizio"
+msgstr "Delete Service"
+
+
+msgid "Questa azione non può essere annullata. Il servizio verrà eliminato permanentemente."
+msgstr "This action cannot be undone. The service will be permanently deleted."
+
+msgid "Modifica servizio"
+msgstr "Edit Service"
+
+msgid "Titolo servizio"
+msgstr "Service Title"
+
+
+msgid "Tipo di prezzo"
+msgstr "Pricing Type"
+
+msgid "Tariffa oraria (€)"
+msgstr "Hourly Rate (€)"
+
+msgid "Prezzo fisso (€)"
+msgstr "Fixed Price (€)"
+
+msgid "Seleziona regione"
+msgstr "Select Region"
+
+msgid "Metti in evidenza il tuo servizio"
+msgstr "Boost Your Service"
+
+msgid "Boost Base"
+msgstr "Basic Boost"
+
+msgid "3x più visibilità"
+msgstr "3x more visibility"
+
+
+
+msgid "Badge priorità"
+msgstr "Priority badge"
+
+msgid "Seleziona piano"
+msgstr "Select Plan"
+
+msgid "Più popolare"
+msgstr "Most Popular"
+
+msgid "Boost Pro"
+msgstr "Pro Boost"
+
+msgid "5x più visibilità"
+msgstr "5x more visibility"
+
+msgid "In cima a tutte le categorie"
+msgstr "Top of all categories"
+
+msgid "Badge in evidenza"
+msgstr "Featured badge"
+
+msgid "Promozione via email"
+msgstr "Email promotion"
+
+msgid "Boost Premium"
+msgstr "Premium Boost"
+
+msgid "10x più visibilità"
+msgstr "10x more visibility"
+
+msgid "In evidenza sulla homepage"
+msgstr "Homepage feature"
+
+msgid "Badge verificato"
+msgstr "Verified badge"
+
+msgid "Supporto prioritario"
+msgstr "Priority support"
+
+msgid "Notifiche SMS"
+msgstr "SMS notifications"
+
+msgid "Piano selezionato"
+msgstr "Selected Plan"
+
+msgid "per"
+msgstr "for"
+
+msgid "giorni"
+msgstr "days"
+
+msgid "Carica prova di pagamento"
+msgstr "Upload Payment Proof"
+
+msgid "Clicca per caricare ricevuta (JPG, PNG, PDF - max 5MB)"
+msgstr "Click to upload receipt (JPG, PNG, PDF - max 5MB)"
+
+msgid "Note (opzionale)"
+msgstr "Notes (Optional)"
+
+msgid "Aggiungi note sul tuo pagamento..."
+msgstr "Add any notes about your payment..."
+
+msgid "Informazioni di pagamento per bonifico internazionale"
+msgstr "Payment Information for International Transfer"
+
+msgid "Nome beneficiario:"
+msgstr "Beneficiary Name:"
+
+msgid "Copia negli appunti"
+msgstr "Copy to clipboard"
+
+msgid "Indirizzo banca:"
+msgstr "Bank Address:"
+
+msgid "BIC banca corrispondente:"
+msgstr "Correspondent Bank BIC:"
+
+msgid "per bonifici EUR"
+msgstr "for EUR transfers"
+
+msgid "Riferimento:"
+msgstr "Reference:"
+
+msgid "Copia riferimento negli appunti"
+msgstr "Copy reference to clipboard"
+
+msgid "Importo:"
+msgstr "Amount:"
+
+msgid "Copia importo negli appunti"
+msgstr "Copy amount to clipboard"
+
+msgid "Copia tutti i dettagli"
+msgstr "Copy All Details"
+
+msgid "Note importanti per le banche italiane:"
+msgstr "Important Notes for Italian Banks:"
+
+msgid "Usa"
+msgstr "Use"
+
+msgid "come codice SWIFT/BIC"
+msgstr "as the SWIFT/BIC code"
+
+msgid "Per bonifici in EUR, includi la banca corrispondente"
+msgstr "For EUR transfers, include correspondent bank"
+
+msgid "Includi sempre il"
+msgstr "Always include the"
+
+msgid "numero di riferimento"
+msgstr "reference number"
+
+msgid "nella descrizione del bonifico"
+msgstr "in the transfer description"
+
+msgid "Assicurati di trasferire in"
+msgstr "Make sure to transfer in"
+
+msgid "EURO (€)"
+msgstr "EURO (€)"
+
+msgid "Potresti dover specificare"
+msgstr "You may need to specify"
+
+msgid "'Nessuna spesa per il beneficiario'"
+msgstr "\"No charges for beneficiary\""
+
+msgid "Il bonifico internazionale richiede 1-3 giorni lavorativi"
+msgstr "International transfer takes 1-3 business days"
+
+msgid "Conserva la ricevuta di pagamento per i tuoi archivi"
+msgstr "Keep the payment receipt for your records"
+
+msgid "Invia richiesta boost"
+msgstr "Submit Boost Request"
+
+# ============== CRAFTSMAN PROFILE PAGE ==============
+msgid "Nome attività"
+msgstr "Business Name"
+
+msgid "Seleziona anni"
+msgstr "Select years"
+
+msgid "Numero licenza (opzionale)"
+msgstr "License Number (Optional)"
+
+msgid "Foto attuale"
+msgstr "Current photo"
+
+# ============== CRAFTSMAN PUBLIC PROFILE ==============
+msgid "%(name)s - Professionista su FindUs"
+msgstr "%(name)s - Professional on FindUs"
+
+msgid "%(years)s+ anni su FindUs"
+msgstr "%(years)s+ years on FindUs"
+
+msgid "Professionista FindUs"
+msgstr "FindUs Professional"
+
+msgid "ID verificato"
+msgstr "Verified ID"
+
+msgid "Visto l'ultima volta 1 ora fa"
+msgstr "Last seen 1 hour ago"
+
+msgid "Su FindUs"
+msgstr "On FindUs"
+
+msgid "anni"
+msgstr "years"
+
+msgid "Verifica"
+msgstr "Verification"
+
+msgid "Servizi"
+msgstr "Services"
+
+msgid "Mostra contatto"
+msgstr "Show Contact"
+
+msgid "Invia messaggio"
+msgstr "Send Message"
+
+msgid "Chi sono"
+msgstr "About Me"
+
+msgid "Nessuna descrizione fornita."
+msgstr "No description provided yet."
+
+msgid "Servizi offerti"
+msgstr "Services Offered"
+
+msgid "%(counter)s servizio"
+msgid_plural "%(counter)s servizi"
+msgstr[0] "%(counter)s service"
+msgstr[1] "%(counter)s services"
+
+msgid "Nessun servizio"
+msgstr "No Services Yet"
+
+msgid "Questo professionista non ha ancora elencato alcun servizio."
+msgstr "This provider hasn't listed any services yet."
+
+# ============== SERVICE DETAIL PAGE ==============
+msgid "/ora"
+msgstr "/hr"
+
+msgid "prezzo fisso"
+msgstr "fixed price"
+
+msgid "Contatta"
+msgstr "Contact"
+
+msgid "per il prezzo"
+msgstr "for price"
+
+msgid "Tariffa oraria"
+msgstr "Hourly Rate"
+
+msgid "Prezzo fisso"
+msgstr "Fixed Price"
+
+msgid "Non specificato"
+msgstr "Not specified"
+
+msgid "%(years)s di esperienza"
+msgstr "%(years)s years experience"
+
+msgid "Chiama"
+msgstr "Call"
+
+msgid "Registrati per chiamare"
+msgstr "Register to Call"
+
+msgid "Condividi"
+msgstr "Share"
+
+msgid "Condividi servizio"
+msgstr "Share Service"
+
+msgid "Link copiato!"
+msgstr "Link copied!"
+
+msgid "Errore durante la copia"
+msgstr "Error copying"
+
+msgid "Descrizione del servizio"
+msgstr "Service Description"
+
+msgid "Caratteristiche principali"
+msgstr "Key Features"
+
+msgid "Garanzia sul lavoro"
+msgstr "Warranty on Work"
+
+msgid "Dettagli del servizio"
+msgstr "Service Details"
+
+msgid "Durata stimata"
+msgstr "Estimated Duration"
+
+msgid "Spese di trasferta"
+msgstr "Travel Fee"
+
+msgid "Recensioni"
+msgstr "Reviews"
+
+msgid "Anni exp"
+msgstr "Years Exp"
+
+msgid "Recensioni dei clienti (%(count)s)"
+msgstr "Customer Reviews (%(count)s)"
+
+msgid "Scrivi una recensione"
+msgstr "Write a Review"
+
+msgid "Titolo"
+msgstr "Title"
+
+msgid "Breve riassunto"
+msgstr "Brief summary"
+
+msgid "La tua recensione"
+msgstr "Your Review"
+
+msgid "Condividi i dettagli..."
+msgstr "Share details..."
+
+msgid "Invia recensione"
+msgstr "Submit Review"
+
+msgid "Ancora nessuna recensione. Sii il primo a recensire questo servizio!"
+msgstr "No reviews yet. Be the first to review this service!"
+
+msgid "recensioni"
+msgstr "reviews"
+
+msgid "Membro dal %(date)s"
+msgstr "Member since %(date)s"
+
+msgid "%(years)s anni di esperienza"
+msgstr "%(years)s years experience"
+
+msgid "Registrati per contattare"
+msgstr "Register to Contact"
+
+msgid "Consigli di sicurezza"
+msgstr "Safety Tips"
+
+msgid "Incontrarsi sempre prima in un luogo pubblico"
+msgstr "Always meet in public first"
+
+msgid "Controlla le valutazioni e le recensioni del professionista"
+msgstr "Check craftsman's ratings and reviews"
+
+msgid "Non pagare ingenti somme in anticipo"
+msgstr "Don't pay large amounts upfront"
+
+msgid "Ottieni un accordo scritto per lavori importanti"
+msgstr "Get a written agreement for large jobs"
+
+# ============== SERVICE WIZARD PAGE ==============
+msgid "Aggiungi nuovo servizio"
+msgstr "Add New Service"
+
+msgid "Passo %(current)s di %(total)s"
+msgstr "Step %(current)s of %(total)s"
+
+msgid "Annuncio base"
+msgstr "Basic Ad"
+
+msgid "Luogo e prezzo"
+msgstr "Location & Money"
+
+msgid "Completamento"
+msgstr "Finish"
+
+msgid "Correggi gli errori qui sotto."
+msgstr "Please correct the errors below."
+
+msgid "Foto del tuo lavoro"
+msgstr "Photo of Your Work"
+
+msgid "Clicca per caricare la foto del tuo lavoro"
+msgstr "Click to upload your work photo"
+
+msgid "JPG o PNG • Max 5MB"
+msgstr "JPG or PNG • Max 5MB"
+
+msgid "Dove lavori?"
+msgstr "Where do you work?"
+
+msgid "Come fai pagare?"
+msgstr "How do you charge?"
+
+msgid "Tempo stimato"
+msgstr "Estimated Time"
+
+msgid "totale"
+msgstr "total"
+
+msgid "Spese di trasferta (opzionale)"
+msgstr "Travel Fee (Optional)"
+
+msgid "Quanto velocemente puoi presentarti?"
+msgstr "How fast can you show up?"
+
+msgid "Materiali inclusi nel prezzo"
+msgstr "Materials included in price"
+
+msgid "Pronto per pubblicare?"
+msgstr "Ready to publish?"
+
+msgid "Il tuo servizio sarà pubblicato immediatamente. Potrai modificarlo in qualsiasi momento dalla tua dashboard."
+msgstr "Your service will go live immediately. You can edit it anytime from your dashboard."
+
+msgid "Indietro"
+msgstr "Back"
+
+msgid "Continua"
+msgstr "Continue"
+
+msgid "Pubblica servizio"
+msgstr "Publish Service"
+
+# ============== SAVE BUTTON ==============
+
+
+msgid "Salva servizio"
+msgstr "Save Service"
+
+msgid "Accedi per salvare"
+msgstr "Login to Save"
+
+# ============== WAITLIST SECTION ==============
+msgid "Nessun servizio trovato per i tuoi filtri. Prova con categorie o regioni diverse."
+msgstr "No services found for your filters. Try different categories or regions."
+
+msgid "Iscriviti alla lista d'attesa"
+msgstr "Join the Waiting List"
+
+msgid "Sii tra i primi ad accedere a professionisti verificati quando lanceremo."
+msgstr "Be among the first to access verified professionals when we launch."
+
+msgid "Mario Rossi"
+msgstr "John Doe"
+
+msgid "mario@example.com"
+msgstr "john@example.com"
+
+msgid "La tua città"
+msgstr "Your city"
+
+msgid "+39 123 456 7890"
+msgstr "+1 (555) 123-4567"
+
+msgid "Idraulico"
+msgstr "Plumber"
+
+msgid "Elettricista"
+msgstr "Electrician"
+
+msgid "Tecnico AC"
+msgstr "AC Technician"
+
+msgid "Carpentiere"
+msgstr "Carpenter"
+
+msgid "Pavimentista"
+msgstr "Tiler"
+
+msgid "Pittore"
+msgstr "Painter"
+
+msgid "Falegname"
+msgstr "Furniture Maker"
+
+msgid "Disinfestatore"
+msgstr "Fumigator"
+
+msgid "Tecnico DSTV"
+msgstr "DSTV Technician"
+
+msgid "Tecnico elettrodomestici a gas"
+msgstr "Gas Appliance Technician"
+
+msgid "Operatore POP"
+msgstr "POP Worker"
+
+msgid "Addetto alle pulizie"
+msgstr "Cleaner"
+
+msgid "Operatore alluminio"
+msgstr "Aluminium Worker"
+
+msgid "Saldatore"
+msgstr "Welder"
+
+msgid "Tecnico tetti"
+msgstr "Roof Technician"
+
+msgid "Tecnico fotovoltaico"
+msgstr "Solar Power Technician"
+
+msgid "Muratore"
+msgstr "Mason"
+
+msgid "Operatore vetro/divisioni"
+msgstr "Glass/Partitioning Worker"
+
+msgid "Muratore / Intonacatore"
+msgstr "Bricklayer / Plasterer"
+
+msgid "Capocantiere"
+msgstr "Foreman"
+
+msgid "Giardinaggio"
+msgstr "Landscaping"
+
+msgid "Riparazione elettrodomestici"
+msgstr "Appliance Repair"
+
+msgid "Servizi HVAC"
+msgstr "HVAC Services"
+
+msgid "Tecnico CCTV / Sistemi di sicurezza"
+msgstr "CCTV / Security System Technician"
+
+msgid "Tecnico gruppi elettrogeni"
+msgstr "Generator Technician"
+
+msgid "Interior designer"
+msgstr "Interior Designer"
+
+msgid "Pavimentazione / Lavori in epossidica"
+msgstr "Flooring / Epoxy Work"
+
+msgid "Lavorazione metalli"
+msgstr "Metal Fabrication"
+
+msgid "Specialista impermeabilizzazione"
+msgstr "Waterproofing Specialist"
+
+msgid "Disinfestazione"
+msgstr "Pest Control"
+
+msgid "Operatore ponteggi"
+msgstr "Scaffolding Worker"
+
+msgid "Supervisore di cantiere"
+msgstr "Site Supervisor"
+
+msgid "Altro"
+msgstr "Other"
+
+# ============== SERVICE GRID PARTIAL ==============
+msgid "Attivo"
+msgstr "Active"
+
+msgid "In pausa"
+msgstr "Paused"
+
+
+msgid "+€%(fee)s Trasferta"
+msgstr "+€%(fee)s Travel"
+
+msgid "Trasferta gratuita"
+msgstr "Free Travel"
+
+
+msgid "Modifica"
+msgstr "Edit"
+
+
+msgid "Elimina"
+msgstr "Delete"
+
+msgid "Precedente"
+msgstr "Previous"
+
+msgid "Pagina {{ current }} di {{ total }}"
+msgstr "Page {{ current }} of {{ total }}"
+
+msgid "Successiva"
+msgstr "Next"
+
+msgid "Nessun servizio trovato con questo filtro."
+msgstr "No services found with this filter."
+
+msgid "Nessun servizio trovato."
+msgstr "No services found."
+
+# ============== MOBILE INLINE FILTERS ==============
+
+msgid "Seleziona categoria"
+msgstr "Select Category"
+
+msgid "Seleziona disponibilità"
+msgstr "Select Availability"
+
+# ============== OFFLINE PAGE ==============
+msgid "Sei offline"
+msgstr "You're Offline"
+
+msgid "Controlla la tua connessione internet e riprova."
+msgstr "Please check your internet connection and try again."
+
+msgid "Riprova"
+msgstr "Try Again"
+
+# ============== REGION CHOICES ==============
+msgid "Abruzzo"
+msgstr "Abruzzo"
+
+msgid "Aosta Valley (Valle d'Aosta)"
+msgstr "Aosta Valley"
+
+msgid "Apulia (Puglia)"
+msgstr "Apulia"
+
+msgid "Basilicata"
+msgstr "Basilicata"
+
+msgid "Calabria"
+msgstr "Calabria"
+
+msgid "Campania"
+msgstr "Campania"
+
+msgid "Emilia-Romagna"
+msgstr "Emilia-Romagna"
+
+msgid "Friuli-Venezia Giulia"
+msgstr "Friuli-Venezia Giulia"
+
+msgid "Lazio"
+msgstr "Lazio"
+
+msgid "Liguria"
+msgstr "Liguria"
+
+msgid "Lombardy (Lombardia)"
+msgstr "Lombardy"
+
+msgid "Marche"
+msgstr "Marche"
+
+msgid "Molise"
+msgstr "Molise"
+
+msgid "Piedmont (Piemonte)"
+msgstr "Piedmont"
+
+msgid "Sardinia (Sardegna)"
+msgstr "Sardinia"
+
+msgid "Sicily (Sicilia)"
+msgstr "Sicily"
+
+msgid "Trentino-South Tyrol (Trentino-Alto Adige)"
+msgstr "Trentino-South Tyrol"
+
+msgid "Tuscany (Toscana)"
+msgstr "Tuscany"
+
+msgid "Umbria"
+msgstr "Umbria"
+
+msgid "Veneto"
+msgstr "Veneto"
+
+# ============== AVAILABILITY CHOICES ==============
+msgid "Immediate"
+msgstr "Immediate"
+
+msgid "24_hours"
+msgstr "Within 24 Hours"
+
+msgid "48_hours"
+msgstr "Within 48 Hours"
+
+msgid "scheduled"
+msgstr "Scheduled"
 
 # ============== SERVICE SCOPE CHOICES ==============
-#~ msgid "small"
-#~ msgstr "Small"
+msgid "small"
+msgstr "Small"
 
-#~ msgid "medium"
-#~ msgstr "Medium"
+msgid "medium"
+msgstr "Medium"
 
-#~ msgid "large"
-#~ msgstr "Large"
+msgid "large"
+msgstr "Large"
 
-#~ msgid "project"
-#~ msgstr "Project"
+msgid "project"
+msgstr "Project"
+
+# ============== USER TYPE CHOICES ==============
+msgid "customer"
+msgstr "Customer"
+
+msgid "craftsman"
+msgstr "Craftsman"
 
 # ============== RATING CHOICES ==============
-#~ msgid "1"
-#~ msgstr "1 Star"
+msgid "1"
+msgstr "1 Star"
 
-#~ msgid "2"
-#~ msgstr "2 Stars"
+msgid "2"
+msgstr "2 Stars"
 
-#~ msgid "3"
-#~ msgstr "3 Stars"
+msgid "3"
+msgstr "3 Stars"
 
-#~ msgid "4"
-#~ msgstr "4 Stars"
+msgid "4"
+msgstr "4 Stars"
 
-#~ msgid "5"
-#~ msgstr "5 Stars"
+msgid "5"
+msgstr "5 Stars"
 
-#~ msgid "Tocca \"Aggiungi\""
-#~ msgstr "Tap \"Add\""
+# ============== BOOST STATUS CHOICES ==============
+msgid "pending"
+msgstr "Pending"
+
+msgid "approved"
+msgstr "Approved"
+
+msgid "rejected"
+msgstr "Rejected"
+
+msgid "expired"
+msgstr "Expired"
+
+# ============== IOS INSTALL BANNER ==============
+msgid "Installa l'app FindUs"
+msgstr "Install FindUs App"
+
+msgid "Tocca qui per le istruzioni"
+msgstr "Tap here for instructions"
+
+msgid "Per installare:"
+msgstr "To install:"
+
+msgid "Tocca il pulsante Condividi (📤)"
+msgstr "Tap the Share button (📤)"
+
+msgid "Scorri verso il basso"
+msgstr "Scroll down"
+
+msgid "Tocca \"Aggiungi alla schermata Home\""
+msgstr "Tap \"Add to Home Screen\""
+
+msgid "Tocca \"Aggiungi\""
+msgstr "Tap \"Add\""
+
+#: templates/home.html
+msgid "Che tu abbia bisogno di un idraulico o di un pittore, FidaMano ti aiuta a fare il lavoro nel modo giusto."
+msgstr "Whether you need a plumber or a painter, FidaMano helps you get the job done right."
+
+msgid "Chiama ora"
+msgstr "Call Now"

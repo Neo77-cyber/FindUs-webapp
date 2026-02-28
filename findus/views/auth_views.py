@@ -51,7 +51,7 @@ def register(request):
                         is_craftsman=False,
                     )
 
-                messages.success(request, "Welcome! Your account has been created.")
+                
                 return redirect("customer_dashboard")
 
             except ValidationError as e:
@@ -129,7 +129,7 @@ def register_craftsman(request):
                     except Exception as e:
                         logger.error(f"Failed to queue welcome email: {str(e)}")
 
-                messages.success(request, "Welcome! Your craftsman account has been created.")
+                
                 return redirect("craftsman_dashboard")
 
             except ValidationError as e:
@@ -184,7 +184,6 @@ def register_craftsman(request):
 
 
 @csrf_protect
-@require_http_methods(["GET", "POST"])
 def signin(request):
     """User login"""
     
@@ -325,7 +324,7 @@ def change_password(request):
 
 
 @login_required
-@require_http_methods(["POST"])
+@require_http_methods(["GET" "POST"])
 def user_logout(request):
     """User logout"""
     
@@ -336,5 +335,5 @@ def user_logout(request):
         logger.info(f"User logged out: {request.user.username}")
     
     auth_logout(request)
-    messages.success(request, "You have been logged out successfully.")
+    
     return redirect("home")

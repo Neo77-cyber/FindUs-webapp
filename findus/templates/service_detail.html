@@ -85,7 +85,7 @@
       <div id="pwa-splash" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#077f46;z-index:99999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s ease;">
          <div style="position:relative;width:120px;height:120px;">
             <!-- Logo -->
-            <img src="{% static 'assets/icons/find-su-logo.png' %}" alt="FidaMano" style="width:80px;height:80px;object-fit:contain;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="width:80px;height:80px;object-fit:contain;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.2);">
             <!-- Spinner Ring -->
             <div style="position:absolute;top:0;left:0;right:0;bottom:0;border:4px solid rgba(255,255,255,0.1);border-top:4px solid white;border-radius:50%;animation:spin 1s linear infinite;"></div>
          </div>
@@ -148,6 +148,7 @@
       <header class="main-header">
          <div class="header-content">
             <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FidaMano Home">
+               <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="height: 40px; margin-right:-12px;">
                <span class="logo-text">FidaMano</span>
             </a>
             {% if request.user.is_authenticated %}
@@ -161,56 +162,27 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                   </svg>
-                  <span class="notification-badge"></span>
-               </a>
-               <a href="{% url 'customer_profile' %}" class="nav-icon-link" data-tooltip="{% trans 'Profilo' %}">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                     <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
                </a>
                <form method="POST" action="{% url 'logout' %}" style="display: inline;">
                   {% csrf_token %}
                   <button type="submit" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}" style="background: none; border: none; cursor: pointer;">
                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <polyline points="16,17 21,12 16,7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
                      </svg>
                   </button>
                </form>
             </nav>
             {% else %}
-            <!-- Non-authenticated user navigation -->
             <nav class="nav-menu" id="nav-menu">
                <a href="{% url 'register' %}" class="nav-link">{% trans "Registrati" %}</a>
                <a href="{% url 'register_as_a_craftsman' %}" class="nav-link">{% trans "Diventa un professionista" %}</a>
-               <button type="button" class="btn-primary" id="open-signin" onclick="window.location.href='{% url 'signin' %}'">
-               {% trans "Accedi" %}
-               </button>
+               <button type="button" class="btn-primary" id="open-signin" onclick="window.location.href='{% url 'signin' %}'">{% trans "Accedi" %}</button>
             </nav>
             {% endif %}
-            <button
-               class="mobile-menu-toggle"
-               id="mobile-menu-toggle"
-               aria-label="Toggle navigation"
-               >
-               <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  >
-                  <line x1="3" y1="12" x2="21" y2="12"></line>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <line x1="3" y1="18" x2="21" y2="18"></line>
-               </svg>
-            </button>
          </div>
       </header>
-      <div class="menu-overlay" id="menu-overlay"></div>
       <main class="service-details-container">
          <div class="service-layout">
             <!-- Main Content Column -->
