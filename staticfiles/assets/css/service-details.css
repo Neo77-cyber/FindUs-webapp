@@ -1,3 +1,78 @@
+/* Mobile Header Styles */
+.mobile-back-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-logo {
+    display: none !important;
+  }
+
+  .mobile-back-button {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .mobile-back-button svg {
+    color: var(--primary);
+    stroke-width: 3;
+  }
+
+  .mobile-back-button .back-text {
+    color: var(--text-primary);
+  }
+}
+
+.mobile-header {
+  display: none;
+}
+
+.desktop-header {
+  display: block;
+}
+
+.back-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.back-arrow:hover {
+  background-color: var(--bg-secondary);
+}
+
+.mobile-header-title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-right: 3rem; /* Balance the back arrow */
+}
+
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: white;
+    border-bottom: 1px solid var(--border-default);
+  }
+  
+  .desktop-header {
+    display: none !important;
+  }
+}
+
 /* Service Header Badges */
 .service-badges {
   display: flex;
