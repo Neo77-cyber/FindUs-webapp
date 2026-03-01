@@ -598,7 +598,7 @@ body {
     justify-content: space-between;
   }
 
-  .category-dropdown + .category-dropdown .category-trigger {
+  .category-dropdown+.category-dropdown .category-trigger {
     border-radius: 0;
   }
 
@@ -749,7 +749,7 @@ body {
   width: 100%;
 }
 
-.signin-form-section > * {
+.signin-form-section>* {
   width: 100%;
 }
 
@@ -776,6 +776,7 @@ body {
     opacity: 0;
     transform: translateY(10px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1274,15 +1275,19 @@ body {
 .service-category-dot.electrical {
   background: #f59e0b;
 }
+
 .service-category-dot.cleaning {
   background: #10b981;
 }
+
 .service-category-dot.hvac {
   background: #0ea5e9;
 }
+
 .service-category-dot.painting {
   background: #8b5cf6;
 }
+
 .service-category-dot.carpentry {
   background: #78350f;
 }
@@ -1537,6 +1542,7 @@ body {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
+
 .service-meta {
   display: flex;
   align-items: center;
@@ -1723,5 +1729,36 @@ body {
   .language-option {
     padding: 0.4375rem 0.625rem;
     font-size: 0.6875rem;
+  }
+}
+
+/* Mobile Header & Back Button Styles */
+.mobile-back-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  .desktop-logo {
+    display: none !important;
+  }
+
+  .mobile-back-button {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .mobile-back-button svg {
+    color: var(--primary);
+    stroke-width: 3;
+  }
+
+  .mobile-back-button .back-text {
+    color: var(--text-primary);
   }
 }
