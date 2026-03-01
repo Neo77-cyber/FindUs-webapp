@@ -1739,8 +1739,7 @@ body {
 
 @media (max-width: 768px) {
 
-  .desktop-logo,
-  .logo {
+  .desktop-logo {
     display: none !important;
   }
 
