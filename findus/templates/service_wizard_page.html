@@ -2,268 +2,286 @@
 {% load i18n %}
 <!doctype html>
 <html lang="it">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>{% trans "Aggiungi nuovo servizio" %} | FidaMano</title>
-      <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/service-form-modal.css' %}" />
-      <link rel="icon" href="{% static 'assets/icons/find-su-logo.png' %}" type="image/png">
-      <link rel="stylesheet" href="{% static 'assets/css/service-wizard.css' %}" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
-   </head>
-   <body>
-      <div class="language-switcher-fixed">
-         <form action="{% url 'set_language' %}" method="post" id="language-form">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.path }}">
-            <button type="button" class="language-button" id="language-button" aria-expanded="false">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_language_info for LANGUAGE_CODE as current_lang %}
-               <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
-               <span class="language-label">{{ current_lang.name_local }}</span>
-               <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-               </svg>
-            </button>
-            <div class="language-dropdown" id="language-dropdown">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_available_languages as LANGUAGES %}
-               {% get_language_info_list for LANGUAGES as languages %}
-               {% for language in languages %}
-               <button type="submit" 
-                  name="language" 
-                  value="{{ language.code }}"
-                  class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
-                  data-value="{{ language.code }}">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>{% trans "Aggiungi nuovo servizio" %} | FidaMano</title>
+   <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/service-form-modal.css' %}" />
+   <link rel="icon" href="{% static 'assets/icons/find-su-logo.png' %}" type="image/png">
+   <link rel="stylesheet" href="{% static 'assets/css/service-wizard.css' %}" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+</head>
+
+<body>
+   <div class="language-switcher-fixed">
+      <form action="{% url 'set_language' %}" method="post" id="language-form">
+         {% csrf_token %}
+         <input name="next" type="hidden" value="{{ request.path }}">
+         <button type="button" class="language-button" id="language-button" aria-expanded="false">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_language_info for LANGUAGE_CODE as current_lang %}
+            <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
+            <span class="language-label">{{ current_lang.name_local }}</span>
+            <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2">
+               <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+         </button>
+         <div class="language-dropdown" id="language-dropdown">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+            <button type="submit" name="language" value="{{ language.code }}"
+               class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+               data-value="{{ language.code }}">
                <span class="fi fi-{% if language.code == 'it' %}it{% else %}gb{% endif %}"></span>
                {{ language.name_local }}
-               </button>
-               {% endfor %}
-            </div>
-         </form>
-      </div>
-      <header class="dashboard-header">
-         <div class="dashboard-header-content">
-            <a href="{% url 'craftsman_dashboard' %}" class="logo" aria-label="FidaMano Home">
-            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="height: 40px; margin-right:-12px;">
-            <span class="logo-text">FidaMano</span>
-            </a>         
-            <a href="{% url 'craftsman_dashboard' %}" class="btn-prev">{% trans "Annulla" %}</a>
+            </button>
+            {% endfor %}
          </div>
-      </header>
-      <main class="dashboard-main">
-         <div class="provider-dashboard-container">
-            <section class="provider-section">
-               <header class="provider-section-header">
-                  <div>
-                     <h1 class="provider-section-title">{% trans "Aggiungi nuovo servizio" %}</h1>
-                     <p class="step-description">
-                        {{ step_title }} • {% blocktrans with current=current_step total=total_steps %}Passo {{ current }} di {{ total }}{% endblocktrans %}
-                     </p>
-                  </div>
-               </header>
-               <!-- Progress Indicator -->
-               <div class="service-form-steps-indicator">
-                  <div class="step-indicator {% if current_step >= 1 %}active{% endif %}" data-step="1">
-                     <span class="step-label">{% trans "Annuncio base" %}</span>
-                  </div>
-                  <div class="step-indicator {% if current_step >= 2 %}active{% endif %}" data-step="2">
-                     <span class="step-label">{% trans "Luogo e prezzo" %}</span>
-                  </div>
-                  <div class="step-indicator {% if current_step >= 3 %}active{% endif %}" data-step="3">
-                     <span class="step-label">{% trans "Completamento" %}</span>
-                  </div>
+      </form>
+   </div>
+   <header class="dashboard-header">
+      <div class="dashboard-header-content">
+         <a href="{% url 'craftsman_dashboard' %}" class="logo desktop-logo" aria-label="FidaMano Home">
+            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano"
+               style="height: 40px; margin-right:-12px;">
+            <span class="logo-text">FidaMano</span>
+         </a>
+         <a href="{% url 'craftsman_dashboard' %}" class="btn-prev">{% trans "Annulla" %}</a>
+      </div>
+   </header>
+   <main class="dashboard-main">
+      <div class="provider-dashboard-container">
+         <section class="provider-section">
+            <header class="provider-section-header">
+               <div>
+                  <h1 class="provider-section-title">{% trans "Aggiungi nuovo servizio" %}</h1>
+                  <p class="step-description">
+                     {{ step_title }} • {% blocktrans with current=current_step total=total_steps %}Passo {{ current }}
+                     di {{ total }}{% endblocktrans %}
+                  </p>
                </div>
-               <div class="service-wizard-container">
-                  <form method="post" enctype="multipart/form-data" class="service-wizard-form" id="wizard-form">
-                     {% csrf_token %}
-                     {{ wizard.management_form }}
-                     {% if wizard.form.errors %}
-                     <div class="alert alert-danger" style="background: #fee; color: #c00; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                        {% trans "Correggi gli errori qui sotto." %}
+            </header>
+            <!-- Progress Indicator -->
+            <div class="service-form-steps-indicator">
+               <div class="step-indicator {% if current_step >= 1 %}active{% endif %}" data-step="1">
+                  <span class="step-label">{% trans "Annuncio base" %}</span>
+               </div>
+               <div class="step-indicator {% if current_step >= 2 %}active{% endif %}" data-step="2">
+                  <span class="step-label">{% trans "Luogo e prezzo" %}</span>
+               </div>
+               <div class="step-indicator {% if current_step >= 3 %}active{% endif %}" data-step="3">
+                  <span class="step-label">{% trans "Completamento" %}</span>
+               </div>
+            </div>
+            <div class="service-wizard-container">
+               <form method="post" enctype="multipart/form-data" class="service-wizard-form" id="wizard-form">
+                  {% csrf_token %}
+                  {{ wizard.management_form }}
+                  {% if wizard.form.errors %}
+                  <div class="alert alert-danger"
+                     style="background: #fee; color: #c00; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                     {% trans "Correggi gli errori qui sotto." %}
+                  </div>
+                  {% endif %}
+                  {% if wizard.steps.current == '0' %}
+                  <div class="service-form-step active">
+                     <div class="form-field">
+                        <label for="{{ wizard.form.title.id_for_label }}" class="form-label required">{% trans "Titolo
+                           del servizio" %}</label>
+                        {{ wizard.form.title }}
+                        <span class="form-help-text">{{ wizard.form.title.help_text }}</span>
+                        {% if wizard.form.title.errors %}
+                        <div class="text-danger">{{ wizard.form.title.errors }}</div>
+                        {% endif %}
                      </div>
-                     {% endif %}
-                     {% if wizard.steps.current == '0' %}
-                     <div class="service-form-step active">
-                        <div class="form-field">
-                           <label for="{{ wizard.form.title.id_for_label }}" class="form-label required">{% trans "Titolo del servizio" %}</label>
-                           {{ wizard.form.title }}
-                           <span class="form-help-text">{{ wizard.form.title.help_text }}</span>
-                           {% if wizard.form.title.errors %}
-                           <div class="text-danger">{{ wizard.form.title.errors }}</div>
-                           {% endif %}
-                        </div>
-                        <div class="form-field" style="margin-top: 1.5rem;">
-                           <label for="{{ wizard.form.category.id_for_label }}" class="form-label required">{% trans "Categoria" %}</label>
-                           {{ wizard.form.category }}
-                           {% if wizard.form.category.errors %}
-                           <div class="text-danger">{{ wizard.form.category.errors }}</div>
-                           {% endif %}
-                        </div>
-                        <div class="form-field" style="margin-top: 1.5rem;">
-                           <label for="{{ wizard.form.description.id_for_label }}" class="form-label required">{% trans "Descrizione" %}</label>
-                           {{ wizard.form.description }}
-                           <span class="form-help-text">{{ wizard.form.description.help_text }}</span>
-                           {% if wizard.form.description.errors %}
-                           <div class="text-danger">{{ wizard.form.description.errors }}</div>
-                           {% endif %}
-                        </div>
-                        <div class="form-field" style="margin-top: 1.5rem;">
-                           <label class="form-label">{% trans "Foto del tuo lavoro" %}</label>
-                           <div class="file-upload-compact">
-                              {{ wizard.form.image }}
-                              <label for="{{ wizard.form.image.id_for_label }}" class="file-upload-label-compact">
-                                 <div class="file-upload-icon-compact">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                       <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                       <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                       <polyline points="21 15 16 10 5 21"></polyline>
-                                    </svg>
-                                 </div>
-                                 <div class="file-upload-text-compact">
-                                    <span class="file-upload-main-compact">{% trans "Clicca per caricare la foto del tuo lavoro" %}</span>
-                                    <span class="file-upload-sub-compact">{% trans "JPG o PNG • Max 5MB" %}</span>
-                                 </div>
-                              </label>
-                           </div>
-                           <span class="form-help-text">{{ wizard.form.image.help_text }}</span>
-                           {% if wizard.form.image.errors %}
-                           <div class="text-danger">{{ wizard.form.image.errors }}</div>
-                           {% endif %}
-                        </div>
+                     <div class="form-field" style="margin-top: 1.5rem;">
+                        <label for="{{ wizard.form.category.id_for_label }}" class="form-label required">{% trans
+                           "Categoria" %}</label>
+                        {{ wizard.form.category }}
+                        {% if wizard.form.category.errors %}
+                        <div class="text-danger">{{ wizard.form.category.errors }}</div>
+                        {% endif %}
                      </div>
-                     {% endif %}
-                     {% if wizard.steps.current == '1' %}
-                     <div class="service-form-step active">
-                        <div class="form-field">
-                           <label for="{{ wizard.form.region.id_for_label }}" class="form-label required">{% trans "Dove lavori?" %}</label>
-                           {{ wizard.form.region }}
-                           {% if wizard.form.region.errors %}
-                           <div class="text-danger">{{ wizard.form.region.errors }}</div>
-                           {% endif %}
+                     <div class="form-field" style="margin-top: 1.5rem;">
+                        <label for="{{ wizard.form.description.id_for_label }}" class="form-label required">{% trans
+                           "Descrizione" %}</label>
+                        {{ wizard.form.description }}
+                        <span class="form-help-text">{{ wizard.form.description.help_text }}</span>
+                        {% if wizard.form.description.errors %}
+                        <div class="text-danger">{{ wizard.form.description.errors }}</div>
+                        {% endif %}
+                     </div>
+                     <div class="form-field" style="margin-top: 1.5rem;">
+                        <label class="form-label">{% trans "Foto del tuo lavoro" %}</label>
+                        <div class="file-upload-compact">
+                           {{ wizard.form.image }}
+                           <label for="{{ wizard.form.image.id_for_label }}" class="file-upload-label-compact">
+                              <div class="file-upload-icon-compact">
+                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                 </svg>
+                              </div>
+                              <div class="file-upload-text-compact">
+                                 <span class="file-upload-main-compact">{% trans "Clicca per caricare la foto del tuo
+                                    lavoro" %}</span>
+                                 <span class="file-upload-sub-compact">{% trans "JPG o PNG • Max 5MB" %}</span>
+                              </div>
+                           </label>
                         </div>
-                        <div class="form-field" style="margin-top: 1.5rem;">
-                           <label class="form-label required">{% trans "Come fai pagare?" %}</label>
-                           <div class="modal-pricing-type" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                              {% for radio in wizard.form.price_type %}
-                              <label class="modal-radio-card" style="flex: 1;">
+                        <span class="form-help-text">{{ wizard.form.image.help_text }}</span>
+                        {% if wizard.form.image.errors %}
+                        <div class="text-danger">{{ wizard.form.image.errors }}</div>
+                        {% endif %}
+                     </div>
+                  </div>
+                  {% endif %}
+                  {% if wizard.steps.current == '1' %}
+                  <div class="service-form-step active">
+                     <div class="form-field">
+                        <label for="{{ wizard.form.region.id_for_label }}" class="form-label required">{% trans "Dove
+                           lavori?" %}</label>
+                        {{ wizard.form.region }}
+                        {% if wizard.form.region.errors %}
+                        <div class="text-danger">{{ wizard.form.region.errors }}</div>
+                        {% endif %}
+                     </div>
+                     <div class="form-field" style="margin-top: 1.5rem;">
+                        <label class="form-label required">{% trans "Come fai pagare?" %}</label>
+                        <div class="modal-pricing-type" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                           {% for radio in wizard.form.price_type %}
+                           <label class="modal-radio-card" style="flex: 1;">
                               {{ radio.tag }}
                               <span class="modal-radio-card-content">
-                              <span class="modal-radio-indicator"></span>
-                              <span class="modal-radio-label">{{ radio.choice_label }}</span>
+                                 <span class="modal-radio-indicator"></span>
+                                 <span class="modal-radio-label">{{ radio.choice_label }}</span>
                               </span>
-                              </label>
-                              {% endfor %}
-                           </div>
+                           </label>
+                           {% endfor %}
                         </div>
-                        <!-- Hourly Rate Section -->
-                        <div id="hourly-section" style="margin-top: 1.5rem;">
-                           <div class="form-field">
-                              <label class="form-label">{% trans "Tariffa oraria" %}</label>
-                              <div class="modal-currency-input">
-                                 <span class="modal-currency-symbol">€</span>
-                                 {{ wizard.form.hourly_rate }}
-                                 <span class="modal-currency-label">/{% trans "ora" %}</span>
-                              </div>
-                              <span class="form-help-text">{{ wizard.form.hourly_rate.help_text }}</span>
-                              {% if wizard.form.hourly_rate.errors %}
-                              <div class="text-danger">{{ wizard.form.hourly_rate.errors }}</div>
-                              {% endif %}
-                           </div>
-                           <div class="form-field" style="margin-top: 1rem;">
-                              <label for="{{ wizard.form.estimated_duration.id_for_label }}" class="form-label">{% trans "Tempo stimato" %}</label>
-                              {{ wizard.form.estimated_duration }}
-                              <span class="form-help-text">{{ wizard.form.estimated_duration.help_text }}</span>
-                              {% if wizard.form.estimated_duration.errors %}
-                              <div class="text-danger">{{ wizard.form.estimated_duration.errors }}</div>
-                              {% endif %}
-                           </div>
-                        </div>
-                        <div id="fixed-section" style="margin-top: 1.5rem; display: none;">
-                           <div class="form-field">
-                              <label class="form-label">{% trans "Prezzo fisso" %}</label>
-                              <div class="modal-currency-input">
-                                 <span class="modal-currency-symbol">€</span>
-                                 {{ wizard.form.fixed_price }}
-                                 <span class="modal-currency-label">{% trans "totale" %}</span>
-                              </div>
-                              <span class="form-help-text">{{ wizard.form.fixed_price.help_text }}</span>
-                              {% if wizard.form.fixed_price.errors %}
-                              <div class="text-danger">{{ wizard.form.fixed_price.errors }}</div>
-                              {% endif %}
-                           </div>
-                        </div>
-                        <div class="form-field" style="margin-top: 1.5rem;">
-                           <label class="form-label">{% trans "Spese di trasferta (opzionale)" %}</label>
+                     </div>
+                     <!-- Hourly Rate Section -->
+                     <div id="hourly-section" style="margin-top: 1.5rem;">
+                        <div class="form-field">
+                           <label class="form-label">{% trans "Tariffa oraria" %}</label>
                            <div class="modal-currency-input">
                               <span class="modal-currency-symbol">€</span>
-                              {{ wizard.form.travel_fee }}
-                              <span class="modal-currency-label"></span>
+                              {{ wizard.form.hourly_rate }}
+                              <span class="modal-currency-label">/{% trans "ora" %}</span>
                            </div>
-                           <span class="form-help-text">{{ wizard.form.travel_fee.help_text }}</span>
-                           {% if wizard.form.travel_fee.errors %}
-                           <div class="text-danger">{{ wizard.form.travel_fee.errors }}</div>
+                           <span class="form-help-text">{{ wizard.form.hourly_rate.help_text }}</span>
+                           {% if wizard.form.hourly_rate.errors %}
+                           <div class="text-danger">{{ wizard.form.hourly_rate.errors }}</div>
+                           {% endif %}
+                        </div>
+                        <div class="form-field" style="margin-top: 1rem;">
+                           <label for="{{ wizard.form.estimated_duration.id_for_label }}" class="form-label">{% trans
+                              "Tempo stimato" %}</label>
+                           {{ wizard.form.estimated_duration }}
+                           <span class="form-help-text">{{ wizard.form.estimated_duration.help_text }}</span>
+                           {% if wizard.form.estimated_duration.errors %}
+                           <div class="text-danger">{{ wizard.form.estimated_duration.errors }}</div>
                            {% endif %}
                         </div>
                      </div>
-                     {% endif %}
-                     {% if wizard.steps.current == '2' %}
-                     <div class="service-form-step active">
+                     <div id="fixed-section" style="margin-top: 1.5rem; display: none;">
                         <div class="form-field">
-                           <label for="{{ wizard.form.availability.id_for_label }}" class="form-label required">{% trans "Quanto velocemente puoi presentarti?" %}</label>
-                           {{ wizard.form.availability }}
-                           {% if wizard.form.availability.errors %}
-                           <div class="text-danger">{{ wizard.form.availability.errors }}</div>
+                           <label class="form-label">{% trans "Prezzo fisso" %}</label>
+                           <div class="modal-currency-input">
+                              <span class="modal-currency-symbol">€</span>
+                              {{ wizard.form.fixed_price }}
+                              <span class="modal-currency-label">{% trans "totale" %}</span>
+                           </div>
+                           <span class="form-help-text">{{ wizard.form.fixed_price.help_text }}</span>
+                           {% if wizard.form.fixed_price.errors %}
+                           <div class="text-danger">{{ wizard.form.fixed_price.errors }}</div>
                            {% endif %}
                         </div>
-                        <div class="form-field" style="margin-top: 1.5rem;">
-                           <label class="checkbox-card-simple">
+                     </div>
+                     <div class="form-field" style="margin-top: 1.5rem;">
+                        <label class="form-label">{% trans "Spese di trasferta (opzionale)" %}</label>
+                        <div class="modal-currency-input">
+                           <span class="modal-currency-symbol">€</span>
+                           {{ wizard.form.travel_fee }}
+                           <span class="modal-currency-label"></span>
+                        </div>
+                        <span class="form-help-text">{{ wizard.form.travel_fee.help_text }}</span>
+                        {% if wizard.form.travel_fee.errors %}
+                        <div class="text-danger">{{ wizard.form.travel_fee.errors }}</div>
+                        {% endif %}
+                     </div>
+                  </div>
+                  {% endif %}
+                  {% if wizard.steps.current == '2' %}
+                  <div class="service-form-step active">
+                     <div class="form-field">
+                        <label for="{{ wizard.form.availability.id_for_label }}" class="form-label required">{% trans
+                           "Quanto velocemente puoi presentarti?" %}</label>
+                        {{ wizard.form.availability }}
+                        {% if wizard.form.availability.errors %}
+                        <div class="text-danger">{{ wizard.form.availability.errors }}</div>
+                        {% endif %}
+                     </div>
+                     <div class="form-field" style="margin-top: 1.5rem;">
+                        <label class="checkbox-card-simple">
                            {{ wizard.form.materials_included }}
                            <span class="checkbox-custom"></span>
                            <span class="checkbox-text">{% trans "Materiali inclusi nel prezzo" %}</span>
-                           </label>
-                        </div>
-                        <div class="form-field" style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px;">
-                           <h4 style="margin-bottom: 0.5rem;">{% trans "Pronto per pubblicare?" %}</h4>
-                           <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                              {% trans "Il tuo servizio sarà pubblicato immediatamente. Potrai modificarlo in qualsiasi momento dalla tua dashboard." %}
-                           </p>
-                        </div>
+                        </label>
                      </div>
-                     {% endif %}
-                     <footer class="service-modal-footer" style="margin-top: 2rem;">
-                        {% if wizard.steps.prev %}
-                        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn-prev" formnovalidate>
+                     <div class="form-field"
+                        style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <h4 style="margin-bottom: 0.5rem;">{% trans "Pronto per pubblicare?" %}</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                           {% trans "Il tuo servizio sarà pubblicato immediatamente. Potrai modificarlo in qualsiasi
+                           momento dalla tua dashboard." %}
+                        </p>
+                     </div>
+                  </div>
+                  {% endif %}
+                  <footer class="service-modal-footer" style="margin-top: 2rem;">
+                     {% if wizard.steps.prev %}
+                     <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn-prev"
+                        formnovalidate>
                         ← {% trans "Indietro" %}
-                        </button>
-                        {% else %}
-                        <a href="{% url 'craftsman_dashboard' %}" class="btn-prev">{% trans "Annulla" %}</a>
-                        {% endif %}
-                        <div style="flex: 1;"></div>
-                        {% if wizard.steps.next %}
-                        <button type="submit" class="btn-next">
-                           {% trans "Continua" %}
-                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <polyline points="9 18 15 12 9 6"></polyline>
-                           </svg>
-                        </button>
-                        {% else %}
-                        <button type="submit" class="btn-submit-form" id="final-submit-btn">
-                           {% trans "Pubblica servizio" %}
-                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                           </svg>
-                        </button>
-                        {% endif %}
-                     </footer>
-                  </form>
-               </div>
-            </section>
-         </div>
-      </main>
-      <script src="{% static 'assets/js/service-wizard.js' %}"></script>
-   </body>
+                     </button>
+                     {% else %}
+                     <a href="{% url 'craftsman_dashboard' %}" class="btn-prev">{% trans "Annulla" %}</a>
+                     {% endif %}
+                     <div style="flex: 1;"></div>
+                     {% if wizard.steps.next %}
+                     <button type="submit" class="btn-next">
+                        {% trans "Continua" %}
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                           stroke-width="2">
+                           <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                     </button>
+                     {% else %}
+                     <button type="submit" class="btn-submit-form" id="final-submit-btn">
+                        {% trans "Pubblica servizio" %}
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                           stroke-width="2">
+                           <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                     </button>
+                     {% endif %}
+                  </footer>
+               </form>
+            </div>
+         </section>
+      </div>
+   </main>
+   <script src="{% static 'assets/js/service-wizard.js' %}"></script>
+</body>
+
 </html>

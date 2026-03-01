@@ -2,128 +2,118 @@
 {% load i18n %}
 <!DOCTYPE html>
 <html lang="it">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta
-         name="description"
-         content="{% trans 'FidaMano - Trova professionisti di fiducia per tutte le tue esigenze domestiche e lavorative' %}"
-         />
-      <link href="{% static 'assets/icons/find-su-logo.png' %}" rel="icon" />
-      <link
-         href="{% static 'assets/icons/find-su-logo.png' %}"
-         rel="apple-touch-icon"
-         />
-      <title>FidaMano</title>
-      <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/results.css' %}">
-      <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}">
-      <link rel="stylesheet" href="{% static 'assets/css/signup-modal.css' %}">
-      <!-- PWA Tags -->
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-      <meta name="apple-mobile-web-app-capable" content="yes">
-      <link rel="apple-touch-icon" href="{% static 'icons/180.png' %}">
-      <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/180.png' %}">
-      <link rel="apple-touch-icon" sizes="167x167" href="{% static 'icons/167.png' %}">
-      <link rel="apple-touch-icon" sizes="152x152" href="{% static 'icons/152.png' %}">
-      <link rel="apple-touch-icon" sizes="120x120" href="{% static 'icons/120.png' %}">
-      <link rel="apple-touch-icon" sizes="114x114" href="{% static 'icons/114.png' %}">
-      <meta name="theme-color" content="#077f46">
-      <link rel="manifest" href="{% static 'manifest.json' %}">
-      <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}">
-      <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-      <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-      <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-      <style>
-         @media screen and (max-width: 1024px) {
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta name="description"
+      content="{% trans 'FidaMano - Trova professionisti di fiducia per tutte le tue esigenze domestiche e lavorative' %}" />
+   <link href="{% static 'assets/icons/find-su-logo.png' %}" rel="icon" />
+   <link href="{% static 'assets/icons/find-su-logo.png' %}" rel="apple-touch-icon" />
+   <title>FidaMano</title>
+   <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/results.css' %}">
+   <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}">
+   <link rel="stylesheet" href="{% static 'assets/css/signup-modal.css' %}">
+   <!-- PWA Tags -->
+   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+   <meta name="apple-mobile-web-app-capable" content="yes">
+   <link rel="apple-touch-icon" href="{% static 'icons/180.png' %}">
+   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/180.png' %}">
+   <link rel="apple-touch-icon" sizes="167x167" href="{% static 'icons/167.png' %}">
+   <link rel="apple-touch-icon" sizes="152x152" href="{% static 'icons/152.png' %}">
+   <link rel="apple-touch-icon" sizes="120x120" href="{% static 'icons/120.png' %}">
+   <link rel="apple-touch-icon" sizes="114x114" href="{% static 'icons/114.png' %}">
+   <meta name="theme-color" content="#077f46">
+   <link rel="manifest" href="{% static 'manifest.json' %}">
+   <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}">
+   <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}"
+      media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+   <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}"
+      media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+   <link rel="apple-touch-startup-image" href="{% static 'splash/universal_splash.png' %}"
+      media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+   <style>
+      @media screen and (max-width: 1024px) {
          body {
-         background-color: #077f46;
+            background-color: #077f46;
          }
-         }
-      </style>
-      <link
-         rel="stylesheet"
-         href="https://cdn.jsdelivr.net/npm/flag-icons@7.5.0/css/flag-icons.min.css"
-         />
-   </head>
-   <body>
-      <div class="language-switcher-fixed">
-         <form action="{% url 'set_language' %}" method="post" id="language-form">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.path }}">
-            <button type="button" class="language-button" id="language-button" aria-expanded="false">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_language_info for LANGUAGE_CODE as current_lang %}
-               <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
-               <span class="language-label">{{ current_lang.name_local }}</span>
-               <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-               </svg>
-            </button>
-            <div class="language-dropdown" id="language-dropdown">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_available_languages as LANGUAGES %}
-               {% get_language_info_list for LANGUAGES as languages %}
-               {% for language in languages %}
-               <button type="submit" 
-                  name="language" 
-                  value="{{ language.code }}"
-                  class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
-                  data-value="{{ language.code }}">
+      }
+   </style>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.5.0/css/flag-icons.min.css" />
+</head>
+
+<body>
+   <div class="language-switcher-fixed">
+      <form action="{% url 'set_language' %}" method="post" id="language-form">
+         {% csrf_token %}
+         <input name="next" type="hidden" value="{{ request.path }}">
+         <button type="button" class="language-button" id="language-button" aria-expanded="false">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_language_info for LANGUAGE_CODE as current_lang %}
+            <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
+            <span class="language-label">{{ current_lang.name_local }}</span>
+            <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2">
+               <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+         </button>
+         <div class="language-dropdown" id="language-dropdown">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+            <button type="submit" name="language" value="{{ language.code }}"
+               class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+               data-value="{{ language.code }}">
                <span class="fi fi-{% if language.code == 'it' %}it{% else %}gb{% endif %}"></span>
                {{ language.name_local }}
-               </button>
-               {% endfor %}
-            </div>
-         </form>
-      </div>
-      <header class="main-header">
-         <div class="header-content">
-            <a href="{% url 'home' %}" class="logo" aria-label="FidaMano Home">
-               <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="height: 40px; margin-right:-12px;">
-               <span class="logo-text">FidaMano</span>
-            </a>
-            
-            <nav class="nav-menu" id="nav-menu">
-               <a href="{% url 'register' %}" class="nav-link">{% trans "Registrati" %}</a>
-               <a href="{% url 'register_as_a_craftsman' %}" class="nav-link">
-               {% trans "Diventa un professionista" %}
-               </a>
-               <button type="button" class="btn-primary" id="open-signin" onclick="openSigninModal()">
-               {% trans "Accedi" %}
-               </button>
-            </nav>
-            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation">
-               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="3" y1="12" x2="21" y2="12"></line>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <line x1="3" y1="18" x2="21" y2="18"></line>
-               </svg>
             </button>
+            {% endfor %}
          </div>
-      </header>
-      <div class="menu-overlay" id="menu-overlay"></div>
-      <main class="landing-content">
-         <section class="hero">
-            <div class="hero-container">
-               <h1>{% trans "Cosa stai cercando?" %}</h1>
-               <p>{% trans "Che tu abbia bisogno di un idraulico o di un pittore, FidaMano ti aiuta a fare il lavoro nel modo giusto." %}</p>
-               <div class="search-box">
-                  <form
-                     class="search-form"
-                     id="service-search"
-                     method="get"
-                     hx-get="."
-                     hx-trigger="submit"
-                     hx-target=".search-results"
-                     hx-swap="innerHTML"
-                     hx-push-url="true"
-                     >
-                     <div class="category-dropdown region-dropdown">
-                        <button type="button" class="category-trigger region-trigger" id="region-trigger">
-                           <span class="category-text region-text">
+      </form>
+   </div>
+   <header class="main-header">
+      <div class="header-content">
+         <a href="{% url 'home' %}" class="logo desktop-logo" aria-label="FidaMano Home">
+            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano"
+               style="height: 40px; margin-right:-12px;">
+            <span class="logo-text">FidaMano</span>
+         </a>
+
+         <nav class="nav-menu" id="nav-menu">
+            <a href="{% url 'register' %}" class="nav-link">{% trans "Registrati" %}</a>
+            <a href="{% url 'register_as_a_craftsman' %}" class="nav-link">
+               {% trans "Diventa un professionista" %}
+            </a>
+            <button type="button" class="btn-primary" id="open-signin" onclick="openSigninModal()">
+               {% trans "Accedi" %}
+            </button>
+         </nav>
+         <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <line x1="3" y1="12" x2="21" y2="12"></line>
+               <line x1="3" y1="6" x2="21" y2="6"></line>
+               <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+         </button>
+      </div>
+   </header>
+   <div class="menu-overlay" id="menu-overlay"></div>
+   <main class="landing-content">
+      <section class="hero">
+         <div class="hero-container">
+            <h1>{% trans "Cosa stai cercando?" %}</h1>
+            <p>{% trans "Che tu abbia bisogno di un idraulico o di un pittore, FidaMano ti aiuta a fare il lavoro nel
+               modo giusto." %}</p>
+            <div class="search-box">
+               <form class="search-form" id="service-search" method="get" hx-get="." hx-trigger="submit"
+                  hx-target=".search-results" hx-swap="innerHTML" hx-push-url="true">
+                  <div class="category-dropdown region-dropdown">
+                     <button type="button" class="category-trigger region-trigger" id="region-trigger">
+                        <span class="category-text region-text">
                            {% if selected_region %}
                            {% for value, label in REGION_CHOICES %}
                            {% if value == selected_region %}{{ label }}{% endif %}
@@ -131,47 +121,35 @@
                            {% else %}
                            {% trans "Tutte le regioni" %}
                            {% endif %}
-                           </span>
-                           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                              <polyline points="6 9 12 15 18 9"></polyline>
-                           </svg>
-                        </button>
-                        <input
-                           type="hidden"
-                           name="region"
-                           id="region-input"
-                           value="{{ selected_region|default:'' }}"
-                           />
-                        <div class="category-menu region-menu" id="region-menu">
-                           <button
-                              type="button"
-                              class="category-option {% if not selected_region %}active{% endif %}"
-                              data-value=""
-                              onclick="
+                        </span>
+                        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.5">
+                           <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                     </button>
+                     <input type="hidden" name="region" id="region-input" value="{{ selected_region|default:'' }}" />
+                     <div class="category-menu region-menu" id="region-menu">
+                        <button type="button" class="category-option {% if not selected_region %}active{% endif %}"
+                           data-value="" onclick="
                               document.getElementById('region-input').value = '';
                               document.getElementById('service-search').requestSubmit();
-                              "
-                              >
+                              ">
                            {% trans "Tutte le regioni" %}
-                           </button>
-                           {% for value, label in REGION_CHOICES %}
-                           <button
-                              type="button"
-                              class="category-option {% if selected_region == value %}active{% endif %}"
-                              data-value="{{ value }}"
-                              onclick="
+                        </button>
+                        {% for value, label in REGION_CHOICES %}
+                        <button type="button" class="category-option {% if selected_region == value %}active{% endif %}"
+                           data-value="{{ value }}" onclick="
                               document.getElementById('region-input').value = '{{ value }}';
                               document.getElementById('service-search').requestSubmit();
-                              "
-                              >
+                              ">
                            {{ label }}
-                           </button>
-                           {% endfor %}
-                        </div>
+                        </button>
+                        {% endfor %}
                      </div>
-                     <div class="category-dropdown">
-                        <button type="button" class="category-trigger" id="category-trigger">
-                           <span class="category-text">
+                  </div>
+                  <div class="category-dropdown">
+                     <button type="button" class="category-trigger" id="category-trigger">
+                        <span class="category-text">
                            {% if selected_category %}
                            {% for value, label in CATEGORY_CHOICES %}
                            {% if value == selected_category %}{{ label }}{% endif %}
@@ -179,586 +157,422 @@
                            {% else %}
                            {% trans "Tutte le categorie" %}
                            {% endif %}
-                           </span>
-                           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                              <polyline points="6 9 12 15 18 9"></polyline>
-                           </svg>
-                        </button>
-                        <input
-                           type="hidden"
-                           name="category"
-                           id="category-input"
-                           value="{{ selected_category|default:'' }}"
-                           />
-                        <div class="category-menu" id="category-menu">
-                           <button
-                              type="button"
-                              class="category-option {% if not selected_category %}active{% endif %}"
-                              data-value=""
-                              onclick="
+                        </span>
+                        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.5">
+                           <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                     </button>
+                     <input type="hidden" name="category" id="category-input"
+                        value="{{ selected_category|default:'' }}" />
+                     <div class="category-menu" id="category-menu">
+                        <button type="button" class="category-option {% if not selected_category %}active{% endif %}"
+                           data-value="" onclick="
                               document.getElementById('category-input').value = '';
                               document.getElementById('service-search').requestSubmit();
-                              "
-                              >
+                              ">
                            {% trans "Tutte le categorie" %}
-                           </button>
-                           {% for value, label in CATEGORY_CHOICES %}
-                           <button
-                              type="button"
-                              class="category-option {% if selected_category == value %}active{% endif %}"
-                              data-value="{{ value }}"
-                              onclick="
+                        </button>
+                        {% for value, label in CATEGORY_CHOICES %}
+                        <button type="button"
+                           class="category-option {% if selected_category == value %}active{% endif %}"
+                           data-value="{{ value }}" onclick="
                               document.getElementById('category-input').value = '{{ value }}';
                               document.getElementById('service-search').requestSubmit();
-                              "
-                              >
+                              ">
                            {{ label }}
-                           </button>
-                           {% endfor %}
+                        </button>
+                        {% endfor %}
+                     </div>
+                  </div>
+                  <div class="search-input-wrapper">
+                     <input type="text" id="service-type" name="search" placeholder="{% trans 'Sto cercando...' %}"
+                        autocomplete="off" value="{{ search_query|default:'' }}" hx-get="."
+                        hx-trigger="keyup changed delay:500ms" hx-target=".search-results" hx-include="#service-search"
+                        hx-push-url="true" />
+                     <button type="submit" class="search-icon-btn" aria-label="{% trans 'Cerca' %}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                           stroke-width="2">
+                           <circle cx="11" cy="11" r="8"></circle>
+                           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                     </button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </section>
+   </main>
+   <section class="search-page" id="search-results">
+      <div class="search-layout">
+         <aside class="search-sidebar" id="search-sidebar">
+            <form class="filter-form" method="GET" action="." hx-get="." hx-target=".search-results" hx-swap="innerHTML"
+               hx-push-url="true" hx-trigger="submit, change delay:500ms" hx-indicator="#loading-indicator">
+               <header class="sidebar-header">
+                  <div class="sidebar-header-left">
+                     <button type="button" class="btn-close-filters" id="btn-close-filters">
+                     </button>
+                     <h2 class="sidebar-title">{% trans "Filtri" %}</h2>
+                  </div>
+                  <div class="sidebar-actions">
+                     <button type="button" class="btn-clear-filters" onclick="window.location.href='/';">
+                        {% trans "Cancella tutto" %}
+                     </button>
+                     <button type="submit" class="btn-apply-filters">{% trans "Applica" %}</button>
+                  </div>
+               </header>
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Fascia di prezzo" %}</legend>
+                  <div class="filter-range-inputs">
+                     <input type="number" name="price_min" class="filter-input filter-input-sm"
+                        placeholder="{% trans 'Min' %}" min="0" value="{{ price_min }}"
+                        hx-trigger="keyup changed delay:800ms" />
+                     <span class="filter-range-sep">{% trans "a" %}</span>
+                     <input type="number" name="price_max" class="filter-input filter-input-sm"
+                        placeholder="{% trans 'Max' %}" min="0" value="{{ price_max }}"
+                        hx-trigger="keyup changed delay:800ms" />
+                  </div>
+               </fieldset>
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Valutazione" %}</legend>
+                  <label class="filter-radio">
+                     <input type="radio" name="rating" value="5" {% if rating=="5" %}checked{% endif %}
+                        hx-trigger="change" />
+                     <span class="radio-custom"></span>
+                     <span class="rating-option">★★★★★ {% trans "5 stelle" %}</span>
+                  </label>
+                  <label class="filter-radio">
+                     <input type="radio" name="rating" value="4" {% if rating=="4" %}checked{% endif %}
+                        hx-trigger="change" />
+                     <span class="radio-custom"></span>
+                     <span class="rating-option">★★★★☆ {% trans "4+ stelle" %}</span>
+                  </label>
+                  <label class="filter-radio">
+                     <input type="radio" name="rating" value="3" {% if rating=="3" %}checked{% endif %}
+                        hx-trigger="change" />
+                     <span class="radio-custom"></span>
+                     <span class="rating-option">★★★☆☆ {% trans "3+ stelle" %}</span>
+                  </label>
+                  <label class="filter-radio">
+                     <input type="radio" name="rating" value="" {% if not rating %}checked{% endif %}
+                        hx-trigger="change" />
+                     <span class="radio-custom"></span>
+                     <span class="rating-option">{% trans "Qualsiasi valutazione" %}</span>
+                  </label>
+               </fieldset>
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Disponibilità" %}</legend>
+                  {% for value, label in AVAILABILITY_CHOICES %}
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="availability" value="{{ value }}" {% if value in availability
+                        %}checked{% endif %} hx-trigger="change" />
+                     <span class="checkbox-custom"></span>
+                     <span>{{ label }}</span>
+                  </label>
+                  {% endfor %}
+               </fieldset>
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Dimensione lavoro" %}</legend>
+                  {% for value, label in SERVICE_SCOPE_CHOICES %}
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="job_size" value="{{ value }}" {% if value in job_sizes %}checked{%
+                        endif %} hx-trigger="change" />
+                     <span class="checkbox-custom"></span>
+                     <span>{{ label }}</span>
+                  </label>
+                  {% endfor %}
+               </fieldset>
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Caratteristiche" %}</legend>
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="features" value="verified" {% if "verified" in features %}checked{%
+                        endif %} hx-trigger="change" />
+                     <span class="checkbox-custom"></span>
+                     <span>{% trans "Professionista verificato" %}</span>
+                  </label>
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="features" value="licensed" {% if "licensed" in features %}checked{%
+                        endif %} hx-trigger="change" />
+                     <span class="checkbox-custom"></span>
+                     <span>{% trans "Autorizzato" %}</span>
+                  </label>
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="features" value="insured" {% if "insured" in features %}checked{%
+                        endif %} hx-trigger="change" />
+                     <span class="checkbox-custom"></span>
+                     <span>{% trans "Assicurato" %}</span>
+                  </label>
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="features" value="warranty" {% if "warranty" in features %}checked{%
+                        endif %} hx-trigger="change" />
+                     <span class="checkbox-custom"></span>
+                     <span>{% trans "Offre garanzia" %}</span>
+                  </label>
+               </fieldset>
+               {% if selected_category %}
+               <input type="hidden" name="category" value="{{ selected_category }}">
+               {% endif %}
+               {% if selected_region %}
+               <input type="hidden" name="region" value="{{ selected_region }}">
+               {% endif %}
+               {% if search_query %}
+               <input type="hidden" name="search" value="{{ search_query }}">
+               {% endif %}
+               <div id="loading-indicator" class="htmx-indicator" style="display: none;">
+                  <div style="text-align: center; padding: 1rem;">
+                     {% trans "Caricamento..." %}
+                  </div>
+               </div>
+            </form>
+            <div class="sidebar-footer-mobile">
+               <button type="button" class="btn-cancel-mobile" id="btn-cancel-filters">
+                  {% trans "Annulla" %}
+               </button>
+               <button type="button" class="btn-clear-mobile" onclick="window.location.href='{% url 'home' %}'">
+                  {% trans "Cancella tutto" %}
+               </button>
+               <button type="button" class="btn-apply-mobile" id="btn-apply-filters"
+                  onclick="document.querySelector('.filter-form').requestSubmit()">
+                  {% trans "Mostra risultati" %}
+               </button>
+            </div>
+         </aside>
+         <button type="button" class="btn-mobile-filters" id="btn-mobile-filters" aria-controls="search-sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <line x1="4" y1="21" x2="4" y2="14"></line>
+               <line x1="4" y1="10" x2="4" y2="3"></line>
+               <line x1="12" y1="21" x2="12" y2="12"></line>
+               <line x1="12" y1="8" x2="12" y2="3"></line>
+               <line x1="20" y1="21" x2="20" y2="16"></line>
+               <line x1="20" y1="12" x2="20" y2="3"></line>
+               <line x1="1" y1="14" x2="7" y2="14"></line>
+               <line x1="9" y1="8" x2="15" y2="8"></line>
+               <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+            {% trans "Filtri" %}
+         </button>
+         {% if not has_services %}
+         <section class="waitlist-section" id="waitlist">
+            <div class="waitlist-container">
+               <div class="waitlist-empty-state">
+                  <div class="empty-illustration">
+                     <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- SVG content -->
+                     </svg>
+                  </div>
+                  <div class="empty-message">
+                     <span class="empty-badge">{% trans "Prossimamente" %}</span>
+                     <h2 class="empty-title">{% trans "Nessun servizio nella tua zona" %}</h2>
+                     <p class="empty-description">
+                        {% trans "Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a sapere
+                        quando FidaMano arriva nel tuo quartiere." %}
+                     </p>
+                  </div>
+               </div>
+               <div class="waitlist-form-wrapper">
+                  <div class="waitlist-form-header">
+                     <h3>{% trans "Iscriviti alla lista d'attesa" %}</h3>
+                     <p>
+                        {% trans "Sii tra i primi ad accedere a professionisti verificati quando lanceremo." %}
+                     </p>
+                  </div>
+                  <form class="waitlist-form" id="waitlist-form" action="{% url 'add_to_waiting_list' %}" method="POST"
+                     hx-post="{% url 'add_to_waiting_list' %}" hx-target="#form-message" hx-swap="innerHTML"
+                     hx-on:htmx:after-request="if(event.detail.successful) this.reset()">
+                     {% csrf_token %}
+                     <div id="form-message" class="form-message"></div>
+                     <div class="form-row">
+                        <div class="form-group">
+                           <label for="waitlist-name">{% trans "Nome completo" %} <span
+                                 class="required">*</span></label>
+                           <input type="text" id="waitlist-name" name="fullname" placeholder="{% trans 'Mario Rossi' %}"
+                              required />
+                        </div>
+                        <div class="form-group">
+                           <label for="waitlist-email">{% trans "Indirizzo email" %} <span
+                                 class="required">*</span></label>
+                           <input type="email" id="waitlist-email" name="email"
+                              placeholder="{% trans 'mario@example.com' %}" required />
                         </div>
                      </div>
-                     <div class="search-input-wrapper">
-                        <input
-                           type="text"
-                           id="service-type"
-                           name="search"
-                           placeholder="{% trans 'Sto cercando...' %}"
-                           autocomplete="off"
-                           value="{{ search_query|default:'' }}"
-                           hx-get="."
-                           hx-trigger="keyup changed delay:500ms"
-                           hx-target=".search-results"
-                           hx-include="#service-search"
-                           hx-push-url="true"
-                           />
-                        <button
-                           type="submit"
-                           class="search-icon-btn"
-                           aria-label="{% trans 'Cerca' %}"
-                           >
-                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <circle cx="11" cy="11" r="8"></circle>
-                              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                           </svg>
-                        </button>
+                     <div class="form-row">
+                        <div class="form-group">
+                           <label for="waitlist-location">{% trans "Località" %} <span class="required">*</span></label>
+                           <input type="text" id="waitlist-location" name="location"
+                              placeholder="{% trans 'La tua città' %}" required />
+                        </div>
+                        <div class="form-group">
+                           <label for="waitlist-phone">{% trans "Numero di telefono" %}</label>
+                           <input type="tel" id="waitlist-phone" name="phone"
+                              placeholder="{% trans '+39 123 456 7890' %}" />
+                        </div>
                      </div>
+                     <div class="form-row">
+                        <div class="form-group">
+                           <label for="waitlist-service">{% trans "Servizio necessario" %} <span
+                                 class="required">*</span></label>
+                           <select id="waitlist-service" name="service" required>
+                              <option value="" disabled selected>{% trans "Seleziona un servizio" %}</option>
+                              <option value="plumbing">{% trans "Idraulico" %}</option>
+                              <option value="electrical">{% trans "Elettricista" %}</option>
+                              <option value="ac_technician">{% trans "Tecnico AC" %}</option>
+                              <option value="carpentry">{% trans "Carpentiere" %}</option>
+                              <option value="tiling">{% trans "Pavimentista" %}</option>
+                              <option value="painting">{% trans "Pittore" %}</option>
+                              <option value="furniture_maker">{% trans "Falegname" %}</option>
+                              <option value="fumigation">{% trans "Disinfestatore" %}</option>
+                              <option value="cleaning">{% trans "Pulizie" %}</option>
+                              <option value="welding">{% trans "Saldatore" %}</option>
+                              <option value="roofing">{% trans "Tetto" %}</option>
+                              <option value="solar_power">{% trans "Tecnico solare" %}</option>
+                              <option value="masonry">{% trans "Muratore" %}</option>
+                              <option value="landscaping">{% trans "Giardiniere" %}</option>
+                              <option value="hvac">{% trans "Climatizzazione" %}</option>
+                              <option value="interior_design">{% trans "Interior designer" %}</option>
+                              <option value="pest_control">{% trans "Controllo parassiti" %}</option>
+                              <option value="other">{% trans "Altro" %}</option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="form-group form-group-full">
+                        <label for="waitlist-notes">{% trans "Note aggiuntive" %}</label>
+                        <textarea id="waitlist-notes" name="notes" rows="3"
+                           placeholder="{% trans 'Dicci di più su cosa stai cercando...' %}"></textarea>
+                     </div>
+                     <div class="form-group form-group-full">
+                        <label class="checkbox-label">
+                           <input type="checkbox" name="updates" id="waitlist-updates" checked />
+                           <span class="checkbox-custom"></span>
+                           <span class="checkbox-text">
+                              {% trans "Accetto di ricevere aggiornamenti sul lancio di FidaMano e offerte esclusive di
+                              accesso anticipato." %}
+                           </span>
+                        </label>
+                     </div>
+                     <button type="submit" class="waitlist-submit">
+                        <span>{% trans "Iscriviti alla lista d'attesa" %}</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                           stroke-width="2">
+                           <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                     </button>
+                     <p class="form-privacy">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                           stroke-width="2">
+                           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        {% trans "Le tue informazioni sono al sicuro e non verranno mai condivise." %}
+                     </p>
                   </form>
                </div>
             </div>
          </section>
-      </main>
-      <section class="search-page" id="search-results">
-         <div class="search-layout">
-            <aside class="search-sidebar" id="search-sidebar">
-               <form 
-                  class="filter-form" 
-                  method="GET" 
-                  action="."
-                  hx-get="."
-                  hx-target=".search-results"
-                  hx-swap="innerHTML"
-                  hx-push-url="true"
-                  hx-trigger="submit, change delay:500ms"
-                  hx-indicator="#loading-indicator"
-                  >
-                  <header class="sidebar-header">
-                     <div class="sidebar-header-left">
-                        <button type="button" class="btn-close-filters" id="btn-close-filters">
-                        </button>
-                        <h2 class="sidebar-title">{% trans "Filtri" %}</h2>
-                     </div>
-                     <div class="sidebar-actions">
-                        <button 
-                           type="button"
-                           class="btn-clear-filters"
-                           onclick="window.location.href='/';"
-                           >
-                        {% trans "Cancella tutto" %}
-                        </button>
-                        <button type="submit" class="btn-apply-filters">{% trans "Applica" %}</button>
-                     </div>
-                  </header>
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Fascia di prezzo" %}</legend>
-                     <div class="filter-range-inputs">
-                        <input
-                           type="number"
-                           name="price_min"
-                           class="filter-input filter-input-sm"
-                           placeholder="{% trans 'Min' %}"
-                           min="0"
-                           value="{{ price_min }}"
-                           hx-trigger="keyup changed delay:800ms"
-                           />
-                        <span class="filter-range-sep">{% trans "a" %}</span>
-                        <input
-                           type="number"
-                           name="price_max"
-                           class="filter-input filter-input-sm"
-                           placeholder="{% trans 'Max' %}"
-                           min="0"
-                           value="{{ price_max }}"
-                           hx-trigger="keyup changed delay:800ms"
-                           />
-                     </div>
-                  </fieldset>
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Valutazione" %}</legend>
-                     <label class="filter-radio">
-                     <input 
-                     type="radio" 
-                     name="rating" 
-                     value="5" 
-                     {% if rating == "5" %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="radio-custom"></span>
-                     <span class="rating-option">★★★★★ {% trans "5 stelle" %}</span>
-                     </label>
-                     <label class="filter-radio">
-                     <input 
-                     type="radio" 
-                     name="rating" 
-                     value="4" 
-                     {% if rating == "4" %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="radio-custom"></span>
-                     <span class="rating-option">★★★★☆ {% trans "4+ stelle" %}</span>
-                     </label>
-                     <label class="filter-radio">
-                     <input 
-                     type="radio" 
-                     name="rating" 
-                     value="3" 
-                     {% if rating == "3" %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="radio-custom"></span>
-                     <span class="rating-option">★★★☆☆ {% trans "3+ stelle" %}</span>
-                     </label>
-                     <label class="filter-radio">
-                     <input 
-                     type="radio" 
-                     name="rating" 
-                     value="" 
-                     {% if not rating %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="radio-custom"></span>
-                     <span class="rating-option">{% trans "Qualsiasi valutazione" %}</span>
-                     </label>
-                  </fieldset>
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Disponibilità" %}</legend>
-                     {% for value, label in AVAILABILITY_CHOICES %}
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="availability" 
-                     value="{{ value }}" 
-                     {% if value in availability %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="checkbox-custom"></span>
-                     <span>{{ label }}</span>
-                     </label>
-                     {% endfor %}
-                  </fieldset>
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Dimensione lavoro" %}</legend>
-                     {% for value, label in SERVICE_SCOPE_CHOICES %}
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="job_size" 
-                     value="{{ value }}" 
-                     {% if value in job_sizes %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="checkbox-custom"></span>
-                     <span>{{ label }}</span>
-                     </label>
-                     {% endfor %}
-                  </fieldset>
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Caratteristiche" %}</legend>
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="features" 
-                     value="verified" 
-                     {% if "verified" in features %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="checkbox-custom"></span>
-                     <span>{% trans "Professionista verificato" %}</span>
-                     </label>
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="features" 
-                     value="licensed" 
-                     {% if "licensed" in features %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="checkbox-custom"></span>
-                     <span>{% trans "Autorizzato" %}</span>
-                     </label>
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="features" 
-                     value="insured" 
-                     {% if "insured" in features %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="checkbox-custom"></span>
-                     <span>{% trans "Assicurato" %}</span>
-                     </label>
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="features" 
-                     value="warranty" 
-                     {% if "warranty" in features %}checked{% endif %}
-                     hx-trigger="change"
-                     />
-                     <span class="checkbox-custom"></span>
-                     <span>{% trans "Offre garanzia" %}</span>
-                     </label>
-                  </fieldset>
-                  {% if selected_category %}
-                  <input type="hidden" name="category" value="{{ selected_category }}">
-                  {% endif %}
-                  {% if selected_region %}
-                  <input type="hidden" name="region" value="{{ selected_region }}">
-                  {% endif %}
-                  {% if search_query %}
-                  <input type="hidden" name="search" value="{{ search_query }}">
-                  {% endif %}
-                  <div id="loading-indicator" class="htmx-indicator" style="display: none;">
-                     <div style="text-align: center; padding: 1rem;">
-                        {% trans "Caricamento..." %}
-                     </div>
-                  </div>
-               </form>
-               <div class="sidebar-footer-mobile">
-                  <button type="button" class="btn-cancel-mobile" id="btn-cancel-filters">
-                  {% trans "Annulla" %}
-                  </button>
-                  <button 
-                     type="button" 
-                     class="btn-clear-mobile" 
-                     onclick="window.location.href='{% url 'home' %}'"
-                     >
-                  {% trans "Cancella tutto" %}
-                  </button>
-                  <button 
-                     type="button" 
-                     class="btn-apply-mobile" 
-                     id="btn-apply-filters"
-                     onclick="document.querySelector('.filter-form').requestSubmit()"
-                     >
-                  {% trans "Mostra risultati" %}
-                  </button>
+         {% else %}
+         {% if filters_active %}
+         <div class="active-filters-bar">
+            <span>{% trans "Filtri attivi" %}</span>
+            <a href="{% url 'home' %}" class="btn-clear">{% trans "Cancella tutto" %}</a>
+         </div>
+         {% endif %}
+         <section class="search-results">
+            <header class="results-header">
+               <div class="results-meta">
+                  <h2 class="results-title">
+                     {% if filters_active %}{% trans "Professionisti vicino a te" %}{% else %}{% trans "Professionisti
+                     più votati" %}{% endif %}
+                  </h2>
+                  <p class="results-count">
+                     {% trans "Mostrando" %} <strong>{{ results_count }}</strong>
+                     {% if filters_active %}{% blocktrans count counter=results_count %}risultato{% plural %}risultati{%
+                     endblocktrans %}{% else %}{% trans "professionisti" %}{% endif %}
+                  </p>
                </div>
-            </aside>
-            <button
-               type="button"
-               class="btn-mobile-filters"
-               id="btn-mobile-filters"
-               aria-controls="search-sidebar"
-               >
-               <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  >
-                  <line x1="4" y1="21" x2="4" y2="14"></line>
-                  <line x1="4" y1="10" x2="4" y2="3"></line>
-                  <line x1="12" y1="21" x2="12" y2="12"></line>
-                  <line x1="12" y1="8" x2="12" y2="3"></line>
-                  <line x1="20" y1="21" x2="20" y2="16"></line>
-                  <line x1="20" y1="12" x2="20" y2="3"></line>
-                  <line x1="1" y1="14" x2="7" y2="14"></line>
-                  <line x1="9" y1="8" x2="15" y2="8"></line>
-                  <line x1="17" y1="16" x2="23" y2="16"></line>
-               </svg>
-               {% trans "Filtri" %}
-            </button>
-            {% if not has_services %}
-            <section class="waitlist-section" id="waitlist">
-               <div class="waitlist-container">
-                  <div class="waitlist-empty-state">
-                     <div class="empty-illustration">
-                        <svg
-                           viewBox="0 0 400 300"
-                           fill="none"
-                           xmlns="http://www.w3.org/2000/svg"
-                           >
-                           <!-- SVG content -->
-                        </svg>
-                     </div>
-                     <div class="empty-message">
-                        <span class="empty-badge">{% trans "Prossimamente" %}</span>
-                        <h2 class="empty-title">{% trans "Nessun servizio nella tua zona" %}</h2>
-                        <p class="empty-description">
-                           {% trans "Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a sapere quando FidaMano arriva nel tuo quartiere." %}
-                        </p>
-                     </div>
-                  </div>
-                  <div class="waitlist-form-wrapper">
-                     <div class="waitlist-form-header">
-                        <h3>{% trans "Iscriviti alla lista d'attesa" %}</h3>
-                        <p>
-                           {% trans "Sii tra i primi ad accedere a professionisti verificati quando lanceremo." %}
-                        </p>
-                     </div>
-                     <form
-                        class="waitlist-form"
-                        id="waitlist-form"
-                        action="{% url 'add_to_waiting_list' %}"
-                        method="POST"
-                        hx-post="{% url 'add_to_waiting_list' %}"
-                        hx-target="#form-message"
-                        hx-swap="innerHTML"
-                        hx-on:htmx:after-request="if(event.detail.successful) this.reset()"
-                        >
-                        {% csrf_token %}
-                        <div id="form-message" class="form-message"></div>
-                        <div class="form-row">
-                           <div class="form-group">
-                              <label for="waitlist-name">{% trans "Nome completo" %} <span class="required">*</span></label>
-                              <input
-                                 type="text"
-                                 id="waitlist-name"
-                                 name="fullname"
-                                 placeholder="{% trans 'Mario Rossi' %}"
-                                 required
-                                 />
-                           </div>
-                           <div class="form-group">
-                              <label for="waitlist-email">{% trans "Indirizzo email" %} <span class="required">*</span></label>
-                              <input
-                                 type="email"
-                                 id="waitlist-email"
-                                 name="email"
-                                 placeholder="{% trans 'mario@example.com' %}"
-                                 required
-                                 />
-                           </div>
-                        </div>
-                        <div class="form-row">
-                           <div class="form-group">
-                              <label for="waitlist-location">{% trans "Località" %} <span class="required">*</span></label>
-                              <input
-                                 type="text"
-                                 id="waitlist-location"
-                                 name="location"
-                                 placeholder="{% trans 'La tua città' %}"
-                                 required
-                                 />
-                           </div>
-                           <div class="form-group">
-                              <label for="waitlist-phone">{% trans "Numero di telefono" %}</label>
-                              <input
-                                 type="tel"
-                                 id="waitlist-phone"
-                                 name="phone"
-                                 placeholder="{% trans '+39 123 456 7890' %}"
-                                 />
-                           </div>
-                        </div>
-                        <div class="form-row">
-                           <div class="form-group">
-                              <label for="waitlist-service">{% trans "Servizio necessario" %} <span class="required">*</span></label>
-                              <select id="waitlist-service" name="service" required>
-                                 <option value="" disabled selected>{% trans "Seleziona un servizio" %}</option>
-                                 <option value="plumbing">{% trans "Idraulico" %}</option>
-                                 <option value="electrical">{% trans "Elettricista" %}</option>
-                                 <option value="ac_technician">{% trans "Tecnico AC" %}</option>
-                                 <option value="carpentry">{% trans "Carpentiere" %}</option>
-                                 <option value="tiling">{% trans "Pavimentista" %}</option>
-                                 <option value="painting">{% trans "Pittore" %}</option>
-                                 <option value="furniture_maker">{% trans "Falegname" %}</option>
-                                 <option value="fumigation">{% trans "Disinfestatore" %}</option>
-                                 <option value="cleaning">{% trans "Pulizie" %}</option>
-                                 <option value="welding">{% trans "Saldatore" %}</option>
-                                 <option value="roofing">{% trans "Tetto" %}</option>
-                                 <option value="solar_power">{% trans "Tecnico solare" %}</option>
-                                 <option value="masonry">{% trans "Muratore" %}</option>
-                                 <option value="landscaping">{% trans "Giardiniere" %}</option>
-                                 <option value="hvac">{% trans "Climatizzazione" %}</option>
-                                 <option value="interior_design">{% trans "Interior designer" %}</option>
-                                 <option value="pest_control">{% trans "Controllo parassiti" %}</option>
-                                 <option value="other">{% trans "Altro" %}</option>
-                              </select>
-                           </div>
-                        </div>
-                        <div class="form-group form-group-full">
-                           <label for="waitlist-notes">{% trans "Note aggiuntive" %}</label>
-                           <textarea
-                              id="waitlist-notes"
-                              name="notes"
-                              rows="3"
-                              placeholder="{% trans 'Dicci di più su cosa stai cercando...' %}"
-                              ></textarea>
-                        </div>
-                        <div class="form-group form-group-full">
-                           <label class="checkbox-label">
-                           <input
-                              type="checkbox"
-                              name="updates"
-                              id="waitlist-updates"
-                              checked
-                              />
-                           <span class="checkbox-custom"></span>
-                           <span class="checkbox-text">
-                           {% trans "Accetto di ricevere aggiornamenti sul lancio di FidaMano e offerte esclusive di accesso anticipato." %}
-                           </span>
-                           </label>
-                        </div>
-                        <button type="submit" class="waitlist-submit">
-                           <span>{% trans "Iscriviti alla lista d'attesa" %}</span>
-                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M5 12h14M12 5l7 7-7 7" />
-                           </svg>
-                        </button>
-                        <p class="form-privacy">
-                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                           </svg>
-                           {% trans "Le tue informazioni sono al sicuro e non verranno mai condivise." %}
-                        </p>
-                     </form>
-                  </div>
-               </div>
-            </section>
-            {% else %}
-            {% if filters_active %}
-            <div class="active-filters-bar">
-               <span>{% trans "Filtri attivi" %}</span>
-               <a href="{% url 'home' %}" class="btn-clear">{% trans "Cancella tutto" %}</a>
-            </div>
-            {% endif %}
-            <section class="search-results">
-               <header class="results-header">
-                  <div class="results-meta">
-                     <h2 class="results-title">
-                        {% if filters_active %}{% trans "Professionisti vicino a te" %}{% else %}{% trans "Professionisti più votati" %}{% endif %}
-                     </h2>
-                     <p class="results-count">
-                        {% trans "Mostrando" %} <strong>{{ results_count }}</strong> 
-                        {% if filters_active %}{% blocktrans count counter=results_count %}risultato{% plural %}risultati{% endblocktrans %}{% else %}{% trans "professionisti" %}{% endif %}
-                     </p>
-                  </div>
-                  <div class="results-sort">
-                     <label for="sort-by" class="visually-hidden">{% trans "Ordina per" %}</label>
-                     <select 
-                        name="sort" 
-                        id="sort-by" 
-                        class="sort-select"
-                        hx-get="."
-                        hx-trigger="change"
-                        hx-target=".search-results"
-                        hx-swap="innerHTML"
-                        hx-push-url="true"
-                        hx-include="[name='category'], [name='region'], [name='search'], 
+               <div class="results-sort">
+                  <label for="sort-by" class="visually-hidden">{% trans "Ordina per" %}</label>
+                  <select name="sort" id="sort-by" class="sort-select" hx-get="." hx-trigger="change"
+                     hx-target=".search-results" hx-swap="innerHTML" hx-push-url="true" hx-include="[name='category'], [name='region'], [name='search'], 
                         [name='price_min'], [name='price_max'], [name='rating'],
-                        [name='availability'], [name='job_size'], [name='features']"
-                        >
-                     <option value="relevance" {% if sort_by == "relevance" %}selected{% endif %}>{% trans "Più rilevanti" %}</option>
-                     <option value="rating" {% if sort_by == "rating" %}selected{% endif %}>{% trans "Più votati" %}</option>
-                     <option value="price_low" {% if sort_by == "price_low" %}selected{% endif %}>{% trans "Prezzo: dal più basso" %}</option>
-                     <option value="price_high" {% if sort_by == "price_high" %}selected{% endif %}>{% trans "Prezzo: dal più alto" %}</option>
-                     <option value="distance" {% if sort_by == "distance" %}selected{% endif %}>{% trans "Più vicini" %}</option>
-                     </select>
-                  </div>
-               </header>
-               {% include 'partials/filtered_results.html' %}
-            </section>
-            {% endif %}
-         </div>
-      </section>
-      <dialog id="signin-dialog" class="signin-dialog">
-         <div class="dialog-container">
-            <button type="button" class="close-dialog" id="close-signin" aria-label="{% trans 'Chiudi' %}">
-               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-               </svg>
-            </button>
-            <div class="signin-form-section">
-               <header class="form-header">
-                  <h2>{% trans "Bentornato" %}</h2>
-                  <p>{% trans "Accedi al tuo account" %}</p>
-               </header>
-               <form class="signin-form" method="POST" action="{% url 'signin' %}" id="modal-login-form">
-                  {% csrf_token %}
-                  <div id="modal-messages"></div>
-                  <div class="form-group">
-                     <label for="signin-email">{% trans "Nome utente o email" %}</label>
-                     <input
-                        type="text"
-                        id="signin-email"
-                        name="username"
-                        placeholder="{% trans 'Inserisci il tuo nome utente o email' %}"
-                        required
-                        autocomplete="username"
-                        />
-                  </div>
-                  <div class="form-group">
-                     <label for="signin-password">{% trans "Password" %}</label>
-                     <div class="password-field">
-                        <input
-                           type="password"
-                           id="signin-password"
-                           name="password"
-                           placeholder="{% trans 'Inserisci la tua password' %}"
-                           required
-                           />
-                        <button
-                           type="button"
-                           class="toggle-password"
-                           aria-label="{% trans 'Mostra password' %}"
-                           onclick="togglePassword('signin-password')"
-                           >
-                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                              <circle cx="12" cy="12" r="3" />
-                           </svg>
-                        </button>
-                     </div>
-                  </div>
-                  <button type="submit" class="submit-btn" id="modal-submit-btn">
-                     <span id="btn-text">{% trans "Accedi" %}</span>
-                     <span id="btn-spinner" style="display: none;">
-                        <svg class="spinner" width="20" height="20" viewBox="0 0 50 50">
-                           <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                        [name='availability'], [name='job_size'], [name='features']">
+                     <option value="relevance" {% if sort_by=="relevance" %}selected{% endif %}>{% trans "Più rilevanti"
+                        %}</option>
+                     <option value="rating" {% if sort_by=="rating" %}selected{% endif %}>{% trans "Più votati" %}
+                     </option>
+                     <option value="price_low" {% if sort_by=="price_low" %}selected{% endif %}>{% trans "Prezzo: dal
+                        più basso" %}</option>
+                     <option value="price_high" {% if sort_by=="price_high" %}selected{% endif %}>{% trans "Prezzo: dal
+                        più alto" %}</option>
+                     <option value="distance" {% if sort_by=="distance" %}selected{% endif %}>{% trans "Più vicini" %}
+                     </option>
+                  </select>
+               </div>
+            </header>
+            {% include 'partials/filtered_results.html' %}
+         </section>
+         {% endif %}
+      </div>
+   </section>
+   <dialog id="signin-dialog" class="signin-dialog">
+      <div class="dialog-container">
+         <button type="button" class="close-dialog" id="close-signin" aria-label="{% trans 'Chiudi' %}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+               <line x1="18" y1="6" x2="6" y2="18"></line>
+               <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+         </button>
+         <div class="signin-form-section">
+            <header class="form-header">
+               <h2>{% trans "Bentornato" %}</h2>
+               <p>{% trans "Accedi al tuo account" %}</p>
+            </header>
+            <form class="signin-form" method="POST" action="{% url 'signin' %}" id="modal-login-form">
+               {% csrf_token %}
+               <div id="modal-messages"></div>
+               <div class="form-group">
+                  <label for="signin-email">{% trans "Nome utente o email" %}</label>
+                  <input type="text" id="signin-email" name="username"
+                     placeholder="{% trans 'Inserisci il tuo nome utente o email' %}" required
+                     autocomplete="username" />
+               </div>
+               <div class="form-group">
+                  <label for="signin-password">{% trans "Password" %}</label>
+                  <div class="password-field">
+                     <input type="password" id="signin-password" name="password"
+                        placeholder="{% trans 'Inserisci la tua password' %}" required />
+                     <button type="button" class="toggle-password" aria-label="{% trans 'Mostra password' %}"
+                        onclick="togglePassword('signin-password')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                           stroke-width="2">
+                           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                           <circle cx="12" cy="12" r="3" />
                         </svg>
-                        {% trans "Accesso in corso..." %}
-                     </span>
-                  </button>
-               </form>
-               <footer class="form-footer">
-                  <p>
-                     {% trans "Non hai un account?" %}
-                     <a href="{% url 'register' %}">{% trans "Registrati" %}</a>
-                  </p>
-                  <p class="auth-footer-alt">
-                     {% trans "Vuoi offrire servizi?" %}
-                     <a href="{% url 'register_as_a_craftsman' %}">{% trans "Diventa professionista" %}</a>
-                  </p>
-               </footer>
-            </div>
+                     </button>
+                  </div>
+               </div>
+               <button type="submit" class="submit-btn" id="modal-submit-btn">
+                  <span id="btn-text">{% trans "Accedi" %}</span>
+                  <span id="btn-spinner" style="display: none;">
+                     <svg class="spinner" width="20" height="20" viewBox="0 0 50 50">
+                        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                     </svg>
+                     {% trans "Accesso in corso..." %}
+                  </span>
+               </button>
+            </form>
+            <footer class="form-footer">
+               <p>
+                  {% trans "Non hai un account?" %}
+                  <a href="{% url 'register' %}">{% trans "Registrati" %}</a>
+               </p>
+               <p class="auth-footer-alt">
+                  {% trans "Vuoi offrire servizi?" %}
+                  <a href="{% url 'register_as_a_craftsman' %}">{% trans "Diventa professionista" %}</a>
+               </p>
+            </footer>
          </div>
-      </dialog>
-      {% if show_alert %}
-      <div style="
+      </div>
+   </dialog>
+   {% if show_alert %}
+   <div style="
          background: #f8d7da;
          color: #721c24;
          padding: 10px;
@@ -767,19 +581,19 @@
          border: 1px solid #f5c6cb;
          text-align: center;
          ">
-         {{ show_alert }}
+      {{ show_alert }}
+   </div>
+   {% endif %}
+   <footer class="site-footer">
+      <div class="footer-container">
+         <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
       </div>
-      {% endif %}
-      <footer class="site-footer">
-         <div class="footer-container">
-            <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
-         </div>
-      </footer>
-      <script src="{% static 'assets/js/filter-constants.js' %}"></script>
-      <script src="{% static 'assets/js/main.js' %}"></script>
-      <script src="{% static 'assets/js/signup-modal.js' %}"></script>
-      <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-      <div id="ios-install-banner" style="
+   </footer>
+   <script src="{% static 'assets/js/filter-constants.js' %}"></script>
+   <script src="{% static 'assets/js/main.js' %}"></script>
+   <script src="{% static 'assets/js/signup-modal.js' %}"></script>
+   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+   <div id="ios-install-banner" style="
          position: fixed;
          bottom: 0;
          left: 0;
@@ -792,14 +606,14 @@
          display: none;
          border-top: 3px solid white;
          ">
-         <span>📱 {% trans "Installa l'app FidaMano" %} → </span>
-         <a href="#" style="
+      <span>📱 {% trans "Installa l'app FidaMano" %} → </span>
+      <a href="#" style="
             color: white;
             text-decoration: underline;
             font-weight: bold;
             margin-left: 10px;
             ">{% trans "Tocca qui per le istruzioni" %}</a>
-         <button onclick="document.getElementById('ios-install-banner').style.display='none'" style="
+      <button onclick="document.getElementById('ios-install-banner').style.display='none'" style="
             background: transparent;
             color: white;
             border: none;
@@ -809,30 +623,31 @@
             top: 10px;
             cursor: pointer;
             ">×</button>
-      </div>
-      <script>
-         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-             if (!('standalone' in window.navigator) || !window.navigator.standalone) {
-                 document.getElementById('ios-install-banner').style.display = 'block';
-             }
+   </div>
+   <script>
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+         if (!('standalone' in window.navigator) || !window.navigator.standalone) {
+            document.getElementById('ios-install-banner').style.display = 'block';
          }
-         
-         document.querySelector('#ios-install-banner a').addEventListener('click', (e) => {
-             e.preventDefault();
-             alert('{% trans "Per installare:" %}\n' +
-                     '1. {% trans "Tocca Condividi (📤)" %}\n' +
-                     '2. {% trans "Scorri verso il basso" %}\n' +
-                     '3. {% trans "Aggiungi alla Home" %}\n' +
-                     '4. {% trans "Conferma" %}');
-         });
-         
-         if ('serviceWorker' in navigator) {
-           window.addEventListener('load', () => { 
-             navigator.serviceWorker.register('/static/service-worker.js')
+      }
+
+      document.querySelector('#ios-install-banner a').addEventListener('click', (e) => {
+         e.preventDefault();
+         alert('{% trans "Per installare:" %}\n' +
+            '1. {% trans "Tocca Condividi (📤)" %}\n' +
+            '2. {% trans "Scorri verso il basso" %}\n' +
+            '3. {% trans "Aggiungi alla Home" %}\n' +
+            '4. {% trans "Conferma" %}');
+      });
+
+      if ('serviceWorker' in navigator) {
+         window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/static/service-worker.js')
                .then(() => console.log('Service Worker Registered'))
                .catch(err => console.log('Registration Failed:', err));
-           });
-         }
-      </script>
-   </body>
+         });
+      }
+   </script>
+</body>
+
 </html>
