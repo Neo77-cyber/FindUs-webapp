@@ -106,8 +106,7 @@
             <div class="profile-header-sidebar">
                <div class="profile-avatar-sidebar">
                   {% if craftsman.user_profile.user.first_name and craftsman.user_profile.user.last_name %}
-                  {{ craftsman.user_profile.user.first_name|first|upper }}{{
-                  craftsman.user_profile.user.last_name|first|upper }}
+                  {{ craftsman.user_profile.user.first_name|first|upper }}{{ craftsman.user_profile.user.last_name|first|upper }}
                   {% else %}
                   {{ craftsman.user_profile.user.username|slice:":2"|upper }}
                   {% endif %}
@@ -216,8 +215,7 @@
                      {% endif %}
                      <span
                         class="provider-card-status {% if service.service_status == 'Active' %}active{% else %}paused{% endif %}">
-                        {% if service.service_status == 'Active' %}{% trans "Attivo" %}{% else %}{% trans "In pausa"
-                        %}{% endif %}
+                        {% if service.service_status == 'Active' %}{% trans "Attivo" %}{% else %}{% trans "In pausa" %}{% endif %}
                      </span>
                      {% if service.is_boosted %}
                      <div class="provider-card-boost-badge" title="{% trans 'In evidenza' %}">

@@ -252,8 +252,7 @@
                      <span class="tag tag-blue">{{ service.get_category_display }}</span>
                      <span class="tag tag-green">{{ service.get_availability_display }}</span>
                      <span class="tag tag-cyan">{{ service.get_job_size_display }}</span>
-                     <span class="tag tag-yellow">{% if service.price_type == 'hourly' %}{% trans "Tariffa oraria" %}{%
-                        else %}{% trans "Prezzo fisso" %}{% endif %}</span>
+                     <span class="tag tag-yellow">{% if service.price_type == 'hourly' %}{% trans "Tariffa oraria" %}{% else %}{% trans "Prezzo fisso" %}{% endif %}</span>
                   </div>
                </div>
             </div>
@@ -557,8 +556,7 @@
             <!-- Reviews Section -->
             <section class="service-section section-reviews">
                <div class="section-header-row">
-                  <h2 class="section-title">{% blocktrans with count=reviews_count %}Recensioni dei clienti ({{ count
-                     }}){% endblocktrans %}</h2>
+                  <h2 class="section-title">{% blocktrans with count=reviews_count %}Recensioni dei clienti ({{ count }}){% endblocktrans %}</h2>
                   {% if request.user.is_authenticated %}
                   <button class="btn btn-primary btn-write-review"
                      onclick="document.getElementById('reviewModal').style.display='flex'">
@@ -705,8 +703,7 @@
                         </div>
                         <span class="rating-count">({{ reviews_count }} {% trans "recensioni" %})</span>
                      </div>
-                     <p class="member-since">{% blocktrans with date=craftsman.created_at|date:"M Y" %}Membro dal {{
-                        date }}{% endblocktrans %}</p>
+                     <p class="member-since">{% blocktrans with date=craftsman.created_at|date:"M Y" %}Membro dal {{ date }}{% endblocktrans %}</p>
                   </div>
                </div>
                <div class="provider-contact">

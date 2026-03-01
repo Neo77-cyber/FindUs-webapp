@@ -106,8 +106,7 @@
       <section class="hero">
          <div class="hero-container">
             <h1>{% trans "Cosa stai cercando?" %}</h1>
-            <p>{% trans "Che tu abbia bisogno di un idraulico o di un pittore, FidaMano ti aiuta a fare il lavoro nel
-               modo giusto." %}</p>
+            <p>{% trans "Che tu abbia bisogno di un idraulico o di un pittore, FidaMano ti aiuta a fare il lavoro nel modo giusto." %}</p>
             <div class="search-box">
                <form class="search-form" id="service-search" method="get" hx-get="." hx-trigger="submit"
                   hx-target=".search-results" hx-swap="innerHTML" hx-push-url="true">
@@ -264,8 +263,7 @@
                   <legend class="filter-group-title">{% trans "Disponibilità" %}</legend>
                   {% for value, label in AVAILABILITY_CHOICES %}
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="availability" value="{{ value }}" {% if value in availability
-                        %}checked{% endif %} hx-trigger="change" />
+                     <input type="checkbox" name="availability" value="{{ value }}" {% if value in availability %}checked{% endif %} hx-trigger="change" />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
                   </label>
@@ -275,8 +273,7 @@
                   <legend class="filter-group-title">{% trans "Dimensione lavoro" %}</legend>
                   {% for value, label in SERVICE_SCOPE_CHOICES %}
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="job_size" value="{{ value }}" {% if value in job_sizes %}checked{%
-                        endif %} hx-trigger="change" />
+                     <input type="checkbox" name="job_size" value="{{ value }}" {% if value in job_sizes %}checked{% endif %} hx-trigger="change" />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
                   </label>
@@ -285,26 +282,22 @@
                <fieldset class="filter-group">
                   <legend class="filter-group-title">{% trans "Caratteristiche" %}</legend>
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="features" value="verified" {% if "verified" in features %}checked{%
-                        endif %} hx-trigger="change" />
+                     <input type="checkbox" name="features" value="verified" {% if "verified" in features %}checked{% endif %} hx-trigger="change" />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Professionista verificato" %}</span>
                   </label>
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="features" value="licensed" {% if "licensed" in features %}checked{%
-                        endif %} hx-trigger="change" />
+                     <input type="checkbox" name="features" value="licensed" {% if "licensed" in features %}checked{% endif %} hx-trigger="change" />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Autorizzato" %}</span>
                   </label>
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="features" value="insured" {% if "insured" in features %}checked{%
-                        endif %} hx-trigger="change" />
+                     <input type="checkbox" name="features" value="insured" {% if "insured" in features %}checked{% endif %} hx-trigger="change" />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Assicurato" %}</span>
                   </label>
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="features" value="warranty" {% if "warranty" in features %}checked{%
-                        endif %} hx-trigger="change" />
+                     <input type="checkbox" name="features" value="warranty" {% if "warranty" in features %}checked{% endif %} hx-trigger="change" />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Offre garanzia" %}</span>
                   </label>
@@ -364,8 +357,7 @@
                      <span class="empty-badge">{% trans "Prossimamente" %}</span>
                      <h2 class="empty-title">{% trans "Nessun servizio nella tua zona" %}</h2>
                      <p class="empty-description">
-                        {% trans "Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a sapere
-                        quando FidaMano arriva nel tuo quartiere." %}
+                        {% trans "Ci stiamo espandendo! Iscriviti alla lista d'attesa per essere il primo a sapere quando FidaMano arriva nel tuo quartiere." %}
                      </p>
                   </div>
                </div>
@@ -444,8 +436,7 @@
                            <input type="checkbox" name="updates" id="waitlist-updates" checked />
                            <span class="checkbox-custom"></span>
                            <span class="checkbox-text">
-                              {% trans "Accetto di ricevere aggiornamenti sul lancio di FidaMano e offerte esclusive di
-                              accesso anticipato." %}
+                              {% trans "Accetto di ricevere aggiornamenti sul lancio di FidaMano e offerte esclusive di accesso anticipato." %}
                            </span>
                         </label>
                      </div>
@@ -478,13 +469,11 @@
             <header class="results-header">
                <div class="results-meta">
                   <h2 class="results-title">
-                     {% if filters_active %}{% trans "Professionisti vicino a te" %}{% else %}{% trans "Professionisti
-                     più votati" %}{% endif %}
+                     {% if filters_active %}{% trans "Professionisti vicino a te" %}{% else %}{% trans "Professionisti più votati" %}{% endif %}
                   </h2>
                   <p class="results-count">
                      {% trans "Mostrando" %} <strong>{{ results_count }}</strong>
-                     {% if filters_active %}{% blocktrans count counter=results_count %}risultato{% plural %}risultati{%
-                     endblocktrans %}{% else %}{% trans "professionisti" %}{% endif %}
+                     {% if filters_active %}{% blocktrans count counter=results_count %}risultato{% plural %}risultati{% endblocktrans %}{% else %}{% trans "professionisti" %}{% endif %}
                   </p>
                </div>
                <div class="results-sort">
@@ -493,14 +482,11 @@
                      hx-target=".search-results" hx-swap="innerHTML" hx-push-url="true" hx-include="[name='category'], [name='region'], [name='search'], 
                         [name='price_min'], [name='price_max'], [name='rating'],
                         [name='availability'], [name='job_size'], [name='features']">
-                     <option value="relevance" {% if sort_by == "relevance" %}selected{% endif %}>{% trans "Più rilevanti"
-                        %}</option>
+                     <option value="relevance" {% if sort_by == "relevance" %}selected{% endif %}>{% trans "Più rilevanti" %}</option>
                      <option value="rating" {% if sort_by == "rating" %}selected{% endif %}>{% trans "Più votati" %}
                      </option>
-                     <option value="price_low" {% if sort_by == "price_low" %}selected{% endif %}>{% trans "Prezzo: dal
-                        più basso" %}</option>
-                     <option value="price_high" {% if sort_by == "price_high" %}selected{% endif %}>{% trans "Prezzo: dal
-                        più alto" %}</option>
+                     <option value="price_low" {% if sort_by == "price_low" %}selected{% endif %}>{% trans "Prezzo: dal più basso" %}</option>
+                     <option value="price_high" {% if sort_by == "price_high" %}selected{% endif %}>{% trans "Prezzo: dal più alto" %}</option>
                      <option value="distance" {% if sort_by == "distance" %}selected{% endif %}>{% trans "Più vicini" %}
                      </option>
                   </select>
