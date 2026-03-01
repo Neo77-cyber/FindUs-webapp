@@ -2,496 +2,344 @@
 {% load i18n %}
 <!doctype html>
 <html lang="it">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta
-         name="description"
-         content="{% trans 'La tua dashboard FidaMano - Trova e gestisci professionisti fidati' %}"
-         />
-      <title>{% trans "Dashboard" %} | FidaMano</title>
-      <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/dashboard-results.css' %}" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
-      <link 
-         rel="icon" 
-         href="{% static 'assets/icons/find-su-logo.png' %}" 
-         type="image/png"
-         >
-      <link
-         href="{% static 'assets/icons/find-su-logo.png' %}"
-         rel="apple-touch-icon"
-         />
-      <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-   </head>
-   <body>
-      <div class="language-switcher-fixed">
-         <form action="{% url 'set_language' %}" method="post" id="language-form">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.path }}">
-            <button type="button" class="language-button" id="language-button" aria-expanded="false">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_language_info for LANGUAGE_CODE as current_lang %}
-               <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
-               <span class="language-label">{{ current_lang.name_local }}</span>
-               <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-               </svg>
-            </button>
-            <div class="language-dropdown" id="language-dropdown">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_available_languages as LANGUAGES %}
-               {% get_language_info_list for LANGUAGES as languages %}
-               {% for language in languages %}
-               <button type="submit" 
-                  name="language" 
-                  value="{{ language.code }}"
-                  class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
-                  data-value="{{ language.code }}">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta name="description"
+      content="{% trans 'La tua dashboard FidaMano - Trova e gestisci professionisti fidati' %}" />
+   <title>{% trans "Dashboard" %} | FidaMano</title>
+   <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/dashboard-results.css' %}" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+   <link rel="icon" href="{% static 'assets/icons/find-su-logo.png' %}" type="image/png">
+   <link href="{% static 'assets/icons/find-su-logo.png' %}" rel="apple-touch-icon" />
+   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+
+<body>
+   <div class="language-switcher-fixed">
+      <form action="{% url 'set_language' %}" method="post" id="language-form">
+         {% csrf_token %}
+         <input name="next" type="hidden" value="{{ request.path }}">
+         <button type="button" class="language-button" id="language-button" aria-expanded="false">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_language_info for LANGUAGE_CODE as current_lang %}
+            <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
+            <span class="language-label">{{ current_lang.name_local }}</span>
+            <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2">
+               <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+         </button>
+         <div class="language-dropdown" id="language-dropdown">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+            <button type="submit" name="language" value="{{ language.code }}"
+               class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+               data-value="{{ language.code }}">
                <span class="fi fi-{% if language.code == 'it' %}it{% else %}gb{% endif %}"></span>
                {{ language.name_local }}
+            </button>
+            {% endfor %}
+         </div>
+      </form>
+   </div>
+
+
+   <header class="dashboard-header">
+
+      <div class="dashboard-header-content">
+
+         <a href="{% url 'customer_dashboard' %}" class="logo desktop-logo" aria-label="FidaMano Home">
+            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano"
+               style="height: 40px; margin-right:-12px;">
+            <span class="logo-text">FidaMano</span>
+         </a>
+         <div class="dashboard-search">
+            <svg class="dashboard-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2">
+               <circle cx="11" cy="11" r="8"></circle>
+               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="search" class="dashboard-search-input" placeholder="{% trans 'Cerca servizi...' %}"
+               aria-label="{% trans 'Cerca servizi' %}" />
+         </div>
+         <nav class="dashboard-nav">
+            <a href="{% url 'saved_services' %}" class="nav-icon-link" data-tooltip="{% trans 'Salvati' %}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+            </a>
+            <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="nav-icon-link"
+               data-tooltip="{% trans 'I miei messaggi' %}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+               </svg>
+               <span class="notification-badge"></span>
+            </a>
+            <a href="{% url 'customer_profile' %}" class="nav-icon-link" data-tooltip="{% trans 'Profilo' %}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+               </svg>
+            </a>
+            <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+               {% csrf_token %}
+               <button type="submit" class="nav-icon-link" data-tooltip="{% trans 'I miei annunci' %}"
+                  style="background: none; border: none; cursor: pointer;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                     <polyline points="16 17 21 12 16 7"></polyline>
+                     <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
                </button>
-               {% endfor %}
-            </div>
+            </form>
+         </nav>
+         <a href="#" class="dashboard-cta"
+            onclick="event.preventDefault(); document.getElementById('logout-to-craftsman-form').submit();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+               <polyline points="16 17 21 12 16 7"></polyline>
+               <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>{% trans "Diventa professionista" %}</span>
+         </a>
+         <form id="logout-to-craftsman-form" method="POST" action="{% url 'logout' %}" style="display: none;">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'register_as_a_craftsman' %}">
          </form>
       </div>
-      
-      
-      <header class="dashboard-header">
-         
-         <div class="dashboard-header-content">
-            
-            <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FidaMano Home">
-            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="height: 40px; margin-right:-12px;">
-            <span class="logo-text">FidaMano</span>
-            </a>
-            <div class="dashboard-search">
-               <svg
-                  class="dashboard-search-icon"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  >
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-               </svg>
-               <input
-                  type="search"
-                  class="dashboard-search-input"
-                  placeholder="{% trans 'Cerca servizi...' %}"
-                  aria-label="{% trans 'Cerca servizi' %}"
-                  />
-            </div>
-            <nav class="dashboard-nav">
-               <a
-                  href="{% url 'saved_services' %}"
-                  class="nav-icon-link"
-                  data-tooltip="{% trans 'Salvati' %}"
-                  >
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path
-                        d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
-                        ></path>
-                  </svg>
-               </a>
-               <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="nav-icon-link" data-tooltip="{% trans 'I miei messaggi' %}">
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path
-                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                        ></path>
-                  </svg>
-                  <span class="notification-badge"></span>
-               </a>
-               <a
-                  href="{% url 'customer_profile' %}"
-                  class="nav-icon-link"
-                  data-tooltip="{% trans 'Profilo' %}"
-                  >
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                     <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-               </a>
-               <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-                  {% csrf_token %}
-                  <button type="submit" class="nav-icon-link" data-tooltip="{% trans 'I miei annunci' %}" style="background: none; border: none; cursor: pointer;">
-                     <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        >
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                     </svg>
-                  </button>
-               </form>
-            </nav>
-            <a href="#" class="dashboard-cta" onclick="event.preventDefault(); document.getElementById('logout-to-craftsman-form').submit();">
-               <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  >
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-               </svg>
-               <span>{% trans "Diventa professionista" %}</span>
-            </a>
-            <form id="logout-to-craftsman-form" method="POST" action="{% url 'logout' %}" style="display: none;">
-               {% csrf_token %}
-               <input type="hidden" name="next" value="{% url 'register_as_a_craftsman' %}">
-            </form>
-         </div>
-        
-      
-      </header>
-      <main class="dashboard-main">
-         <div class="search-layout">
-            <!-- Sidebar Filters -->
-            <aside class="search-sidebar" id="search-sidebar">
-               <form 
-                  class="filter-form" 
-                  method="GET" 
-                  action="."
-                  hx-get="."
-                  hx-target="#dashboard-results"
-                  hx-swap="innerHTML"
-                  hx-push-url="true"
-                  hx-trigger="change"
-                  hx-indicator="#loading-indicator"
-                  >
-                  <header class="sidebar-header">
-                     <div class="sidebar-header-left">
-                        <button type="button" class="btn-close-filters" id="btn-close-filters">
-                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <line x1="18" y1="6" x2="6" y2="18"></line>
-                              <line x1="6" y1="6" x2="18" y2="18"></line>
-                           </svg>
-                        </button>
-                        <h2 class="sidebar-title">{% trans "Filtri" %}</h2>
-                     </div>
-                     <div class="sidebar-actions">
-                        <button 
-                           type="button"
-                           class="btn-clear-filters"
-                           onclick="window.location.href='{% url 'customer_dashboard' %}';"
-                           >
+
+
+   </header>
+   <main class="dashboard-main">
+      <div class="search-layout">
+         <!-- Sidebar Filters -->
+         <aside class="search-sidebar" id="search-sidebar">
+            <form class="filter-form" method="GET" action="." hx-get="." hx-target="#dashboard-results"
+               hx-swap="innerHTML" hx-push-url="true" hx-trigger="change" hx-indicator="#loading-indicator">
+               <header class="sidebar-header">
+                  <div class="sidebar-header-left">
+                     <button type="button" class="btn-close-filters" id="btn-close-filters">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                           stroke-width="2">
+                           <line x1="18" y1="6" x2="6" y2="18"></line>
+                           <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                     </button>
+                     <h2 class="sidebar-title">{% trans "Filtri" %}</h2>
+                  </div>
+                  <div class="sidebar-actions">
+                     <button type="button" class="btn-clear-filters"
+                        onclick="window.location.href='{% url 'customer_dashboard' %}';">
                         {% trans "Cancella tutto" %}
-                        </button>
-                     </div>
-                  </header>
-                  <!-- Region Filter -->
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Regione" %}</legend>
-                     {% for value, label in REGION_CHOICES %}
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="region" 
-                     value="{{ value }}" 
-                     {% if value == selected_region %}checked{% endif %}
-                     />
+                     </button>
+                  </div>
+               </header>
+               <!-- Region Filter -->
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Regione" %}</legend>
+                  {% for value, label in REGION_CHOICES %}
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="region" value="{{ value }}" {% if value==selected_region %}checked{%
+                        endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
-                     </label>
-                     {% endfor %}
-                  </fieldset>
-                  <!-- Service Category -->
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Categoria servizio" %}</legend>
-                     {% for value, label in CATEGORY_CHOICES %}
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="category" 
-                     value="{{ value }}" 
-                     {% if value == selected_category %}checked{% endif %}
-                     />
+                  </label>
+                  {% endfor %}
+               </fieldset>
+               <!-- Service Category -->
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Categoria servizio" %}</legend>
+                  {% for value, label in CATEGORY_CHOICES %}
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="category" value="{{ value }}" {% if value==selected_category
+                        %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
-                     </label>
-                     {% endfor %}
-                  </fieldset>
-                  <!-- Price Range -->
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Fascia di prezzo" %}</legend>
-                     <div class="filter-range-inputs">
-                        <input
-                           type="number"
-                           name="price_min"
-                           class="filter-input filter-input-sm"
-                           placeholder="{% trans 'Min' %}"
-                           min="0"
-                           value="{{ price_min }}"
-                           />
-                        <span class="filter-range-sep">{% trans "a" %}</span>
-                        <input
-                           type="number"
-                           name="price_max"
-                           class="filter-input filter-input-sm"
-                           placeholder="{% trans 'Max' %}"
-                           min="0"
-                           value="{{ price_max }}"
-                           />
-                     </div>
-                  </fieldset>
-                  <!-- Rating -->
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Valutazione" %}</legend>
-                     <label class="filter-radio">
-                     <input 
-                     type="radio" 
-                     name="rating" 
-                     value="5" 
-                     {% if rating == "5" %}checked{% endif %}
-                     />
+                  </label>
+                  {% endfor %}
+               </fieldset>
+               <!-- Price Range -->
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Fascia di prezzo" %}</legend>
+                  <div class="filter-range-inputs">
+                     <input type="number" name="price_min" class="filter-input filter-input-sm"
+                        placeholder="{% trans 'Min' %}" min="0" value="{{ price_min }}" />
+                     <span class="filter-range-sep">{% trans "a" %}</span>
+                     <input type="number" name="price_max" class="filter-input filter-input-sm"
+                        placeholder="{% trans 'Max' %}" min="0" value="{{ price_max }}" />
+                  </div>
+               </fieldset>
+               <!-- Rating -->
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Valutazione" %}</legend>
+                  <label class="filter-radio">
+                     <input type="radio" name="rating" value="5" {% if rating=="5" %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★★ {% trans "5 stelle" %}</span>
-                     </label>
-                     <label class="filter-radio">
-                     <input 
-                     type="radio" 
-                     name="rating" 
-                     value="4" 
-                     {% if rating == "4" %}checked{% endif %}
-                     />
+                  </label>
+                  <label class="filter-radio">
+                     <input type="radio" name="rating" value="4" {% if rating=="4" %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★☆ {% trans "4+ stelle" %}</span>
-                     </label>
-                     <label class="filter-radio">
-                     <input 
-                     type="radio" 
-                     name="rating" 
-                     value="3" 
-                     {% if rating == "3" %}checked{% endif %}
-                     />
+                  </label>
+                  <label class="filter-radio">
+                     <input type="radio" name="rating" value="3" {% if rating=="3" %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★☆☆ {% trans "3+ stelle" %}</span>
-                     </label>
-                     <label class="filter-radio">
-                     <input 
-                     type="radio" 
-                     name="rating" 
-                     value="" 
-                     {% if not rating %}checked{% endif %}
-                     />
+                  </label>
+                  <label class="filter-radio">
+                     <input type="radio" name="rating" value="" {% if not rating %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">{% trans "Qualsiasi valutazione" %}</span>
-                     </label>
-                  </fieldset>
-                  <!-- Availability -->
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Disponibilità" %}</legend>
-                     {% for value, label in AVAILABILITY_CHOICES %}
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="availability" 
-                     value="{{ value }}" 
-                     {% if value in availability %}checked{% endif %}
-                     />
+                  </label>
+               </fieldset>
+               <!-- Availability -->
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Disponibilità" %}</legend>
+                  {% for value, label in AVAILABILITY_CHOICES %}
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="availability" value="{{ value }}" {% if value in availability
+                        %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
-                     </label>
-                     {% endfor %}
-                  </fieldset>
-                  <!-- Job Size -->
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Dimensione lavoro" %}</legend>
-                     {% for value, label in SERVICE_SCOPE_CHOICES %}
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="job_size" 
-                     value="{{ value }}" 
-                     {% if value in job_sizes %}checked{% endif %}
-                     />
+                  </label>
+                  {% endfor %}
+               </fieldset>
+               <!-- Job Size -->
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Dimensione lavoro" %}</legend>
+                  {% for value, label in SERVICE_SCOPE_CHOICES %}
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="job_size" value="{{ value }}" {% if value in job_sizes %}checked{%
+                        endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
-                     </label>
-                     {% endfor %}
-                  </fieldset>
-                  <!-- Features -->
-                  <fieldset class="filter-group">
-                     <legend class="filter-group-title">{% trans "Caratteristiche" %}</legend>
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="features" 
-                     value="verified" 
-                     {% if "verified" in features %}checked{% endif %}
-                     />
+                  </label>
+                  {% endfor %}
+               </fieldset>
+               <!-- Features -->
+               <fieldset class="filter-group">
+                  <legend class="filter-group-title">{% trans "Caratteristiche" %}</legend>
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="features" value="verified" {% if "verified" in features %}checked{%
+                        endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Professionista verificato" %}</span>
-                     </label>
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="features" 
-                     value="licensed" 
-                     {% if "licensed" in features %}checked{% endif %}
-                     />
+                  </label>
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="features" value="licensed" {% if "licensed" in features %}checked{%
+                        endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Autorizzato" %}</span>
-                     </label>
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="features" 
-                     value="insured" 
-                     {% if "insured" in features %}checked{% endif %}
-                     />
+                  </label>
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="features" value="insured" {% if "insured" in features %}checked{%
+                        endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Assicurato" %}</span>
-                     </label>
-                     <label class="filter-checkbox">
-                     <input 
-                     type="checkbox" 
-                     name="features" 
-                     value="warranty" 
-                     {% if "warranty" in features %}checked{% endif %}
-                     />
+                  </label>
+                  <label class="filter-checkbox">
+                     <input type="checkbox" name="features" value="warranty" {% if "warranty" in features %}checked{%
+                        endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Offre garanzia" %}</span>
-                     </label>
-                  </fieldset>
-                  <!-- Loading indicator -->
-                  <div id="loading-indicator" class="htmx-indicator" style="display: none;">
-                     <div style="text-align: center; padding: 1rem;">
-                        {% trans "Caricamento..." %}
-                     </div>
+                  </label>
+               </fieldset>
+               <!-- Loading indicator -->
+               <div id="loading-indicator" class="htmx-indicator" style="display: none;">
+                  <div style="text-align: center; padding: 1rem;">
+                     {% trans "Caricamento..." %}
                   </div>
-               </form>
-               <div class="sidebar-footer-mobile">
-                  <button type="button" class="btn-cancel-mobile" id="btn-cancel-filters">
-                  {% trans "Annulla" %}
-                  </button>
                </div>
-            </aside>
-            <!-- Mobile Filter Button -->
-            <button
-               type="button"
-               class="btn-mobile-filters"
-               id="btn-mobile-filters"
-               aria-controls="search-sidebar"
-               >
-               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="4" y1="21" x2="4" y2="14"></line>
-                  <line x1="4" y1="10" x2="4" y2="3"></line>
-                  <line x1="12" y1="21" x2="12" y2="12"></line>
-                  <line x1="12" y1="8" x2="12" y2="3"></line>
-                  <line x1="20" y1="21" x2="20" y2="16"></line>
-                  <line x1="20" y1="12" x2="20" y2="3"></line>
-                  <line x1="1" y1="14" x2="7" y2="14"></line>
-                  <line x1="9" y1="8" x2="15" y2="8"></line>
-                  <line x1="17" y1="16" x2="23" y2="16"></line>
-               </svg>
-               {% trans "Filtri" %}
-            </button>
-            {% include 'partials/mobile_inline_filters.html' %}
-             
-            <div id="dashboard-results">
-               {% include 'partials/dashboard_results.html' %}
+            </form>
+            <div class="sidebar-footer-mobile">
+               <button type="button" class="btn-cancel-mobile" id="btn-cancel-filters">
+                  {% trans "Annulla" %}
+               </button>
             </div>
-            
+         </aside>
+         <!-- Mobile Filter Button -->
+         <button type="button" class="btn-mobile-filters" id="btn-mobile-filters" aria-controls="search-sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <line x1="4" y1="21" x2="4" y2="14"></line>
+               <line x1="4" y1="10" x2="4" y2="3"></line>
+               <line x1="12" y1="21" x2="12" y2="12"></line>
+               <line x1="12" y1="8" x2="12" y2="3"></line>
+               <line x1="20" y1="21" x2="20" y2="16"></line>
+               <line x1="20" y1="12" x2="20" y2="3"></line>
+               <line x1="1" y1="14" x2="7" y2="14"></line>
+               <line x1="9" y1="8" x2="15" y2="8"></line>
+               <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+            {% trans "Filtri" %}
+         </button>
+         {% include 'partials/mobile_inline_filters.html' %}
+
+         <div id="dashboard-results">
+            {% include 'partials/dashboard_results.html' %}
          </div>
-         </div>
-      </main>
-      <nav class="mobile-bottom-nav">
-         <a href="{% url 'customer_dashboard' %}" class="bottom-nav-item active">
-            <svg
-               viewBox="0 0 24 24"
-               fill="currentColor"
-               stroke="currentColor"
-               stroke-width="2"
-               >
-               <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-               <polyline points="2 17 12 22 22 17"></polyline>
-               <polyline points="2 12 12 17 22 12"></polyline>
+
+      </div>
+      </div>
+   </main>
+   <nav class="mobile-bottom-nav">
+      <a href="{% url 'customer_dashboard' %}" class="bottom-nav-item active">
+         <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+         </svg>
+         <span>{% trans "Dashboard" %}</span>
+      </a>
+      <a href="{% url 'saved_services' %}" class="bottom-nav-item">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+         </svg>
+         <span>{% trans "Salvati" %}</span>
+      </a>
+      <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="bottom-nav-item">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+         </svg>
+         <span>{% trans "Messaggi" %}</span>
+         <span class="bottom-nav-badge"></span>
+      </a>
+      <a href="{% url 'customer_profile' %}" class="bottom-nav-item">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+         </svg>
+         <span>{% trans "Profilo" %}</span>
+      </a>
+      <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+         {% csrf_token %}
+         <button type="submit" class="bottom-nav-item"
+            style="background: none; border: none; cursor: pointer; width: 100%;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+               <polyline points="16 17 21 12 16 7"></polyline>
+               <line x1="21" y1="12" x2="9" y2="12"></line>
             </svg>
-            <span>{% trans "Dashboard" %}</span>
-         </a>
-         <a href="{% url 'saved_services' %}" class="bottom-nav-item">
-            <svg
-               viewBox="0 0 24 24"
-               fill="none"
-               stroke="currentColor"
-               stroke-width="2"
-               >
-               <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <span>{% trans "Salvati" %}</span>
-         </a>
-         <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="bottom-nav-item">
-            <svg
-               viewBox="0 0 24 24"
-               fill="none"
-               stroke="currentColor"
-               stroke-width="2"
-               >
-               <path
-                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                  ></path>
-            </svg>
-            <span>{% trans "Messaggi" %}</span>
-            <span class="bottom-nav-badge"></span>
-         </a>
-         <a href="{% url 'customer_profile' %}" class="bottom-nav-item">
-            <svg
-               viewBox="0 0 24 24"
-               fill="none"
-               stroke="currentColor"
-               stroke-width="2"
-               >
-               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-               <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span>{% trans "Profilo" %}</span>
-         </a>
-         <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="bottom-nav-item" style="background: none; border: none; cursor: pointer; width: 100%;">
-               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-               </svg>
-               <span>{% trans "Esci" %}</span>
-            </button>
-         </form>
-      </nav>
-      <footer class="site-footer">
-         <div class="footer-container">
-            <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
-         </div>
-      </footer>
-      <script src="{% static 'assets/js/filter-constants.js' %}"></script>
-      <script src="{% static 'assets/js/main.js' %}"></script>
-      
-   </body>
+            <span>{% trans "Esci" %}</span>
+         </button>
+      </form>
+   </nav>
+   <footer class="site-footer">
+      <div class="footer-container">
+         <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
+      </div>
+   </footer>
+   <script src="{% static 'assets/js/filter-constants.js' %}"></script>
+   <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
 </html>
