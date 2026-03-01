@@ -1,6 +1,6 @@
 {
-  "name": "FindUs",
-  "short_name": "FindUs",
+  "name": "FidaMano",
+  "short_name": "FidaMano",
   "description": "Find local craftsmen and service providers",
   "start_url": "/",
   "display": "standalone",
