@@ -198,15 +198,15 @@ def signin(request):
         return redirect("customer_dashboard")
 
     if request.method == "POST":
-        username = request.POST.get("username", "").strip().lower()
+        username_input = request.POST.get("username", "").strip()
         password = request.POST.get("password", "").strip()
         
-        if not username or not password:
+        if not username_input or not password:
             messages.error(request, "Please provide both username and password.")
-            return render(request, "signin.html", {"username_value": username})
+            return render(request, "signin.html", {"username_value": username_input})
 
-        # Try cache first (optimization)
-        cache_key = f"user_auth_{username}"
+        # Try cache first (optimization - using lowercase for key is fine for cache)
+        cache_key = f"user_auth_{username_input.lower()}"
         cached_user_id = cache.get(cache_key)
         
         user = None
@@ -220,20 +220,25 @@ def signin(request):
             except User.DoesNotExist:
                 cache.delete(cache_key)
         
-        # If not in cache, authenticate
+        # If not in cache, try multi-stage authentication
         if not user:
-            user = authenticate(request, username=username, password=password)
+            # 1. Try exact match (most efficient if correct case provided)
+            user = authenticate(request, username=username_input, password=password)
             
-            # Try email lookup if username fails
+            # 2. Try case-insensitive username lookup
             if not user:
                 try:
-                    user_by_email = User.objects.get(email__iexact=username)
-                    user = authenticate(
-                        request, 
-                        username=user_by_email.username, 
-                        password=password
-                    )
-                except User.DoesNotExist:
+                    user_record = User.objects.get(username__iexact=username_input)
+                    user = authenticate(request, username=user_record.username, password=password)
+                except (User.DoesNotExist, User.MultipleObjectsReturned):
+                    pass
+            
+            # 3. Try case-insensitive email lookup
+            if not user:
+                try:
+                    user_record = User.objects.get(email__iexact=username_input)
+                    user = authenticate(request, username=user_record.username, password=password)
+                except (User.DoesNotExist, User.MultipleObjectsReturned):
                     pass
             
             # Cache successful login
@@ -259,9 +264,9 @@ def signin(request):
             return redirect("customer_dashboard")
         
         # Failed login
-        logger.warning(f"Failed login attempt for username: {username}")
+        logger.warning(f"Failed login attempt for username: {username_input}")
         messages.error(request, "Invalid username or password.")
-        return render(request, "signin.html", {"username_value": username})
+        return render(request, "signin.html", {"username_value": username_input})
 
     return render(request, "signin.html", {"username_value": ""})
 
@@ -324,7 +329,6 @@ def change_password(request):
 
 
 @login_required
-@require_http_methods(["GET" "POST"])
 def user_logout(request):
     """User logout"""
     

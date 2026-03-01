@@ -2,320 +2,335 @@
 {% load i18n %}
 <!doctype html>
 <html lang="it">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="description" content="{% trans 'Gestisci il tuo profilo FidaMano e le impostazioni dell\'account' %}" />
-      <title>{% trans "Profilo" %} | FidaMano</title>
-      <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/profile.css' %}" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
-      <link 
-         rel="icon" 
-         href="{% static 'assets/icons/find-su-logo.png' %}" 
-         type="image/png"
-         >
-      <link
-         href="{% static 'assets/icons/find-su-logo.png' %}"
-         rel="apple-touch-icon"
-         />
-   </head>
-   <body>
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta name="description" content="{% trans 'Gestisci il tuo profilo FidaMano e le impostazioni dell\'account' %}" />
+   <title>{% trans "Profilo" %} | FidaMano</title>
+   <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/profile.css' %}" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+   <link rel="icon" href="{% static 'assets/icons/find-su-logo.png' %}" type="image/png">
+   <link href="{% static 'assets/icons/find-su-logo.png' %}" rel="apple-touch-icon" />
+</head>
+
+<body>
    <div class="language-switcher-fixed">
-         <form action="{% url 'set_language' %}" method="post" id="language-form">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.path }}">
-            <button type="button" class="language-button" id="language-button" aria-expanded="false">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_language_info for LANGUAGE_CODE as current_lang %}
-               <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
-               <span class="language-label">{{ current_lang.name_local }}</span>
-               <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-               </svg>
-            </button>
-            <div class="language-dropdown" id="language-dropdown">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_available_languages as LANGUAGES %}
-               {% get_language_info_list for LANGUAGES as languages %}
-               {% for language in languages %}
-               <button type="submit" 
-                  name="language" 
-                  value="{{ language.code }}"
-                  class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
-                  data-value="{{ language.code }}">
+      <form action="{% url 'set_language' %}" method="post" id="language-form">
+         {% csrf_token %}
+         <input name="next" type="hidden" value="{{ request.path }}">
+         <button type="button" class="language-button" id="language-button" aria-expanded="false">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_language_info for LANGUAGE_CODE as current_lang %}
+            <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
+            <span class="language-label">{{ current_lang.name_local }}</span>
+            <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2">
+               <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+         </button>
+         <div class="language-dropdown" id="language-dropdown">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+            <button type="submit" name="language" value="{{ language.code }}"
+               class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+               data-value="{{ language.code }}">
                <span class="fi fi-{% if language.code == 'it' %}it{% else %}gb{% endif %}"></span>
                {{ language.name_local }}
-               </button>
-               {% endfor %}
-            </div>
-         </form>
-      </div>
-      <header class="dashboard-header">
-         <div class="dashboard-header-content">
-            <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FidaMano Home">
-            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="height: 40px; margin-right:-12px;">
-            <span class="logo-text">FidaMano</span>
-            </a>
-            
-            <nav class="dashboard-nav">
-               <a href="{% url 'saved_services' %}" class="nav-icon-link" data-tooltip="{% trans 'Salvati' %}">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                  </svg>
-               </a>
-               <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="nav-icon-link" data-tooltip="{% trans 'I miei messaggi' %}">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                  </svg>
-                  <span class="notification-badge"></span>
-               </a>
-               <a href="{% url 'customer_profile' %}" class="nav-icon-link active" data-tooltip="{% trans 'Profilo' %}">
-                  <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                     <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-               </a>
-               <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-                  {% csrf_token %}
-                  <button type="submit" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}" style="background: none; border: none; cursor: pointer;">
-                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                     </svg>
-                  </button>
-               </form>
-            </nav>
-            <a href="#" class="dashboard-cta" onclick="event.preventDefault(); document.getElementById('logout-to-craftsman-form').submit();">
-               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-               </svg>
-               <span>{% trans "Diventa professionista" %}</span>
-            </a>
+            </button>
+            {% endfor %}
          </div>
-      </header>
-      
-      <form id="logout-to-craftsman-form" method="POST" action="{% url 'logout' %}" style="display: none;">
-         {% csrf_token %}
-         <input type="hidden" name="next" value="{% url 'register_as_a_craftsman' %}">
       </form>
-      
-      <main class="dashboard-main">
-         <div class="profile-layout">
-            <aside class="profile-sidebar">
-               <div class="profile-sidebar-card">
-                  <div class="profile-user-info">
-                     <div class="profile-avatar-wrapper">
-                        <div class="profile-avatar-initials">
-                           {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
-                        </div>
+   </div>
+   <header class="dashboard-header">
+      <div class="dashboard-header-content">
+         <a href="{% url 'customer_dashboard' %}" class="logo desktop-logo" aria-label="FidaMano Home">
+            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano"
+               style="height: 40px; margin-right:-12px;">
+            <span class="logo-text">FidaMano</span>
+         </a>
+
+         <nav class="dashboard-nav">
+            <a href="{% url 'saved_services' %}" class="nav-icon-link" data-tooltip="{% trans 'Salvati' %}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+            </a>
+            <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="nav-icon-link"
+               data-tooltip="{% trans 'I miei messaggi' %}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+               </svg>
+               <span class="notification-badge"></span>
+            </a>
+            <a href="{% url 'customer_profile' %}" class="nav-icon-link active" data-tooltip="{% trans 'Profilo' %}">
+               <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+               </svg>
+            </a>
+            <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+               {% csrf_token %}
+               <button type="submit" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}"
+                  style="background: none; border: none; cursor: pointer;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                     <polyline points="16 17 21 12 16 7"></polyline>
+                     <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+               </button>
+            </form>
+         </nav>
+         <a href="#" class="dashboard-cta"
+            onclick="event.preventDefault(); document.getElementById('logout-to-craftsman-form').submit();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+               <polyline points="16 17 21 12 16 7"></polyline>
+               <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>{% trans "Diventa professionista" %}</span>
+         </a>
+      </div>
+   </header>
+
+   <form id="logout-to-craftsman-form" method="POST" action="{% url 'logout' %}" style="display: none;">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{% url 'register_as_a_craftsman' %}">
+   </form>
+
+   <main class="dashboard-main">
+      <div class="profile-layout">
+         <aside class="profile-sidebar">
+            <div class="profile-sidebar-card">
+               <div class="profile-user-info">
+                  <div class="profile-avatar-wrapper">
+                     <div class="profile-avatar-initials">
+                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
                      </div>
-                     <h2 class="profile-name">{{ user.get_full_name|default:user.username }}</h2>
-                     <p class="profile-email">{{ user.email }}</p>
                   </div>
-                  <nav class="profile-menu">
-                     <a href="#" class="profile-menu-item active">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                           <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        <span>{% trans "Info account" %}</span>
-                     </a>
-                  </nav>
-                  <div class="profile-quick-actions">
-                     <h3 class="quick-actions-title">{% trans "Azioni rapide" %}</h3>
-                     <div class="quick-actions-grid">
-                        <button type="button" class="btn-quick-action" onclick="window.location.href='{% url 'saved_services' %}'">
-                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                           </svg>
-                           {% trans "Servizi salvati" %}
-                        </button>
-                        <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-                           {% csrf_token %}
-                           <button type="submit" class="btn-quick-action danger" style="background: none; border: none; cursor: pointer;">
-                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                 <polyline points="16 17 21 12 16 7"></polyline>
-                                 <line x1="21" y1="12" x2="9" y2="12"></line>
-                              </svg>
-                              {% trans "Esci" %}
-                           </button>
-                        </form>
-                     </div>
-                  </div>
+                  <h2 class="profile-name">{{ user.get_full_name|default:user.username }}</h2>
+                  <p class="profile-email">{{ user.email }}</p>
                </div>
-            </aside>
-            <section class="profile-content-area">
-               <header class="profile-content-header">
-                  <div>
-                     <h1 class="profile-content-title">{% trans "Informazioni account" %}</h1>
-                     <p class="profile-content-subtitle">{% trans "Gestisci i tuoi dati personali" %}</p>
-                  </div>
-               </header>
-               
-               {% if messages %}
-               <div class="messages">
-                  {% for message in messages %}
-                  <div class="alert alert-{{ message.tags }}">
-                     {{ message }}
-                  </div>
-                  {% endfor %}
-               </div>
-               {% endif %}
-               
-               <form method="POST" id="profile-form" class="profile-form">
-                  {% csrf_token %}
-                  
-                  <div class="form-row">
-                     <div class="form-group">
-                        <label for="profile-firstname">{% trans "Nome" %}</label>
-                        <input type="text" id="profile-firstname" name="first_name" value="{{ user.first_name }}" class="profile-input" />
-                     </div>
-                     <div class="form-group">
-                        <label for="profile-lastname">{% trans "Cognome" %}</label>
-                        <input type="text" id="profile-lastname" name="last_name" value="{{ user.last_name }}" class="profile-input" />
-                     </div>
-                  </div>
-                  
-                  <div class="form-row">
-                     <div class="form-group">
-                        <label for="profile-email">{% trans "Indirizzo email" %}</label>
-                        <input type="email" id="profile-email" name="email" value="{{ user.email }}" class="profile-input" readonly />
-                        <small class="form-text text-muted">{% trans "L'email non può essere modificata" %}</small>
-                     </div>
-                     <div class="form-group">
-                        <label for="profile-phone">{% trans "Numero di telefono" %}</label>
-                        <input type="tel" id="profile-phone" name="phone" value="{{ profile.phone|default:'' }}" class="profile-input" />
-                     </div>
-                  </div>
-                  
-                  <div class="profile-form-actions">
-                     <button type="submit" class="btn-primary" id="save-profile">{% trans "Salva modifiche" %}</button>
-                  </div>
-               </form>
-               
-               <div class="profile-section-divider"></div>
-               
-               <div class="security-preview">
-                  <div class="security-header">
-                     <h3>{% trans "Sicurezza" %}</h3>
-                     <button type="button" class="btn-link" onclick="showPasswordModal()">{% trans "Gestisci sicurezza" %}</button>
-                  </div>
-                  <div class="security-item">
-                     <div class="security-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                           <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                           <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+               <nav class="profile-menu">
+                  <a href="#" class="profile-menu-item active">
+                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                     </svg>
+                     <span>{% trans "Info account" %}</span>
+                  </a>
+               </nav>
+               <div class="profile-quick-actions">
+                  <h3 class="quick-actions-title">{% trans "Azioni rapide" %}</h3>
+                  <div class="quick-actions-grid">
+                     <button type="button" class="btn-quick-action"
+                        onclick="window.location.href='{% url 'saved_services' %}';">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                           stroke-width="2">
+                           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                         </svg>
-                     </div>
-                     <div class="security-info">
-                        <span class="security-label">{% trans "Password" %}</span>
-                        <span class="security-value">{% trans "Ultima modifica 3 mesi fa" %}</span>
-                     </div>
-                     <button type="button" class="btn-secondary-sm" onclick="showPasswordModal()">
-                        {% trans "Cambia password" %}
+                        {% trans "Servizi salvati" %}
                      </button>
-                  </div>
-               </div>
-               
-               <!-- Password Change Modal -->
-               <div id="passwordModal" class="modal" style="display:none;">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <h4>{% trans "Cambia password" %}</h4>
-                        <button type="button" class="close" onclick="closePasswordModal()">&times;</button>
-                     </div>
-                     <div id="passwordMessages"></div>
-                     <form method="POST" action="{% url 'change_password' %}" class="password-form">
+                     <form method="POST" action="{% url 'logout' %}" style="display: inline;">
                         {% csrf_token %}
-                        <div class="form-group">
-                           <label for="currentPassword">{% trans "Password attuale" %}</label>
-                           <div class="password-input-wrapper">
-                              <input type="password" name="current_password" id="currentPassword" class="form-control" required>
-                              <button type="button" class="toggle-password" onclick="togglePassword('currentPassword')">👁️</button>
-                           </div>
-                        </div>
-                        <div class="form-group">
-                           <label for="newPassword">{% trans "Nuova password" %}</label>
-                           <div class="password-input-wrapper">
-                              <input type="password" name="new_password" id="newPassword" class="form-control" required>
-                              <button type="button" class="toggle-password" onclick="togglePassword('newPassword')">👁️</button>
-                           </div>
-                        </div>
-                        <div class="form-group">
-                           <label for="confirmPassword">{% trans "Conferma nuova password" %}</label>
-                           <div class="password-input-wrapper">
-                              <input type="password" name="confirm_password" id="confirmPassword" class="form-control" required>
-                              <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">👁️</button>
-                           </div>
-                        </div>
-                        <div class="form-buttons">
-                           <button type="submit" class="btn-primary">{% trans "Aggiorna password" %}</button>
-                           <button type="button" class="btn-secondary" onclick="closePasswordModal()">{% trans "Annulla" %}</button>
-                        </div>
+                        <button type="submit" class="btn-quick-action danger"
+                           style="background: none; border: none; cursor: pointer;">
+                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2">
+                              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                              <polyline points="16 17 21 12 16 7"></polyline>
+                              <line x1="21" y1="12" x2="9" y2="12"></line>
+                           </svg>
+                           {% trans "Esci" %}
+                        </button>
                      </form>
                   </div>
                </div>
-            </section>
-         </div>
-      </main>
-      
-      <nav class="mobile-bottom-nav">
-         <a href="{% url 'customer_dashboard' %}" class="bottom-nav-item">
-            <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-               <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-               <polyline points="2 17 12 22 22 17"></polyline>
-               <polyline points="2 12 12 17 22 12"></polyline>
-            </svg>
-            <span>{% trans "Dashboard" %}</span>
-         </a>
-         <a href="{% url 'saved_services' %}" class="bottom-nav-item">
+            </div>
+         </aside>
+         <section class="profile-content-area">
+            <header class="profile-content-header">
+               <div>
+                  <h1 class="profile-content-title">{% trans "Informazioni account" %}</h1>
+                  <p class="profile-content-subtitle">{% trans "Gestisci i tuoi dati personali" %}</p>
+               </div>
+            </header>
+
+            {% if messages %}
+            <div class="messages">
+               {% for message in messages %}
+               <div class="alert alert-{{ message.tags }}">
+                  {{ message }}
+               </div>
+               {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST" id="profile-form" class="profile-form">
+               {% csrf_token %}
+
+               <div class="form-row">
+                  <div class="form-group">
+                     <label for="profile-firstname">{% trans "Nome" %}</label>
+                     <input type="text" id="profile-firstname" name="first_name" value="{{ user.first_name }}"
+                        class="profile-input" />
+                  </div>
+                  <div class="form-group">
+                     <label for="profile-lastname">{% trans "Cognome" %}</label>
+                     <input type="text" id="profile-lastname" name="last_name" value="{{ user.last_name }}"
+                        class="profile-input" />
+                  </div>
+               </div>
+
+               <div class="form-row">
+                  <div class="form-group">
+                     <label for="profile-email">{% trans "Indirizzo email" %}</label>
+                     <input type="email" id="profile-email" name="email" value="{{ user.email }}" class="profile-input"
+                        readonly />
+                     <small class="form-text text-muted">{% trans "L'email non può essere modificata" %}</small>
+                  </div>
+                  <div class="form-group">
+                     <label for="profile-phone">{% trans "Numero di telefono" %}</label>
+                     <input type="tel" id="profile-phone" name="phone" value="{{ profile.phone|default:'' }}"
+                        class="profile-input" />
+                  </div>
+               </div>
+
+               <div class="profile-form-actions">
+                  <button type="submit" class="btn-primary" id="save-profile">{% trans "Salva modifiche" %}</button>
+               </div>
+            </form>
+
+            <div class="profile-section-divider"></div>
+
+            <div class="security-preview">
+               <div class="security-header">
+                  <h3>{% trans "Sicurezza" %}</h3>
+                  <button type="button" class="btn-link" onclick="showPasswordModal();">{% trans "Gestisci sicurezza"
+                     %}</button>
+               </div>
+               <div class="security-item">
+                  <div class="security-icon">
+                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                     </svg>
+                  </div>
+                  <div class="security-info">
+                     <span class="security-label">{% trans "Password" %}</span>
+                     <span class="security-value">{% trans "Ultima modifica 3 mesi fa" %}</span>
+                  </div>
+                  <button type="button" class="btn-secondary-sm" onclick="showPasswordModal();">
+                     {% trans "Cambia password" %}
+                  </button>
+               </div>
+            </div>
+
+            <!-- Password Change Modal -->
+            <div id="passwordModal" class="modal" style="display:none;">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h4>{% trans "Cambia password" %}</h4>
+                     <button type="button" class="close" onclick="closePasswordModal();">&times;</button>
+                  </div>
+                  <div id="passwordMessages"></div>
+                  <form method="POST" action="{% url 'change_password' %}" class="password-form">
+                     {% csrf_token %}
+                     <div class="form-group">
+                        <label for="currentPassword">{% trans "Password attuale" %}</label>
+                        <div class="password-input-wrapper">
+                           <input type="password" name="current_password" id="currentPassword" class="form-control"
+                              required>
+                           <button type="button" class="toggle-password"
+                              onclick="togglePassword('currentPassword');">👁️</button>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <label for="newPassword">{% trans "Nuova password" %}</label>
+                        <div class="password-input-wrapper">
+                           <input type="password" name="new_password" id="newPassword" class="form-control" required>
+                           <button type="button" class="toggle-password"
+                              onclick="togglePassword('newPassword');">👁️</button>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <label for="confirmPassword">{% trans "Conferma nuova password" %}</label>
+                        <div class="password-input-wrapper">
+                           <input type="password" name="confirm_password" id="confirmPassword" class="form-control"
+                              required>
+                           <button type="button" class="toggle-password"
+                              onclick="togglePassword('confirmPassword');">👁️</button>
+                        </div>
+                     </div>
+                     <div class="form-buttons">
+                        <button type="submit" class="btn-primary">{% trans "Aggiorna password" %}</button>
+                        <button type="button" class="btn-secondary" onclick="closePasswordModal();">{% trans "Annulla"
+                           %}</button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </section>
+      </div>
+   </main>
+
+   <nav class="mobile-bottom-nav">
+      <a href="{% url 'customer_dashboard' %}" class="bottom-nav-item">
+         <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+         </svg>
+         <span>{% trans "Dashboard" %}</span>
+      </a>
+      <a href="{% url 'saved_services' %}" class="bottom-nav-item">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+         </svg>
+         <span>{% trans "Salvati" %}</span>
+      </a>
+      <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="bottom-nav-item">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+         </svg>
+         <span>{% trans "Messaggi" %}</span>
+         <span class="bottom-nav-badge"></span>
+      </a>
+      <a href="{% url 'customer_profile' %}" class="bottom-nav-item active">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+         </svg>
+         <span>{% trans "Profilo" %}</span>
+      </a>
+      <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+         {% csrf_token %}
+         <button type="submit" class="bottom-nav-item"
+            style="background: none; border: none; cursor: pointer; width: 100%;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-               <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+               <polyline points="16 17 21 12 16 7"></polyline>
+               <line x1="21" y1="12" x2="9" y2="12"></line>
             </svg>
-            <span>{% trans "Salvati" %}</span>
-         </a>
-         <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="bottom-nav-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <span>{% trans "Messaggi" %}</span>
-            <span class="bottom-nav-badge"></span>
-         </a>
-         <a href="{% url 'customer_profile' %}" class="bottom-nav-item active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-               <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span>{% trans "Profilo" %}</span>
-         </a>
-         <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="bottom-nav-item" style="background: none; border: none; cursor: pointer; width: 100%;">
-               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-               </svg>
-               <span>{% trans "Esci" %}</span>
-            </button>
-         </form>
-      </nav>
-      
-      <footer class="site-footer">
-         <div class="footer-container">
-            <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
-         </div>
-      </footer>
-      
-      <script src="{% static 'assets/js/main.js' %}"></script>
-      <script src="{% static 'assets/js/profile.js' %}"></script>
-   </body>
+            <span>{% trans "Esci" %}</span>
+         </button>
+      </form>
+   </nav>
+
+   <footer class="site-footer">
+      <div class="footer-container">
+         <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
+      </div>
+   </footer>
+
+   <script src="{% static 'assets/js/main.js' %}"></script>
+   <script src="{% static 'assets/js/profile.js' %}"></script>
+</body>
+
 </html>

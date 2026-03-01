@@ -125,6 +125,7 @@
                         placeholder="+39 1234567890"
                         required
                         autocomplete="tel"
+                        maxlength="11"
                         value="{{ form.phone.value|default:'' }}"
                         />
                      {% if form.phone.errors %}

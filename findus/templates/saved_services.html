@@ -2,364 +2,95 @@
 {% load i18n %}
 <!doctype html>
 <html lang="it">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="description" content="{% trans 'I tuoi professionisti salvati su FidaMano' %}" />
-      <title>{% trans "Salvati" %} | FidaMano</title>
-      <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
-      <link 
-         rel="icon" 
-         href="{% static 'assets/icons/find-su-logo.png' %}" 
-         type="image/png"
-         >
-      <link
-         href="{% static 'assets/icons/find-su-logo.png' %}"
-         rel="apple-touch-icon"
-         />
-   </head>
-   <body>
-      <div class="language-switcher-fixed">
-         <form action="{% url 'set_language' %}" method="post" id="language-form">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.path }}">
-            <button type="button" class="language-button" id="language-button" aria-expanded="false">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_language_info for LANGUAGE_CODE as current_lang %}
-               <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
-               <span class="language-label">{{ current_lang.name_local }}</span>
-               <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-               </svg>
-            </button>
-            <div class="language-dropdown" id="language-dropdown">
-               {% get_current_language as LANGUAGE_CODE %}
-               {% get_available_languages as LANGUAGES %}
-               {% get_language_info_list for LANGUAGES as languages %}
-               {% for language in languages %}
-               <button type="submit" 
-                  name="language" 
-                  value="{{ language.code }}"
-                  class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
-                  data-value="{{ language.code }}">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta name="description" content="{% trans 'I tuoi professionisti salvati su FidaMano' %}" />
+   <title>{% trans "Salvati" %} | FidaMano</title>
+   <link rel="stylesheet" href="{% static 'assets/css/colors.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
+   <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+   <link rel="icon" href="{% static 'assets/icons/find-su-logo.png' %}" type="image/png">
+   <link href="{% static 'assets/icons/find-su-logo.png' %}" rel="apple-touch-icon" />
+</head>
+
+<body>
+   <div class="language-switcher-fixed">
+      <form action="{% url 'set_language' %}" method="post" id="language-form">
+         {% csrf_token %}
+         <input name="next" type="hidden" value="{{ request.path }}">
+         <button type="button" class="language-button" id="language-button" aria-expanded="false">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_language_info for LANGUAGE_CODE as current_lang %}
+            <span class="fi fi-{% if LANGUAGE_CODE == 'it' %}it{% else %}gb{% endif %}"></span>
+            <span class="language-label">{{ current_lang.name_local }}</span>
+            <svg class="language-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2">
+               <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+         </button>
+         <div class="language-dropdown" id="language-dropdown">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+            <button type="submit" name="language" value="{{ language.code }}"
+               class="language-option {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+               data-value="{{ language.code }}">
                <span class="fi fi-{% if language.code == 'it' %}it{% else %}gb{% endif %}"></span>
                {{ language.name_local }}
-               </button>
-               {% endfor %}
-            </div>
-         </form>
-      </div>
-      <header class="dashboard-header">
-         <div class="dashboard-header-content">
-            <a href="{% url 'customer_dashboard' %}" class="logo" aria-label="FidaMano Home">
-            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="height: 40px; margin-right:-12px;">
+            </button>
+            {% endfor %}
+         </div>
+      </form>
+   </div>
+   <header class="dashboard-header">
+      <div class="dashboard-header-content">
+         <a href="{% url 'customer_dashboard' %}" class="logo desktop-logo" aria-label="FidaMano Home">
+            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano"
+               style="height: 40px; margin-right:-12px;">
             <span class="logo-text">FidaMano</span>
+         </a>
+
+
+         <nav class="dashboard-nav">
+            <a href="{% url 'saved_services' %}" class="nav-icon-link active" data-tooltip="{% trans 'Salvati' %}">
+               <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
             </a>
-            
-            
-            <nav class="dashboard-nav">
-               <a
-                  href="{% url 'saved_services' %}"
-                  class="nav-icon-link active"
-                  data-tooltip="{% trans 'Salvati' %}"
-                  >
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="currentColor"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path
-                        d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
-                        ></path>
-                  </svg>
-               </a>
-               <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="nav-icon-link" data-tooltip="{% trans 'I miei messaggi' %}">
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path
-                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                        ></path>
-                  </svg>
-                  <span class="notification-badge"></span>
-               </a>
-               <a
-                  href="{% url 'customer_profile' %}"
-                  class="nav-icon-link"
-                  data-tooltip="{% trans 'Profilo' %}"
-                  >
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
-                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                     <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-               </a>
-               <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-                  {% csrf_token %}
-                  <button type="submit" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}" style="background: none; border: none; cursor: pointer;">
-                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                     </svg>
-                  </button>
-               </form>
-            </nav>
+            <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="nav-icon-link"
+               data-tooltip="{% trans 'I miei messaggi' %}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+               </svg>
+               <span class="notification-badge"></span>
+            </a>
+            <a href="{% url 'customer_profile' %}" class="nav-icon-link" data-tooltip="{% trans 'Profilo' %}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+               </svg>
+            </a>
             <form method="POST" action="{% url 'logout' %}" style="display: inline;">
                {% csrf_token %}
-               <button type="submit" class="dashboard-cta" style="background: none; border: none; cursor: pointer; width: 100%; text-align: left;">
-                  <svg
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     >
+               <button type="submit" class="nav-icon-link" data-tooltip="{% trans 'Esci' %}"
+                  style="background: none; border: none; cursor: pointer;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                      <polyline points="16 17 21 12 16 7"></polyline>
                      <line x1="21" y1="12" x2="9" y2="12"></line>
                   </svg>
-                  <span>{% trans "Esci" %}</span>
                </button>
             </form>
-         </div>
-      </header>
-      <main class="dashboard-main">
-         <div class="saved-page-container">
-            <header class="saved-page-header">
-               <h1>{% trans "Professionisti salvati" %}</h1>
-               <p class="saved-count">
-                  {% blocktrans count counter=saved_count %}
-                  Hai <strong>{{ counter }}</strong> professionista salvato
-                  {% plural %}
-                  Hai <strong>{{ counter }}</strong> professionisti salvati
-                  {% endblocktrans %}
-               </p>
-            </header>
-            {% if saved_count == 0 %}
-            <section class="saved-empty-state" id="saved-empty-state">
-               <div class="empty-state-content">
-                  <div class="empty-state-icon">
-                     <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        >
-                        <path
-                           d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
-                           ></path>
-                     </svg>
-                  </div>
-                  <h2>{% trans "Nessun professionista salvato" %}</h2>
-                  <p>
-                     {% trans "Esplora i nostri professionisti fidati e salvali qui per accedervi rapidamente in seguito." %}
-                  </p>
-                  <a href="{% url 'customer_dashboard' %}" class="btn-primary">
-                     <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        >
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                     </svg>
-                     {% trans "Cerca professionisti" %}
-                  </a>
-               </div>
-            </section>
-            {% else %}
-            <section class="saved-items-section" id="saved-items-section">
-               <div class="saved-grid">
-                  {% for service in saved_services %}
-                  <article class="customer-dashboard-service-card" data-category="{{ service.category }}">
-                     <button
-                        type="button"
-                        class="saved-card-remove"
-                        aria-label="{% trans 'Rimuovi dai salvati' %}"
-                        hx-get="{% url 'save_service' service.slug %}"
-                        hx-target="closest .customer-dashboard-service-card"
-                        hx-swap="outerHTML"
-                        style="position: absolute; top: 10px; right: 10px; z-index: 10;"
-                        >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                           <line x1="18" y1="6" x2="6" y2="18"></line>
-                           <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                     </button>
-                     <div class="dashboard-card-image-wrapper">
-                        {% if service.image %}
-                        <img src="{{ service.image.url }}" class="dashboard-card-image" alt="{{ service.title }}">
-                        {% else %}
-                        <img src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=400" class="dashboard-card-image" alt="{{ service.title }}">
-                        {% endif %}
-                        <span class="dashboard-card-category-badge">{{ service.get_category_display }}</span>
-                     </div>
-                     <div class="dashboard-card-content">
-                        <div class="dashboard-card-header">
-                           {% if service.craftsman.profile_photo %}
-                           <img src="{{ service.craftsman.profile_photo.url }}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
-                           {% else %}
-                           <img src="{% static 'assets/img/default-image.jpg' %}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
-                           {% endif %}
-                           <div class="dashboard-card-header-info">
-                              <a href="{% url 'service_detail' service.slug %}" class="dashboard-card-name-link">
-                                 <h3 class="dashboard-card-name">{{ service.title }}</h3>
-                              </a>
-                              <div class="dashboard-card-rating">
-                                 <svg viewBox="0 0 24 24">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                 </svg>
-                                 <span>{{ service.avg_rating|default:service.craftsman.rating|default:"4.5" }}</span>
-                              </div>
-                              <div class="dashboard-card-badges">
-                                 {% if service.craftsman.is_verified %}
-                                 <span class="service-verified">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                       <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                    </svg>
-                                    {% trans "Professionista verificato" %}
-                                 </span>
-                                 {% endif %}
-                                 {% if service.craftsman.license_number %}
-                                 <span class="service-license licensed">{% trans "Autorizzato" %}</span>
-                                 {% else %}
-                                 <span class="service-license not-licensed">{% trans "Non autorizzato" %}</span>
-                                 {% endif %}
-                              </div>
-                           </div>
-                        </div>
-                        <div class="dashboard-card-details-grid">
-                           <div class="dashboard-card-detail-item">
-                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                 <circle cx="12" cy="10" r="3"></circle>
-                              </svg>
-                              <span>{{ service.get_region_display }}</span>
-                           </div>
-                           <div class="dashboard-card-detail-item">
-                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                 <circle cx="12" cy="12" r="10"></circle>
-                                 <polyline points="12 6 12 12 16 14"></polyline>
-                              </svg>
-                              <span>{{ service.get_availability_display }}</span>
-                           </div>
-                           <div class="dashboard-card-detail-item">
-                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                 <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                              </svg>
-                              <span>
-                              {% trans "A partire da" %} 
-                              <strong class="dashboard-card-price">
-                              {% if service.price_type == 'hourly' %}
-                              €{{ service.hourly_rate }}/{% trans "ora" %}
-                              {% elif service.price_type == 'fixed' %}
-                              €{{ service.fixed_price }}
-                              {% else %}
-                              {% trans "Contattaci per il prezzo" %}
-                              {% endif %}
-                              </strong>
-                              </span>
-                           </div>
-                        </div>
-                        <div class="dashboard-card-tags">
-                           <span class="dashboard-tag">{{ service.get_availability_display }}</span>
-                           <span class="dashboard-tag">{{ service.get_job_size_display }}</span>
-                           {% if service.materials_included %}
-                           <span class="dashboard-tag">{% trans "Materiali inclusi" %}</span>
-                           {% endif %}
-                        </div>
-                        <div class="dashboard-card-actions">
-                           <button class="btn-service-primary" onclick="window.location.href='tel:{{ service.craftsman.phone }}'">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                              </svg>
-                              {% trans "Chiama ora" %}
-                           </button>
-                           <button class="btn-service-secondary" onclick="window.location.href='{% url 'service_detail' service.slug %}'">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                 <circle cx="12" cy="12" r="3"></circle>
-                              </svg>
-                              {% trans "Visualizza" %}
-                           </button>
-                        </div>
-                     </div>
-                  </article>
-                  {% endfor %}
-               </div>
-            </section>
-            {% endif %}
-         </div>
-      </main>
-      <nav class="mobile-bottom-nav">
-         <a href="{% url 'customer_dashboard' %}" class="bottom-nav-item">
-            <svg
-               viewBox="0 0 24 24"
-               fill="currentColor"
-               stroke="currentColor"
-               stroke-width="2"
-               >
-               <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-               <polyline points="2 17 12 22 22 17"></polyline>
-               <polyline points="2 12 12 17 22 12"></polyline>
-            </svg>
-            <span>{% trans "Dashboard" %}</span>
-         </a>
-         <a href="{% url 'saved_services' %}" class="bottom-nav-item active">
-            <svg
-               viewBox="0 0 24 24"
-               fill="none"
-               stroke="currentColor"
-               stroke-width="2"
-               >
-               <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <span>{% trans "Salvati" %}</span>
-         </a>
-         <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="bottom-nav-item">
-            <svg
-               viewBox="0 0 24 24"
-               fill="none"
-               stroke="currentColor"
-               stroke-width="2"
-               >
-               <path
-                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                  ></path>
-            </svg>
-            <span>{% trans "Messaggi" %}</span>
-            <span class="bottom-nav-badge"></span>
-         </a>
-         <a href="{% url 'customer_profile' %}" class="bottom-nav-item">
-            <svg
-               viewBox="0 0 24 24"
-               fill="none"
-               stroke="currentColor"
-               stroke-width="2"
-               >
-               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-               <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span>{% trans "Profilo" %}</span>
-         </a>
+         </nav>
          <form method="POST" action="{% url 'logout' %}" style="display: inline;">
             {% csrf_token %}
-            <button type="submit" class="bottom-nav-item" style="background: none; border: none; cursor: pointer; width: 100%;">
+            <button type="submit" class="dashboard-cta"
+               style="background: none; border: none; cursor: pointer; width: 100%; text-align: left;">
                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                   <polyline points="16 17 21 12 16 7"></polyline>
@@ -368,13 +99,217 @@
                <span>{% trans "Esci" %}</span>
             </button>
          </form>
-      </nav>
-      <footer class="site-footer">
-         <div class="footer-container">
-            <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
-         </div>
-      </footer>
-      <script src="{% static 'assets/js/main.js' %}"></script>
-      <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-   </body>
+      </div>
+   </header>
+   <main class="dashboard-main">
+      <div class="saved-page-container">
+         <header class="saved-page-header">
+            <h1>{% trans "Professionisti salvati" %}</h1>
+            <p class="saved-count">
+               {% blocktrans count counter=saved_count %}Hai <strong>{{ counter }}</strong> professionista salvato{% plural %}Hai <strong>{{ counter }}</strong> professionisti salvati{% endblocktrans %}
+            </p>
+         </header>
+         {% if saved_count == 0 %}
+         <section class="saved-empty-state" id="saved-empty-state">
+            <div class="empty-state-content">
+               <div class="empty-state-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                  </svg>
+               </div>
+               <h2>{% trans "Nessun professionista salvato" %}</h2>
+               <p>
+                  {% trans "Esplora i nostri professionisti fidati e salvali qui per accedervi rapidamente in seguito."
+                  %}
+               </p>
+               <a href="{% url 'customer_dashboard' %}" class="btn-primary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                     <circle cx="11" cy="11" r="8"></circle>
+                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  {% trans "Cerca professionisti" %}
+               </a>
+            </div>
+         </section>
+         {% else %}
+         <section class="saved-items-section" id="saved-items-section">
+            <div class="saved-grid">
+               {% for service in saved_services %}
+               <article class="customer-dashboard-service-card" data-category="{{ service.category }}">
+                  <button type="button" class="saved-card-remove" aria-label="{% trans 'Rimuovi dai salvati' %}"
+                     hx-get="{% url 'save_service' service.slug %}" hx-target="closest .customer-dashboard-service-card"
+                     hx-swap="outerHTML" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                     </svg>
+                  </button>
+                  <div class="dashboard-card-image-wrapper">
+                     {% if service.image %}
+                     <img src="{{ service.image.url }}" class="dashboard-card-image" alt="{{ service.title }}">
+                     {% else %}
+                     <img
+                        src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=400"
+                        class="dashboard-card-image" alt="{{ service.title }}">
+                     {% endif %}
+                     <span class="dashboard-card-category-badge">{{ service.get_category_display }}</span>
+                  </div>
+                  <div class="dashboard-card-content">
+                     <div class="dashboard-card-header">
+                        {% if service.craftsman.profile_photo %}
+                        <img src="{{ service.craftsman.profile_photo.url }}" alt="{{ service.craftsman.business_name }}"
+                           class="dashboard-card-avatar">
+                        {% else %}
+                        <img src="{% static 'assets/img/default-image.jpg' %}"
+                           alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
+                        {% endif %}
+                        <div class="dashboard-card-header-info">
+                           <a href="{% url 'service_detail' service.slug %}" class="dashboard-card-name-link">
+                              <h3 class="dashboard-card-name">{{ service.title }}</h3>
+                           </a>
+                           <div class="dashboard-card-rating">
+                              <svg viewBox="0 0 24 24">
+                                 <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                                 </path>
+                              </svg>
+                              <span>{{ service.avg_rating|default:service.craftsman.rating|default:"4.5" }}</span>
+                           </div>
+                           <div class="dashboard-card-badges">
+                              {% if service.craftsman.is_verified %}
+                              <span class="service-verified">
+                                 <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                 </svg>
+                                 {% trans "Professionista verificato" %}
+                              </span>
+                              {% endif %}
+                              {% if service.craftsman.license_number %}
+                              <span class="service-license licensed">{% trans "Autorizzato" %}</span>
+                              {% else %}
+                              <span class="service-license not-licensed">{% trans "Non autorizzato" %}</span>
+                              {% endif %}
+                           </div>
+                        </div>
+                     </div>
+                     <div class="dashboard-card-details-grid">
+                        <div class="dashboard-card-detail-item">
+                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                              <circle cx="12" cy="10" r="3"></circle>
+                           </svg>
+                           <span>{{ service.get_region_display }}</span>
+                        </div>
+                        <div class="dashboard-card-detail-item">
+                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <polyline points="12 6 12 12 16 14"></polyline>
+                           </svg>
+                           <span>{{ service.get_availability_display }}</span>
+                        </div>
+                        <div class="dashboard-card-detail-item">
+                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                           </svg>
+                           <span>
+                              {% trans "A partire da" %}
+                              <strong class="dashboard-card-price">
+                                 {% if service.price_type == 'hourly' %}
+                                 €{{ service.hourly_rate }}/{% trans "ora" %}
+                                 {% elif service.price_type == 'fixed' %}
+                                 €{{ service.fixed_price }}
+                                 {% else %}
+                                 {% trans "Contattaci per il prezzo" %}
+                                 {% endif %}
+                              </strong>
+                           </span>
+                        </div>
+                     </div>
+                     <div class="dashboard-card-tags">
+                        <span class="dashboard-tag">{{ service.get_availability_display }}</span>
+                        <span class="dashboard-tag">{{ service.get_job_size_display }}</span>
+                        {% if service.materials_included %}
+                        <span class="dashboard-tag">{% trans "Materiali inclusi" %}</span>
+                        {% endif %}
+                     </div>
+                     <div class="dashboard-card-actions">
+                        <button class="btn-service-primary"
+                           onclick="window.location.href='tel:{{ service.craftsman.phone }}';">
+                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path
+                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                              </path>
+                           </svg>
+                           {% trans "Chiama ora" %}
+                        </button>
+                        <button class="btn-service-secondary"
+                           onclick="window.location.href='{% url 'service_detail' service.slug %}';">
+                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                           </svg>
+                           {% trans "Visualizza" %}
+                        </button>
+                     </div>
+                  </div>
+               </article>
+               {% endfor %}
+            </div>
+         </section>
+         {% endif %}
+      </div>
+   </main>
+   <nav class="mobile-bottom-nav">
+      <a href="{% url 'customer_dashboard' %}" class="bottom-nav-item">
+         <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+         </svg>
+         <span>{% trans "Dashboard" %}</span>
+      </a>
+      <a href="{% url 'saved_services' %}" class="bottom-nav-item active">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+         </svg>
+         <span>{% trans "Salvati" %}</span>
+      </a>
+      <a href="javascript:alert('{% trans 'Questa funzione è in fase di sviluppo' %}')" class="bottom-nav-item">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+         </svg>
+         <span>{% trans "Messaggi" %}</span>
+         <span class="bottom-nav-badge"></span>
+      </a>
+      <a href="{% url 'customer_profile' %}" class="bottom-nav-item">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+         </svg>
+         <span>{% trans "Profilo" %}</span>
+      </a>
+      <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+         {% csrf_token %}
+         <button type="submit" class="bottom-nav-item"
+            style="background: none; border: none; cursor: pointer; width: 100%;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+               <polyline points="16 17 21 12 16 7"></polyline>
+               <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>{% trans "Esci" %}</span>
+         </button>
+      </form>
+   </nav>
+   <footer class="site-footer">
+      <div class="footer-container">
+         <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
+      </div>
+   </footer>
+   <script src="{% static 'assets/js/main.js' %}"></script>
+   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</body>
+
 </html>

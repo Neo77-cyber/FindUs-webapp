@@ -13,7 +13,7 @@ def send_customer_welcome_email(user_email):
     try:
         RESEND_API_KEY = "re_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ"
 
-        subject = "Find the right pro for the job!"
+        subject = "Trova il professionista giusto per il lavoro!"
 
         html_message = f"""<!DOCTYPE html>
 <html>
@@ -38,64 +38,64 @@ def send_customer_welcome_email(user_email):
     <div class="content">
         
         
-        <p>Welcome to <span class="platform-name">FidaMano</span>. Whether you have a leaking pipe, need a new roof, or want to redesign your living room, the right expert is just a phone call away.</p>
+        <p>Bentornato su <span class="platform-name">FidaMano</span>. Che tu abbia un tubo che perde, bisogno di un nuovo tetto o voglia ristrutturare il tuo soggiorno, l'esperto giusto è a solo una telefonata di distanza.</p>
         
-        <h3>How it works:</h3>
+        <h3>Come funziona:</h3>
         
         <div class="step">
-            <p><span class="step-number">1.</span> <strong>Search:</strong> Filter by your State and Category.</p>
+            <p><span class="step-number">1.</span> <strong>Cerca:</strong> Filtra per Regione e Categoria.</p>
         </div>
         
         <div class="step">
-            <p><span class="step-number">2.</span> <strong>Connect:</strong> Call or WhatsApp the craftsman directly.</p>
+            <p><span class="step-number">2.</span> <strong>Connettiti:</strong> Chiama o contatta il professionista direttamente su WhatsApp.</p>
         </div>
         
         <div class="step">
-            <p><span class="step-number">3.</span> <strong>Negotiate:</strong> Discuss your project and agree on a price—no middleman fees!</p>
+            <p><span class="step-number">3.</span> <strong>Negozia:</strong> Discuti il tuo progetto e accordati sul prezzo—nessuna commissione intermediaria!</p>
         </div>
         
         <div class="safety-box">
-            <h3>Safety First</h3>
-            <p>To keep your experience great, remember:</p>
+            <h3>Sicurezza prima di tutto</h3>
+            <p>Per mantenere la tua esperienza ottima, ricorda:</p>
             <ul>
-                <li><strong>Meet & Quote:</strong> Invite your pro for a site visit to get an accurate price and plan the details together.</li>
-                <li><strong>Check the Gallery:</strong> View their "Previous Work" photos to see their skill and style in action.</li>
-                <li><strong>Agreement:</strong> Ensure you both agree on costs and timelines before the work begins.</li>
-                <li><strong>Rate the Pro:</strong> Finished? Leave a review to support your pro and help others find the best talent!</li>
+                <li><strong>Incontro e Preventivo:</strong> Invita il professionista per un sopralluogo per ottenere un prezzo accurato e pianificare i dettagli insieme.</li>
+                <li><strong>Controlla la Galleria:</strong> Visualizza le foto dei "Lavori Precedenti" per vedere le loro abilità e stile in azione.</li>
+                <li><strong>Accordo:</strong> Assicurati che entrambi siate d'accordo su costi e tempistiche prima che il lavoro inizi.</li>
+                <li><strong>Valuta il Professionista:</strong> Lavoro finito? Lascia una recensione per supportare il professionista e aiutare gli altri a trovare i migliori talenti!</li>
             </ul>
         </div>
         
         <p style="text-align: center;">
-            <a href="https://fidamano.com/customer-dashboard/" class="button">Find a Craftsman Near Me</a>
+            <a href="https://fidamano.com/customer-dashboard/" class="button">Trova un Professionista Vicino a Me</a>
         </p>
         
-        <p>Happy building,<br>
-        <strong>The <span class="platform-name">FidaMano</span> Team</strong></p>
+        <p>Buon lavoro,<br>
+        <strong>Il Team <span class="platform-name">FidaMano</span></strong></p>
     </div>
 </body>
 </html>"""
 
-        plain_message = f"""Hey there!,
+        plain_message = f"""Ciao!,
 
-Welcome to FidaMano. Whether you have a leaking pipe, need a new roof, or want to redesign your living room, the right expert is just a phone call away.
+Bentornato su FidaMano. Che tu abbia un tubo che perde, bisogno di un nuovo tetto o voglia ristrutturare il tuo soggiorno, l'esperto giusto è a solo una telefonata di distanza.
 
-How it works:
+Come funziona:
 
-1. Search: Filter by your State and Category.
-2. Connect: Call or WhatsApp the craftsman directly.
-3. Negotiate: Discuss your project and agree on a price—no middleman fees!
+1. Cerca: Filtra per Regione e Categoria.
+2. Connettiti: Chiama o contatta il professionista direttamente su WhatsApp.
+3. Negozia: Discuti il tuo progetto e accordati sul prezzo—nessuna commissione intermediaria!
 
-Safety First: To keep your experience great, remember:
+Sicurezza prima di tutto: Per mantenere la tua esperienza ottima, ricorda:
 
-• Meet & Quote: Invite your pro for a site visit to get an accurate price and plan the details together.
-• Check the Gallery: View their "Previous Work" photos to see their skill and style in action.
-• Agreement: Ensure you both agree on costs and timelines before the work begins.
-• Rate the Pro: Finished? Leave a review to support your pro and help others find the best talent!
+• Incontro e Preventivo: Invita il professionista per un sopralluogo per ottenere un prezzo accurato e pianificare i dettagli insieme.
+• Controlla la Galleria: Visualizza le foto dei "Lavori Precedenti" per vedere le loro abilità e stile in azione.
+• Accordo: Assicurati che entrambi siate d'accordo su costi e tempistiche prima che il lavoro inizi.
+• Valuta il Professionista: Lavoro finito? Lascia una recensione per supportare il professionista e aiutare gli altri a trovare i migliori talenti!
 
-Find a Craftsman Near Me: https://fidamano.com/customer-dashboard/
+Trova un Professionista Vicino a Me: https://fidamano.com/customer-dashboard/
 
-Happy building,
-The FidaMano Team"""
+Buon lavoro,
+Il Team FidaMano"""
 
         email_data = {
             "from": "FidaMano <support@retechloans.com>",
@@ -141,7 +141,7 @@ def send_craftsman_welcome_email(
 
         RESEND_API_KEY = "re_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ"
 
-        subject = "You're open for business! Let's get your first lead."
+        subject = "Sei pronto per lavorare! Troviamo il tuo primo cliente."
 
         html_message = f"""<!DOCTYPE html>
 <html>
@@ -167,57 +167,57 @@ def send_craftsman_welcome_email(
     <div class="content">
         
         
-        <p>Welcome to <span class="platform-name">FidaMano</span>! You've just joined a community of the best hands in the business—from Plumbers and Masons to Interior Designers.</p>
+        <p>Bentornato su <span class="platform-name">FidaMano</span>! Sei appena entrato a far parte di una community dei migliori professionisti del settore—da Idraulici e Muratori a Designer d'interni.</p>
         
-        <p>We've built this platform to help you grow your business without the middleman. Remember: <span class="highlight">You are the boss.</span> You talk to the clients, you set your prices, and you keep 100% of what you earn.</p>
+        <p>Abbiamo costruito questa piattaforma per aiutarti a far crescere la tua attività senza intermediari. Ricorda: <span class="highlight">Tu sei il capo.</span> Parli direttamente con i clienti, fissi i tuoi prezzi e mantieni il 100% di quanto guadagni.</p>
         
-        <h3>3 Steps to get your first call:</h3>
+        <h3>3 passaggi per ricevere la tua prima chiamata:</h3>
         
         <div class="step">
-            <p><span class="step-number">1.</span> <strong>Complete your Profile:</strong> Upload a clear photo of yourself or your business logo.</p>
+            <p><span class="step-number">1.</span> <strong>Completa il tuo Profilo:</strong> Carica una foto chiara di te o del logo della tua attività.</p>
         </div>
         
         <div class="step">
-            <p><span class="step-number">2.</span> <strong>Show off your work:</strong> Upload at least 5 photos of your best "Before & After" projects.</p>
+            <p><span class="step-number">2.</span> <strong>Mostra i tuoi lavori:</strong> Carica almeno 5 foto dei tuoi migliori progetti "Prima e Dopo".</p>
         </div>
         
         <div class="step">
-            <p><span class="step-number">3.</span> <strong>Set your Location:</strong> Make sure your State and Neighborhood are correct so local clients can find you.</p>
+            <p><span class="step-number">3.</span> <strong>Imposta la tua Posizione:</strong> Assicurati che Regione e Quartiere siano corretti così i clienti locali possono trovarti.</p>
         </div>
         
         <div class="safety-box">
-            <h3>💡 Safety Tip</h3>
-            <p>Always meet new clients in a safe environment and clearly agree on material costs before starting work.</p>
+            <h3>💡 Consiglio sulla Sicurezza</h3>
+            <p>Incontra sempre i nuovi clienti in un ambiente sicuro e accordati chiaramente sui costi dei materiali prima di iniziare il lavoro.</p>
         </div>
         
         <p style="text-align: center;">
-            <a href="https://yourdomain.com/craftsman-dashboard/" class="button">Post Your Service Now</a>
+            <a href="https://yourdomain.com/craftsman-dashboard/" class="button">Pubblica il tuo Servizio Ora</a>
         </p>
         
-        <p>To your success,<br>
-        <strong>The <span class="platform-name">FidaMano</span> Team</strong></p>
+        <p>Al tuo successo,<br>
+        <strong>Il Team <span class="platform-name">FidaMano</span></strong></p>
     </div>
 </body>
 </html>"""
 
-        plain_message = f"""Hey there!,
+        plain_message = f"""Ciao!,
 
-Welcome to FidaMano! You've just joined a community of the best hands in the business—from Plumbers and Masons to Interior Designers.
+Bentornato su FidaMano! Sei appena entrato a far parte di una community dei migliori professionisti del settore—da Idraulici e Muratori a Designer d'interni.
 
-We've built this platform to help you grow your business without the middleman. Remember: You are the boss. You talk to the clients, you set your prices, and you keep 100% of what you earn.
+Abbiamo costruito questa piattaforma per aiutarti a far crescere la tua attività senza intermediari. Ricorda: Tu sei il capo. Parli direttamente con i clienti, fissi i tuoi prezzi e mantieni il 100% di quanto guadagni.
 
-3 Steps to get your first call:
+3 passaggi per ricevere la tua prima chiamata:
 
-1. Complete your Profile: Upload a clear photo of yourself or your business logo.
-2. Show off your work: Upload at least 5 photos of your best "Before & After" projects.
-3. Set your Location: Make sure your State and Neighborhood are correct so local clients can find you.
+1. Completa il tuo Profilo: Carica una foto chiara di te o del logo della tua attività.
+2. Mostra i tuoi lavori: Carica almeno 5 foto dei tuoi migliori progetti "Prima e Dopo".
+3. Imposta la tua Posizione: Assicurati che Regione e Quartiere siano corretti così i clienti locali possono trovarti.
 
-Safety Tip: Always meet new clients in a safe environment and clearly agree on material costs before starting work.
+Consiglio sulla Sicurezza: Incontra sempre i nuovi clienti in un ambiente sicuro e accordati chiaramente sui costi dei materiali prima di iniziare il lavoro.
 
-Post Your Service Now: https://yourdomain.com/craftsman-dashboard/
+Pubblica il tuo Servizio Ora: https://yourdomain.com/craftsman-dashboard/
 
-To your success,
-The FidaMano Team"""
+Al tuo successo,
+Il Team FidaMano"""
 
         email_data = {
             "from": "FidaMano <support@retechloans.com>",
@@ -271,7 +271,7 @@ def send_waitlist_confirmation_email(user_email, user_name, city, category):
     try:
         RESEND_API_KEY = "re_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ"
 
-        subject = f"We're on the hunt for top {category} professionals in {city}!"
+        subject = f"Stiamo cercando i migliori professionisti {category} a {city}!"
 
         html_message = f"""<!DOCTYPE html>
 <html>
@@ -297,100 +297,100 @@ def send_waitlist_confirmation_email(user_email, user_name, city, category):
     </div>
     
     <div class="content">
-        <p>Hi <strong>{user_name}</strong>,</p>
+        <p>Ciao <strong>{user_name}</strong>,</p>
         
-        <p>We noticed you were looking for <strong>{category}</strong> services in <strong>{city}</strong> on <span class="platform-name">FidaMano</span> today.</p>
+        <p>Abbiamo notato che stavi cercando servizi <strong>{category}</strong> a <strong>{city}</strong> su <span class="platform-name">FidaMano</span> oggi.</p>
         
         <div class="highlight-box">
-            <p><strong>Right now, we are in our "Quality Over Quantity" phase.</strong> We are hand-picking and verifying craftsmen one by one to ensure that when you hire someone through FidaMano, they are truly the best in the business.</p>
+            <p><strong>Al momento siamo nella nostra fase "Qualità sulla Quantità".</strong> Stiamo selezionando e verificando i professionisti uno per uno per assicurarci che quando assumi qualcuno attraverso FidaMano, siano davvero i migliori del settore.</p>
             
             <div class="founder-badge">
-                FOUNDING MEMBER STATUS
+                STATO DI MEMBRO FONDATORE
             </div>
             
-            <p>Because we don't have a verified pro in your specific area yet, we've <strong>upgraded your account to "Founding Member" status.</strong></p>
+            <p>Perché non abbiamo ancora un professionista verificato nella tua area specifica, abbiamo <strong>aggiornato il tuo account a stato "Membro Fondatore".</strong></p>
         </div>
         
-        <h3>What we're doing for you:</h3>
+        <h3>Cosa stiamo facendo per te:</h3>
         
         <div class="feature-list">
             <div class="feature">
                 <div class="feature-icon"></div>
                 <div>
-                    <strong>The Hunt:</strong> Our team is now actively scouting and verifying {category} professionals in {city} specifically because of your request.
+                    <strong>La Ricerca:</strong> Il nostro team sta attivamente cercando e verificando professionisti {category} a {city} specificamente a causa della tua richiesta.
                 </div>
             </div>
             
             <div class="feature">
                 <div class="feature-icon"></div>
                 <div>
-                    <strong>Priority Notification:</strong> As soon as we verify a top-tier {category} professional in your neighborhood, you will be the <strong>first to know</strong> via email.
+                    <strong>Notifica Prioritaria:</strong> Non appena verifichiamo un professionista di prima classe {category} nel tuo quartiere, sarai il <strong>primo a saperlo</strong> via email.
                 </div>
             </div>
             
             <div class="feature">
                 <div class="feature-icon"></div>
                 <div>
-                    <strong>Founder Perks:</strong> As a thank you for your patience, you will receive <strong>lifetime priority booking</strong> and <strong>exclusive discounts</strong> once we fully launch in your region.
+                    <strong>Vantaggi Fondatore:</strong> Come ringraziamento per la tua pazienza, riceverai <strong>prenotazione prioritaria a vita</strong> e <strong>sconti esclusivi</strong> una volta che lanceremo completamente nella tua regione.
                 </div>
             </div>
         </div>
         
         <div class="urgent-box">
-            <h3>Is your job urgent?</h3>
-            <p>Simply reply to this email with a few details about what you need. We will do our best to manually find a trusted professional for you through our private network.</p>
-            <p><strong>Reply to:</strong> support@retechloans.com</p>
+            <h3>Il tuo lavoro è urgente?</h3>
+            <p>Rispondi semplicemente a questa email con alcuni dettagli su cosa ti serve. Faremo del nostro meglio per trovare manualmente un professionista fidato per te attraverso la nostra rete privata.</p>
+            <p><strong>Rispondi a:</strong> support@retechloans.com</p>
         </div>
         
-        <p>In the meantime, you can:</p>
+        <p>Nel frattempo, puoi:</p>
         <ul>
-            <li>Explore services available in nearby areas</li>
-            <li>Save your search to get notified when professionals become available</li>
-            <li>Browse our verified professionals' portfolios</li>
+            <li>Esplorare servizi disponibili nelle aree vicine</li>
+            <li>Salvare la tua ricerca per ricevere notifiche quando i professionisti diventano disponibili</li>
+            <li>Consultare i portfolio dei nostri professionisti verificati</li>
         </ul>
         
-        <p>Thank you for helping us build a more trusted community, one city at a time.</p>
+        <p>Grazie per aiutarci a costruire una community più fidata, una città alla volta.</p>
         
-        <p>Best regards,<br>
-        <strong>The <span class="platform-name">FidaMano</span> Team</strong></p>
+        <p>Cordiali saluti,<br>
+        <strong>Il Team <span class="platform-name">FidaMano</span></strong></p>
     </div>
     
     <div class="footer">
-        <p>This email was sent to {user_email} because you signed up for the FidaMano waitlist.</p>
+        <p>Questa email è stata inviata a {user_email} perché ti sei iscritto alla lista d'attesa di FidaMano.</p>
         <p>© 2024 FidaMano. All rights reserved.</p>
     </div>
 </body>
 </html>"""
 
-        plain_message = f"""Hi {user_name},
+        plain_message = f"""Ciao {user_name},
 
-We noticed you were looking for {category} services in {city} on FidaMano today.
+Abbiamo notato che stavi cercando servizi {category} a {city} su FidaMano oggi.
 
-Right now, we are in our "Quality Over Quantity" phase. We are hand-picking and verifying craftsmen one by one to ensure that when you hire someone through FidaMano, they are truly the best in the business.
+Al momento siamo nella nostra fase "Qualità sulla Quantità". Stiamo selezionando e verificando i professionisti uno per uno per assicurarci che quando assumi qualcuno attraverso FidaMano, siano davvero i migliori del settore.
 
-Because we don't have a verified pro in your specific area yet, we've upgraded your account to "Founding Member" status.
+Perché non abbiamo ancora un professionista verificato nella tua area specifica, abbiamo aggiornato il tuo account a stato "Membro Fondatore".
 
-What we're doing for you:
+Cosa stiamo facendo per te:
 
- THE HUNT: Our team is now actively scouting and verifying {category} professionals in {city} specifically because of your request.
+LA RICERCA: Il nostro team sta attivamente cercando e verificando professionisti {category} a {city} specificamente a causa della tua richiesta.
 
- PRIORITY NOTIFICATION: As soon as we verify a top-tier {category} professional in your neighborhood, you will be the FIRST to know via email.
+NOTIFICA PRIORITARIA: Non appena verifichiamo un professionista di prima classe {category} nel tuo quartiere, sarai il PRIMO a saperlo via email.
 
- FOUNDER PERKS: As a thank you for your patience, you will receive lifetime priority booking and exclusive discounts once we fully launch in your region.
+VANTAGGI FONDATORE: Come ringraziamento per la tua pazienza, riceverai prenotazione prioritaria a vita e sconti esclusivi una volta che lanceremo completamente nella tua regione.
 
- IS YOUR JOB URGENT?
-Simply reply to this email with a few details about what you need. We will do our best to manually find a trusted professional for you through our private network.
+IL TUO LAVORO È URGENTE?
+Rispondi semplicemente a questa email con alcuni dettagli su cosa ti serve. Faremo del nostro meglio per trovare manualmente un professionista fidato per te attraverso la nostra rete privata.
 
-Reply to: support@retechloans.com
+Rispondi a: support@retechloans.com
 
-Thank you for helping us build a more trusted community, one city at a time.
+Grazie per aiutarci a costruire una community più fidata, una città alla volta.
 
-Best regards,
-The FidaMano Team
+Cordiali saluti,
+Il Team FidaMano
 
 ---
-This email was sent to {user_email} because you signed up for the FidaMano waitlist.
-© 2024 FidaMano. All rights reserved."""
+Questa email è stata inviata a {user_email} perché ti sei iscritto alla lista d'attesa di FidaMano.
+© 2024 FidaMano. Tutti i diritti riservati."""
 
         email_data = {
             "from": "FidaMano Waitlist <support@retechloans.com>",
