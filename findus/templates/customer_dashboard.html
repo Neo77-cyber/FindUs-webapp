@@ -181,17 +181,17 @@
                <fieldset class="filter-group">
                   <legend class="filter-group-title">{% trans "Valutazione" %}</legend>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="5" {% if rating == "5" %}checked{% endif %} />
+                     <input type="radio" name="rating" value="5" {% if rating=="5" %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★★ {% trans "5 stelle" %}</span>
                   </label>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="4" {% if rating == "4" %}checked{% endif %} />
+                     <input type="radio" name="rating" value="4" {% if rating=="4" %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★☆ {% trans "4+ stelle" %}</span>
                   </label>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="3" {% if rating == "3" %}checked{% endif %} />
+                     <input type="radio" name="rating" value="3" {% if rating=="3" %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★☆☆ {% trans "3+ stelle" %}</span>
                   </label>
@@ -339,6 +339,7 @@
    </footer>
    <script src="{% static 'assets/js/filter-constants.js' %}"></script>
    <script src="{% static 'assets/js/main.js' %}"></script>
+   <script src="{% static 'assets/js/infinite-scroll.js' %}"></script>
 
 </body>
 

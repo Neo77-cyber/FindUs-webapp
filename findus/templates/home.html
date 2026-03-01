@@ -236,19 +236,19 @@
                <fieldset class="filter-group">
                   <legend class="filter-group-title">{% trans "Valutazione" %}</legend>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="5" {% if rating == "5" %}checked{% endif %}
+                     <input type="radio" name="rating" value="5" {% if rating=="5" %}checked{% endif %}
                         hx-trigger="change" />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★★ {% trans "5 stelle" %}</span>
                   </label>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="4" {% if rating == "4" %}checked{% endif %}
+                     <input type="radio" name="rating" value="4" {% if rating=="4" %}checked{% endif %}
                         hx-trigger="change" />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★☆ {% trans "4+ stelle" %}</span>
                   </label>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="3" {% if rating == "3" %}checked{% endif %}
+                     <input type="radio" name="rating" value="3" {% if rating=="3" %}checked{% endif %}
                         hx-trigger="change" />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★☆☆ {% trans "3+ stelle" %}</span>
@@ -328,11 +328,11 @@
                <button type="button" class="btn-cancel-mobile" id="btn-cancel-filters">
                   {% trans "Annulla" %}
                </button>
-               <button type="button" class="btn-clear-mobile" onclick="window.location.href='{% url 'home' %}'">
+               <button type="button" class="btn-clear-mobile" onclick="window.location.href='{% url 'home' %}';">
                   {% trans "Cancella tutto" %}
                </button>
                <button type="button" class="btn-apply-mobile" id="btn-apply-filters"
-                  onclick="document.querySelector('.filter-form').requestSubmit()">
+                  onclick="document.querySelector('.filter-form').requestSubmit();">
                   {% trans "Mostra risultati" %}
                </button>
             </div>
@@ -592,6 +592,7 @@
    <script src="{% static 'assets/js/filter-constants.js' %}"></script>
    <script src="{% static 'assets/js/main.js' %}"></script>
    <script src="{% static 'assets/js/signup-modal.js' %}"></script>
+   <script src="{% static 'assets/js/infinite-scroll.js' %}"></script>
    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
    <div id="ios-install-banner" style="
          position: fixed;
