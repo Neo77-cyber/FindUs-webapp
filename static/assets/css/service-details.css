@@ -1,3 +1,7 @@
+.mobile-header {
+  display: none;
+}
+
 /* Mobile Header Styles */
 .mobile-back-button {
   display: none;
@@ -28,10 +32,6 @@
   }
 }
 
-.mobile-header {
-  display: none;
-}
-
 .desktop-header {
   display: block;
 }
@@ -55,7 +55,8 @@
   text-align: center;
   font-weight: 600;
   color: var(--text-primary);
-  margin-right: 3rem; /* Balance the back arrow */
+  margin-right: 3rem;
+  /* Balance the back arrow */
 }
 
 @media (max-width: 768px) {
@@ -67,7 +68,7 @@
     background: white;
     border-bottom: 1px solid var(--border-default);
   }
-  
+
   .desktop-header {
     display: none !important;
   }
@@ -293,19 +294,23 @@
   background: var(--info-bg);
   color: var(--info);
 }
+
 .tag-green {
   background: var(--success-bg);
   color: var(--success);
 }
+
 .tag-cyan {
   background: var(--bg-tertiary);
   color: var(--primary);
   border: 1px solid var(--primary-light);
 }
+
 .tag-yellow {
   background: var(--warning-bg);
   color: var(--warning);
 }
+
 .tag-gray {
   background: var(--bg-secondary);
   color: var(--text-secondary);
@@ -703,6 +708,7 @@
 
 /* Show mobile card on mobile, hide desktop card */
 @media (max-width: 1024px) {
+
   /* Ensure desktop card is completely hidden */
   .provider-card {
     display: none !important;
@@ -1040,7 +1046,8 @@
   }
 
   .review-rating {
-    margin-left: 64px; /* Align with name */
+    margin-left: 64px;
+    /* Align with name */
     margin-top: -0.5rem;
   }
 }

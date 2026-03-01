@@ -251,8 +251,7 @@
                      <span class="tag tag-blue">{{ service.get_category_display }}</span>
                      <span class="tag tag-green">{{ service.get_availability_display }}</span>
                      <span class="tag tag-cyan">{{ service.get_job_size_display }}</span>
-                     <span class="tag tag-yellow">{% if service.price_type == 'hourly' %}{% trans "Tariffa oraria" %}{%
-                        else %}{% trans "Prezzo fisso" %}{% endif %}</span>
+                     <span class="tag tag-yellow">{% if service.price_type == 'hourly' %}{% trans "Tariffa oraria" %}{% else %}{% trans "Prezzo fisso" %}{% endif %}</span>
                   </div>
                </div>
             </div>
@@ -313,8 +312,8 @@
                               <line x1="12" y1="8" x2="12" y2="12"></line>
                               <line x1="12" y1="16" x2="12.01" y2="16"></line>
                            </svg>
-                           {% blocktrans with years=craftsman.years_of_experience %} {{ years }} di esperienza{%
-                           endblocktrans %}
+                           {% blocktrans with years=craftsman.years_of_experience %}{{ years }} di esperienza
+                           {% endblocktrans %}
                         </span>
                      </div>
                   </div>
@@ -705,8 +704,7 @@
                         </div>
                         <span class="rating-count">({{ reviews_count }} {% trans "recensioni" %})</span>
                      </div>
-                     <p class="member-since">{% blocktrans with date=craftsman.created_at|date:"M Y" %}Membro dal {{
-                        date }}{% endblocktrans %}</p>
+                     <p class="member-since">{% blocktrans with date=craftsman.created_at|date:"M Y" %}Membro dal {{ date }}{% endblocktrans %}</p>
                   </div>
                </div>
                <div class="provider-contact">
@@ -734,8 +732,7 @@
                         <line x1="12" y1="8" x2="12" y2="12"></line>
                         <line x1="12" y1="16" x2="12.01" y2="16"></line>
                      </svg>
-                     <span>{% blocktrans with years=craftsman.years_of_experience %}{{ years }} anni di esperienza{%
-                        endblocktrans %}</span>
+                     <span>{% blocktrans with years=craftsman.years_of_experience %}{{ years }} anni di esperienza{% endblocktrans %}</span>
                   </div>
                </div>
                <div class="provider-actions">
