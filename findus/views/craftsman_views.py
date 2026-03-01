@@ -352,7 +352,7 @@ def boost_service(request):
         }, status=500)
 
 
-@login_required
+@login_required(login_url="home")
 def craftsman_profile(request):
     """Craftsman profile management (uses preloaded profile to avoid extra queries)."""
     craftsman_profile = get_craftsman_profile(request.user)

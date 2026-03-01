@@ -190,7 +190,7 @@ def service_detail(request, service_slug):
         })
 
 
-@login_required
+@login_required(login_url="home")
 def customer_profile(request):
     """Customer profile page"""
     user = request.user
@@ -221,7 +221,7 @@ def customer_profile(request):
     return render(request, "customer_profile.html", context)
 
 
-@login_required
+@login_required(login_url="home")
 def saved_services(request):
     """View saved services"""
     try:
