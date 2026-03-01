@@ -1739,7 +1739,8 @@ body {
 
 @media (max-width: 768px) {
 
-  .desktop-logo {
+  .desktop-logo,
+  .logo {
     display: none !important;
   }
 

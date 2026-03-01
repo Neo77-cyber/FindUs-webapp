@@ -236,19 +236,19 @@
                <fieldset class="filter-group">
                   <legend class="filter-group-title">{% trans "Valutazione" %}</legend>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="5" {% if rating=="5" %}checked{% endif %}
+                     <input type="radio" name="rating" value="5" {% if rating == "5" %}checked{% endif %}
                         hx-trigger="change" />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★★ {% trans "5 stelle" %}</span>
                   </label>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="4" {% if rating=="4" %}checked{% endif %}
+                     <input type="radio" name="rating" value="4" {% if rating == "4" %}checked{% endif %}
                         hx-trigger="change" />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★☆ {% trans "4+ stelle" %}</span>
                   </label>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="3" {% if rating=="3" %}checked{% endif %}
+                     <input type="radio" name="rating" value="3" {% if rating == "3" %}checked{% endif %}
                         hx-trigger="change" />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★☆☆ {% trans "3+ stelle" %}</span>
@@ -493,15 +493,15 @@
                      hx-target=".search-results" hx-swap="innerHTML" hx-push-url="true" hx-include="[name='category'], [name='region'], [name='search'], 
                         [name='price_min'], [name='price_max'], [name='rating'],
                         [name='availability'], [name='job_size'], [name='features']">
-                     <option value="relevance" {% if sort_by=="relevance" %}selected{% endif %}>{% trans "Più rilevanti"
+                     <option value="relevance" {% if sort_by == "relevance" %}selected{% endif %}>{% trans "Più rilevanti"
                         %}</option>
-                     <option value="rating" {% if sort_by=="rating" %}selected{% endif %}>{% trans "Più votati" %}
+                     <option value="rating" {% if sort_by == "rating" %}selected{% endif %}>{% trans "Più votati" %}
                      </option>
-                     <option value="price_low" {% if sort_by=="price_low" %}selected{% endif %}>{% trans "Prezzo: dal
+                     <option value="price_low" {% if sort_by == "price_low" %}selected{% endif %}>{% trans "Prezzo: dal
                         più basso" %}</option>
-                     <option value="price_high" {% if sort_by=="price_high" %}selected{% endif %}>{% trans "Prezzo: dal
+                     <option value="price_high" {% if sort_by == "price_high" %}selected{% endif %}>{% trans "Prezzo: dal
                         più alto" %}</option>
-                     <option value="distance" {% if sort_by=="distance" %}selected{% endif %}>{% trans "Più vicini" %}
+                     <option value="distance" {% if sort_by == "distance" %}selected{% endif %}>{% trans "Più vicini" %}
                      </option>
                   </select>
                </div>

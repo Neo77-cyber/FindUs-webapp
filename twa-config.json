@@ -1,0 +1,49 @@
+{
+  "packageId": "com.fidamano.app",
+  "host": "fidamano.com",
+  "name": "FidaMano",
+  "launcherName": "FidaMano",
+  "display": "standalone",
+  "themeColor": "#077f46",
+  "navigationColor": "#077f46",
+  "navigationColorDark": "#055c34",
+  "navigationDividerColor": "#ffffff",
+  "navigationDividerColorDark": "#ffffff",
+  "backgroundColor": "#077f46",
+  "enableNotifications": true,
+  "enableLocation": false,
+  "enableCamera": false,
+  "enableMicrophone": false,
+  "maskableIcons": true,
+  "monochromeIconUrl": "/static/icons/monochrome.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "fidamano"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "minSdkVersion": 21,
+  "targetSdkVersion": 34,
+  "webManifestUrl": "https://fidamano.com/static/manifest.json",
+  "fallbackUrl": "https://fidamano.com",
+  "shareTarget": {
+    "action": "/share-target/",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": ["image/*", "video/*"]
+        }
+      ]
+    }
+  },
+  "isChromeOSOnly": false,
+  "generateApk": true,
+  "generateAab": true
+}
