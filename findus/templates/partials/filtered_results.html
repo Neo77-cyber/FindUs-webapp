@@ -17,7 +17,11 @@
           
           <div class="dashboard-card-content">
             <div class="dashboard-card-header">
-              <a href="{% url 'craftsman_public_profile' service.craftsman.slug %}">
+              {% if service.craftsman.slug %}
+                <a href="{% url 'craftsman_public_profile' service.craftsman.slug %}">
+              {% else %}
+                <a href="#">
+              {% endif %}
                 {% if service.craftsman.profile_photo %}
                     <img src="{{ service.craftsman.profile_photo.url }}" alt="{{ service.craftsman.business_name }}" class="dashboard-card-avatar">
                 {% else %}
@@ -25,7 +29,11 @@
                 {% endif %}
             </a>
               <div class="dashboard-card-header-info">
-                  <a href="{% url 'service_detail' service.slug %}" class="dashboard-card-name-link">
+                  {% if service.slug %}
+                    <a href="{% url 'service_detail' service.slug %}" class="dashboard-card-name-link">
+                  {% else %}
+                    <a href="#" class="dashboard-card-name-link">
+                  {% endif %}
                     <h3 class="dashboard-card-name">{{ service.title }}</h3>
                   </a>
                 <div class="dashboard-card-rating">
@@ -116,7 +124,11 @@
               {% endif %}
               
               {% if request.user.is_authenticated %}
-                <button class="btn-service-secondary" onclick="window.location.href='{% url 'service_detail' service.slug %}'">
+                {% if service.slug %}
+                  <button class="btn-service-secondary" onclick="window.location.href='{% url 'service_detail' service.slug %}'">
+                {% else %}
+                  <button class="btn-service-secondary" onclick="window.location.href='#'">
+                {% endif %}
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>

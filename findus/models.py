@@ -243,7 +243,13 @@ class CraftsmanProfile(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug or self.slug == '':
-            base_slug = slugify(self.business_name)
+            # Use business_name if available, otherwise use username
+            if self.business_name and self.business_name.strip():
+                base_string = self.business_name
+            else:
+                base_string = self.user_profile.user.username
+            
+            base_slug = slugify(base_string)
             slug = base_slug
             counter = 1
             # Exclude self when checking for existing slugs
