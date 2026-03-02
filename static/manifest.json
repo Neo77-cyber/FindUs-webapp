@@ -1,129 +1,47 @@
 {
   "name": "FidaMano",
   "short_name": "FidaMano",
-  "description": "Trova artigiani locali e professionisti di servizi in Italia",
+  "description": "Find local craftsmen and service providers",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#077f46",
   "theme_color": "#077f46",
   "orientation": "portrait",
-  "scope": "/",
-  "lang": "it",
-  "dir": "ltr",
-  "categories": ["business", "lifestyle", "utilities"],
-  "screenshots": [
-    {
-      "src": "/static/screenshots/desktop1.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Dashboard principale di FidaMano"
-    },
-    {
-      "src": "/static/screenshots/mobile1.png",
-      "sizes": "375x812",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Ricerca professionisti su mobile"
-    }
-  ],
   "icons": [
-    {
-      "src": "/static/icons/72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/static/icons/96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/static/icons/128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/static/icons/144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/static/icons/152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/static/icons/167.png",
-      "sizes": "167x167",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/static/icons/180.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
     {
       "src": "/static/icons/192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/static/icons/384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     },
     {
       "src": "/static/icons/512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     },
     {
-      "src": "/static/icons/1024.png",
-      "sizes": "1024x1024",
-      "type": "image/png",
-      "purpose": "maskable any"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Cerca Professionisti",
-      "short_name": "Cerca",
-      "description": "Trova artigiani nella tua zona",
-      "url": "/?shortcut=search",
-      "icons": [
-        {
-          "src": "/static/icons/96.png",
-          "sizes": "96x96"
-        }
-      ]
+      "src": "/static/icons/180.png",
+      "sizes": "180x180",
+      "type": "image/png"
     },
     {
-      "name": "Dashboard Cliente",
-      "short_name": "Cliente",
-      "description": "Accedi alla tua dashboard",
-      "url": "/customer-dashboard/?shortcut=dashboard",
-      "icons": [
-        {
-          "src": "/static/icons/96.png",
-          "sizes": "96x96"
-        }
-      ]
+      "src": "/static/icons/167.png",
+      "sizes": "167x167",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icons/152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icons/120.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icons/114.png",
+      "sizes": "114x114",
+      "type": "image/png"
     }
-  ],
-  "related_applications": [],
-  "prefer_related_applications": false,
-  "edge_side_panel": {
-    "preferred_width": 400
-  }
+  ]
 }

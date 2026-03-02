@@ -96,21 +96,9 @@ def home(request):
         # Apply sorting
         services = ServiceQueryBuilder.apply_sorting(services, sort_by)
 
-        # Check if this is an infinite scroll request
-        is_infinite_scroll = request.GET.get('infinite_scroll') == 'true'
-
         # Paginate
         paginator = Paginator(services, 12)
         page_obj = paginator.get_page(page)
-
-        # If infinite scroll, return only the service cards
-        if is_infinite_scroll:
-            from django.template.loader import render_to_string
-            html = render_to_string('partials/filtered_results.html', {
-                'services': page_obj,
-                'Service': Service,
-            })
-            return HttpResponse(html, content_type='text/html')
 
         # Build context
         context = {

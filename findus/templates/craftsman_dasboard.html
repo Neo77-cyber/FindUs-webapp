@@ -61,9 +61,9 @@
       </div>
       <header class="dashboard-header">
          <div class="dashboard-header-content">
-            <a href="{% url 'craftsman_dashboard' %}" class="logo" aria-label="FidaMano Home">
-            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="height: 40px; margin-right:-12px;">
-            <span class="logo-text">FidaMano</span>
+            <a href="{% url 'craftsman_dashboard' %}" class="logo mobile-hide" aria-label="FidaMano Home">
+               <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" class="logo-img">
+               <span class="logo-text">FidaMano</span>
             </a>
             
             <div class="dashboard-search">
@@ -926,6 +926,5 @@
       </footer>
       <script src="{% static 'assets/js/main.js' %}"></script>
       <script src="{% static 'assets/js/service-provider-modal.js' %}"></script>
-      <script src="{% static 'assets/js/infinite-scroll.js' %}"></script>
    </body>
 </html>

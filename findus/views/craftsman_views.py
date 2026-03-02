@@ -47,21 +47,9 @@ def craftsman_dashboard(request):
         # Get counts
         counts = CraftsmanServiceManager.get_service_counts(craftsman_profile)
         
-        # Check if this is an infinite scroll request
-        is_infinite_scroll = request.GET.get('infinite_scroll') == 'true'
-        
         # Paginate
         paginator = Paginator(services_qs, 8)
         services = paginator.get_page(page_number)
-        
-        # If infinite scroll, return only the service cards
-        if is_infinite_scroll:
-            from django.template.loader import render_to_string
-            html = render_to_string('partials/service_grid.html', {
-                'services': services,
-                'craftsman': craftsman_profile,
-            })
-            return HttpResponse(html, content_type='text/html')
         
         # Build context
         context = {

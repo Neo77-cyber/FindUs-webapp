@@ -77,11 +77,10 @@
    </div>
    <header class="main-header">
       <div class="header-content">
-         <a href="{% url 'home' %}" class="logo" aria-label="FidaMano Home">
-            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano"
-               style="height: 40px; margin-right:-12px;">
-            <span class="logo-text">FidaMano</span>
-         </a>
+         <a href="{% url 'home' %}" class="logo mobile-hide" aria-label="FidaMano Home">
+    <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" style="height: 40px; margin-right:-12px;">
+    <span class="logo-text">FidaMano</span>
+</a>
 
          <nav class="nav-menu" id="nav-menu">
             <a href="{% url 'register' %}" class="nav-link">{% trans "Registrati" %}</a>
@@ -321,11 +320,11 @@
                <button type="button" class="btn-cancel-mobile" id="btn-cancel-filters">
                   {% trans "Annulla" %}
                </button>
-               <button type="button" class="btn-clear-mobile" onclick="window.location.href='{% url 'home' %}';">
+               <button type="button" class="btn-clear-mobile" onclick="window.location.href='{% url 'home' %}'">
                   {% trans "Cancella tutto" %}
                </button>
                <button type="button" class="btn-apply-mobile" id="btn-apply-filters"
-                  onclick="document.querySelector('.filter-form').requestSubmit();">
+                  onclick="document.querySelector('.filter-form').requestSubmit()">
                   {% trans "Mostra risultati" %}
                </button>
             </div>
@@ -578,7 +577,6 @@
    <script src="{% static 'assets/js/filter-constants.js' %}"></script>
    <script src="{% static 'assets/js/main.js' %}"></script>
    <script src="{% static 'assets/js/signup-modal.js' %}"></script>
-   <script src="{% static 'assets/js/infinite-scroll.js' %}"></script>
    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
    <div id="ios-install-banner" style="
          position: fixed;

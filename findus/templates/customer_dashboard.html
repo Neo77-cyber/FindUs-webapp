@@ -147,8 +147,7 @@
                   <legend class="filter-group-title">{% trans "Regione" %}</legend>
                   {% for value, label in REGION_CHOICES %}
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="region" value="{{ value }}" {% if value==selected_region %}checked{%
-                        endif %} />
+                     <input type="checkbox" name="region" value="{{ value }}" {% if value == selected_region %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
                   </label>
@@ -159,8 +158,7 @@
                   <legend class="filter-group-title">{% trans "Categoria servizio" %}</legend>
                   {% for value, label in CATEGORY_CHOICES %}
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="category" value="{{ value }}" {% if value==selected_category
-                        %}checked{% endif %} />
+                     <input type="checkbox" name="category" value="{{ value }}" {% if value == selected_category %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
                   </label>
@@ -181,17 +179,17 @@
                <fieldset class="filter-group">
                   <legend class="filter-group-title">{% trans "Valutazione" %}</legend>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="5" {% if rating=="5" %}checked{% endif %} />
+                     <input type="radio" name="rating" value="5" {% if rating == "5" %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★★ {% trans "5 stelle" %}</span>
                   </label>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="4" {% if rating=="4" %}checked{% endif %} />
+                     <input type="radio" name="rating" value="4" {% if rating == "4" %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★★☆ {% trans "4+ stelle" %}</span>
                   </label>
                   <label class="filter-radio">
-                     <input type="radio" name="rating" value="3" {% if rating=="3" %}checked{% endif %} />
+                     <input type="radio" name="rating" value="3" {% if rating == "3" %}checked{% endif %} />
                      <span class="radio-custom"></span>
                      <span class="rating-option">★★★☆☆ {% trans "3+ stelle" %}</span>
                   </label>
@@ -206,8 +204,7 @@
                   <legend class="filter-group-title">{% trans "Disponibilità" %}</legend>
                   {% for value, label in AVAILABILITY_CHOICES %}
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="availability" value="{{ value }}" {% if value in availability
-                        %}checked{% endif %} />
+                     <input type="checkbox" name="availability" value="{{ value }}" {% if value in availability %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
                   </label>
@@ -218,8 +215,7 @@
                   <legend class="filter-group-title">{% trans "Dimensione lavoro" %}</legend>
                   {% for value, label in SERVICE_SCOPE_CHOICES %}
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="job_size" value="{{ value }}" {% if value in job_sizes %}checked{%
-                        endif %} />
+                     <input type="checkbox" name="job_size" value="{{ value }}" {% if value in job_sizes %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{{ label }}</span>
                   </label>
@@ -229,26 +225,22 @@
                <fieldset class="filter-group">
                   <legend class="filter-group-title">{% trans "Caratteristiche" %}</legend>
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="features" value="verified" {% if "verified" in features %}checked{%
-                        endif %} />
+                     <input type="checkbox" name="features" value="verified" {% if "verified" in features %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Professionista verificato" %}</span>
                   </label>
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="features" value="licensed" {% if "licensed" in features %}checked{%
-                        endif %} />
+                     <input type="checkbox" name="features" value="licensed" {% if "licensed" in features %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Autorizzato" %}</span>
                   </label>
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="features" value="insured" {% if "insured" in features %}checked{%
-                        endif %} />
+                     <input type="checkbox" name="features" value="insured" {% if "insured" in features %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Assicurato" %}</span>
                   </label>
                   <label class="filter-checkbox">
-                     <input type="checkbox" name="features" value="warranty" {% if "warranty" in features %}checked{%
-                        endif %} />
+                     <input type="checkbox" name="features" value="warranty" {% if "warranty" in features %}checked{% endif %} />
                      <span class="checkbox-custom"></span>
                      <span>{% trans "Offre garanzia" %}</span>
                   </label>

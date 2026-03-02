@@ -65,6 +65,7 @@
                style="height: 40px; margin-right:-12px;">
             <span class="logo-text">FidaMano</span>
          </a>
+         
          {% if request.user.is_authenticated %}
          <nav class="dashboard-nav">
             <a href="{% url 'saved_services' %}" class="nav-icon-link" data-tooltip="{% trans 'Salvati' %}">
@@ -331,7 +332,7 @@
          <p class="footer-copyright">&copy; 2026 FidaMano. {% trans "Tutti i diritti riservati." %}</p>
       </div>
    </footer>
+   <script src="{% static 'assets/js/main.js' %}"></script>
 </body>
-<script src="{% static 'assets/js/main.js' %}"></script>
 
 </html>

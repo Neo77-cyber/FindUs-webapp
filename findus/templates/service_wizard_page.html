@@ -48,11 +48,10 @@
    </div>
    <header class="dashboard-header">
       <div class="dashboard-header-content">
-         <a href="{% url 'craftsman_dashboard' %}" class="logo" aria-label="FidaMano Home">
-            <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano"
-               style="height: 40px; margin-right:-12px;">
-            <span class="logo-text">FidaMano</span>
-         </a>
+         <a href="{% url 'craftsman_dashboard' %}" class="logo mobile-hide" aria-label="FidaMano Home">
+               <img src="{% static 'assets/img/fidamano-logo-2.png' %}" alt="FidaMano" class="logo-img">
+               <span class="logo-text">FidaMano</span>
+            </a>
          <a href="{% url 'craftsman_dashboard' %}" class="btn-prev">{% trans "Annulla" %}</a>
       </div>
    </header>
