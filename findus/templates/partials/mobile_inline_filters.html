@@ -337,23 +337,23 @@
     });
     
     // Close modal when clicking outside
-    document.querySelectorAll('.filter-modal').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target = == this) {
-                closeFilterModal(this.id.replace('-modal', ''));
-            }
-        });
-    });
-    
-    // Close on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key = == 'Escape') {
-            document.querySelectorAll('.filter-modal').forEach(modal => {
-                if (modal.style.display = == 'flex') {
-                    const type = modal.id.replace('-modal', '');
-                    closeFilterModal(type);
-                }
-            });
+document.querySelectorAll('.filter-modal').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeFilterModal(this.id.replace('-modal', ''));
         }
     });
+});
+
+// Close on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.filter-modal').forEach(modal => {
+            if (modal.style.display === 'flex') {
+                const type = modal.id.replace('-modal', '');
+                closeFilterModal(type);
+            }
+        });
+    }
+});
 </script>
