@@ -2,7 +2,7 @@
 
 A comprehensive handyman services marketplace built with Django, connecting customers with skilled craftsmen across various trades and services.
 
-## 🔧 Features
+##  Features
 
 ### Core Functionality
 - **Multi-category Service Platform**: 30+ service categories including plumbing, electrical, carpentry, and more
@@ -21,7 +21,7 @@ A comprehensive handyman services marketplace built with Django, connecting cust
 - **Admin Panel**: Comprehensive Django admin interface
 - **Static File Management**: Optimized static file serving
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Backend**: Django 4.2.28
 - **Database**: PostgreSQL (production), SQLite (development)
@@ -31,26 +31,26 @@ A comprehensive handyman services marketplace built with Django, connecting cust
 - **Web Server**: Gunicorn
 - **Development Tools**: Django Debug Toolbar, Black, isort
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 handyman_2/
-├── handyman_project/          # Main Django project
-│   ├── settings.py           # Django settings
-│   ├── urls.py              # Main URL configuration
-│   └── wsgi.py              # WSGI configuration
-├── findus/                   # Core application
-│   ├── models.py            # Database models (User, Craftsman, Service, etc.)
-│   ├── views/               # View modules
-│   ├── forms.py             # Django forms
-│   ├── services.py          # Business logic services
-│   ├── email_utils.py       # Email functionality
-│   ├── templates/           # HTML templates
-│   └── migrations/          # Database migrations
-├── populate.py              # Test data population script
-├── media/                   # User uploaded files
-├── static/                  # Static assets
-└── requirements.txt         # Python dependencies
+├── handyman_project/          
+│   ├── settings.py           
+│   ├── urls.py              
+│   └── wsgi.py              
+├── findus/                   
+│   ├── models.py            
+│   ├── views/               
+│   ├── forms.py             
+│   ├── services.py          
+│   ├── email_utils.py       
+│   ├── templates/           
+│   └── migrations/          
+├── populate.py              
+├── media/                   
+├── static/                  
+└── requirements.txt         
 ```
 
 ## 🚀 Quick Start
@@ -171,7 +171,7 @@ EMAIL_HOST_USER=your-email@gmail.com
 EMAIL_HOST_PASSWORD=your-app-password
 ```
 
-## 🌐 Key Features
+## Key Features
 
 ### User Management
 - **Customer Accounts**: Service seekers can browse, search, and book services
@@ -189,7 +189,7 @@ EMAIL_HOST_PASSWORD=your-app-password
 - **Messaging System**: In-app communication between customers and craftsmen
 - **Review System**: Rating and feedback mechanism
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run tests
@@ -199,7 +199,7 @@ python manage.py test
 python manage.py test findus
 ```
 
-## 📝 Development Tools
+## Development Tools
 
 ### Code Quality
 - **Black**: Code formatting
@@ -210,7 +210,7 @@ python manage.py test findus
 - **populate.py**: Test data population script
 - **Admin Interface**: Comprehensive admin panel for data management
 
-## 🚀 Deployment
+## Deployment
 
 ### Build Script
 ```bash
@@ -227,15 +227,15 @@ chmod +x build.sh
 - Configure email services
 - Set up monitoring and logging
 
-## 📄 License
+## License
 
 This project is proprietary and intended for commercial use.
 
-## 🤝 Contributing
+## Contributing
 
-Contact the development team for contribution guidelines.
+Contact my team for contribution guidelines.
 
-## 📞 Support
+## Support
 
 For technical support or questions, please contact the development team.
 
