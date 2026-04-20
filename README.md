@@ -53,7 +53,7 @@ handyman_2/
 └── requirements.txt         
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8+
@@ -122,7 +122,7 @@ handyman_2/
     redis-server
     ```
 
-## 📊 Database Models
+## Database Models
 
 ### Core Models
 - **User**: Extended Django user with profile information
@@ -143,7 +143,7 @@ The platform supports 30+ service categories including:
 ### Regional Coverage
 Support for multiple regions with location-based filtering and search capabilities.
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 ```bash
