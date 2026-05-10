@@ -10,6 +10,8 @@ except ImportError:
     import dj_database_url as dj_database_url
 import cloudinary 
 from dotenv import load_dotenv
+import logging
+logging.basicConfig(level=logging.INFO)
 
 from django.utils.translation import gettext_lazy as _
 
@@ -191,17 +193,37 @@ if not os.path.exists(MEDIA_TEMP_DIR):
 
 REDIS_URL = os.getenv('REDIS_URL')
 
-# Only use Redis if URL is provided
+# Initialize with default local memory cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,
+        }
+    }
+}
+
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+
 if REDIS_URL:
     try:
+        
+        import redis
+        test_redis = redis.from_url(REDIS_URL, socket_connect_timeout=5)
+        test_redis.ping()
+        test_redis.close()
+        
+        
         CACHES = {
             'default': {
                 'BACKEND': 'django_redis.cache.RedisCache',
                 'LOCATION': REDIS_URL,
                 'OPTIONS': {
                     'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-                    # Remove HiredisParser if it's causing issues
-                    # 'PARSER_CLASS': 'redis.connection.HiredisParser',
                     'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
                     'CONNECTION_POOL_CLASS_KWARGS': {
                         'max_connections': 50,
@@ -211,7 +233,7 @@ if REDIS_URL:
                     'PICKLE_VERSION': -1,
                     'SOCKET_CONNECT_TIMEOUT': 5,
                     'SOCKET_TIMEOUT': 5,
-                    'IGNORE_EXCEPTIONS': True,  # Fail gracefully if Redis is down
+                    'IGNORE_EXCEPTIONS': True,  
                     'RETRY_ON_TIMEOUT': True,
                 },
                 'KEY_PREFIX': 'findus',
@@ -221,39 +243,17 @@ if REDIS_URL:
         }
         
         
-        SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-        SESSION_CACHE_ALIAS = 'default'
         
         
         
     except Exception as e:
         
-        print(f"Redis configuration error: {e}")
-        CACHES = {
-            'default': {
-                'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-                'LOCATION': 'unique-snowflake',
-                'TIMEOUT': 300,
-                'OPTIONS': {
-                    'MAX_ENTRIES': 1000,
-                }
-            }
-        }
+        logging.warning(f"Redis connection failed: {e}. Falling back to local memory cache.")
+        
 else:
-    
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'unique-snowflake',
-            'TIMEOUT': 300,
-            'OPTIONS': {
-                'MAX_ENTRIES': 1000,
-            }
-        }
-    }
+    logging.info("No REDIS_URL provided - using local memory cache")
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_CACHE_ALIAS = 'default'
+
 
 LOGGING = {
     'version': 1,

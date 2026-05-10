@@ -32,6 +32,7 @@ urlpatterns = [
     path("logout", user_logout, name="logout"),
     path("change-password/", change_password, name="change_password"),
     
+    
     # ============== CUSTOMER ROUTES ==============
     path("customer-dashboard/", customer_dashboard, name="customer_dashboard"),
     path("customer-profile/", customer_profile, name="customer_profile"),

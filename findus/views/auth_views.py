@@ -13,6 +13,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, DatabaseError
 from django.core.cache import cache
 import logging
+from django.http import HttpResponse
 
 from ..forms import CustomerSignUpForm, CraftsmanSignUpForm
 from ..email_utils import send_welcome_email_async
@@ -341,3 +342,7 @@ def user_logout(request):
     auth_logout(request)
     
     return redirect("home")
+
+
+def health_check(request):
+    return HttpResponse("ok", status=200)
