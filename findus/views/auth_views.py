@@ -1,6 +1,7 @@
 """
 Authentication views (login, register, logout)
 """
+
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -25,16 +26,20 @@ logger = logging.getLogger(__name__)
 @csrf_protect
 def register(request):
     """Customer registration"""
-    
+
     # Redirect if already authenticated
     if request.user.is_authenticated:
         if hasattr(request.user, "userprofile"):
             try:
                 request.user.userprofile.craftsmanprofile
-                logger.debug(f"Authenticated craftsman redirected: {request.user.username}")
+                logger.debug(
+                    f"Authenticated craftsman redirected: {request.user.username}"
+                )
                 return redirect("craftsman_dashboard")
             except:
-                logger.debug(f"Authenticated customer redirected: {request.user.username}")
+                logger.debug(
+                    f"Authenticated customer redirected: {request.user.username}"
+                )
                 return redirect("customer_dashboard")
 
     if request.method == "POST":
@@ -52,7 +57,6 @@ def register(request):
                         is_craftsman=False,
                     )
 
-                
                 return redirect("customer_dashboard")
 
             except ValidationError as e:
@@ -74,8 +78,12 @@ def register(request):
                 )
 
             except Exception as e:
-                logger.error(f"Unexpected error during registration: {str(e)}", exc_info=True)
-                messages.error(request, "An unexpected error occurred. Please try again later.")
+                logger.error(
+                    f"Unexpected error during registration: {str(e)}", exc_info=True
+                )
+                messages.error(
+                    request, "An unexpected error occurred. Please try again later."
+                )
         else:
             # Log form errors
             logger.warning(f"Form validation failed - Errors: {form.errors}")
@@ -98,7 +106,7 @@ def register(request):
 @csrf_protect
 def register_craftsman(request):
     """Craftsman registration"""
-    
+
     # Redirect if already authenticated
     if request.user.is_authenticated:
         if hasattr(request.user, "userprofile"):
@@ -130,11 +138,12 @@ def register_craftsman(request):
                     except Exception as e:
                         logger.error(f"Failed to queue welcome email: {str(e)}")
 
-                
                 return redirect("craftsman_dashboard")
 
             except ValidationError as e:
-                logger.warning(f"Validation error during craftsman registration: {str(e)}")
+                logger.warning(
+                    f"Validation error during craftsman registration: {str(e)}"
+                )
                 messages.error(request, f"Validation error: {str(e)}")
 
             except IntegrityError as e:
@@ -152,7 +161,10 @@ def register_craftsman(request):
                 )
 
             except Exception as e:
-                logger.error(f"Unexpected error during craftsman registration: {str(e)}", exc_info=True)
+                logger.error(
+                    f"Unexpected error during craftsman registration: {str(e)}",
+                    exc_info=True,
+                )
                 messages.error(
                     request,
                     "An unexpected error occurred. Please try again later.",
@@ -187,7 +199,7 @@ def register_craftsman(request):
 @csrf_protect
 def signin(request):
     """User login"""
-    
+
     # Early redirect for authenticated users
     if request.user.is_authenticated:
         if hasattr(request.user, "userprofile"):
@@ -201,7 +213,7 @@ def signin(request):
     if request.method == "POST":
         username_input = request.POST.get("username", "").strip()
         password = request.POST.get("password", "").strip()
-        
+
         if not username_input or not password:
             messages.error(request, "Please provide both username and password.")
             return render(request, "signin.html", {"username_value": username_input})
@@ -209,7 +221,7 @@ def signin(request):
         # Try cache first (optimization - using lowercase for key is fine for cache)
         cache_key = f"user_auth_{username_input.lower()}"
         cached_user_id = cache.get(cache_key)
-        
+
         user = None
         if cached_user_id:
             try:
@@ -220,41 +232,45 @@ def signin(request):
                     cache.delete(cache_key)
             except User.DoesNotExist:
                 cache.delete(cache_key)
-        
+
         # If not in cache, try multi-stage authentication
         if not user:
             # 1. Try exact match (most efficient if correct case provided)
             user = authenticate(request, username=username_input, password=password)
-            
+
             # 2. Try case-insensitive username lookup
             if not user:
                 try:
                     user_record = User.objects.get(username__iexact=username_input)
-                    user = authenticate(request, username=user_record.username, password=password)
+                    user = authenticate(
+                        request, username=user_record.username, password=password
+                    )
                 except (User.DoesNotExist, User.MultipleObjectsReturned):
                     pass
-            
+
             # 3. Try case-insensitive email lookup
             if not user:
                 try:
                     user_record = User.objects.get(email__iexact=username_input)
-                    user = authenticate(request, username=user_record.username, password=password)
+                    user = authenticate(
+                        request, username=user_record.username, password=password
+                    )
                 except (User.DoesNotExist, User.MultipleObjectsReturned):
                     pass
-            
+
             # Cache successful login
             if user:
                 cache.set(cache_key, user.id, 3600)  # 1 hour
 
         if user and user.is_active:
             login(request, user)
-            
+
             # Set session expiry
             if not request.POST.get("remember"):
                 request.session.set_expiry(0)  # Browser close
-            
+
             logger.info(f"User logged in: {user.username}")
-            
+
             # Redirect based on user type
             if hasattr(user, "userprofile"):
                 try:
@@ -263,7 +279,7 @@ def signin(request):
                 except:
                     return redirect("customer_dashboard")
             return redirect("customer_dashboard")
-        
+
         # Failed login
         logger.warning(f"Failed login attempt for username: {username_input}")
         messages.error(request, "Invalid username or password.")
@@ -287,30 +303,46 @@ def _get_dashboard_redirect(user):
 @require_http_methods(["POST"])
 def change_password(request):
     """Change user password"""
-    
+
     current = request.POST.get("current_password")
     new = request.POST.get("new_password")
     confirm = request.POST.get("confirm_password")
-    
+
     # Validate fields are not empty
     if not all([current, new, confirm]):
         messages.error(request, "All password fields are required")
-        return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
+        return redirect(
+            "craftsman_profile"
+            if get_craftsman_profile(request.user)
+            else "customer_profile"
+        )
 
     # Validate current password
     if not request.user.check_password(current):
         messages.error(request, "Current password is incorrect")
-        return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
+        return redirect(
+            "craftsman_profile"
+            if get_craftsman_profile(request.user)
+            else "customer_profile"
+        )
 
     # Validate new password length
     if len(new) < 6:
         messages.error(request, "New password must be at least 6 characters")
-        return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
+        return redirect(
+            "craftsman_profile"
+            if get_craftsman_profile(request.user)
+            else "customer_profile"
+        )
 
     # Validate password confirmation
     if new != confirm:
         messages.error(request, "New passwords do not match")
-        return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
+        return redirect(
+            "craftsman_profile"
+            if get_craftsman_profile(request.user)
+            else "customer_profile"
+        )
 
     # Update password
     request.user.set_password(new)
@@ -318,29 +350,33 @@ def change_password(request):
 
     # Keep user logged in
     update_session_auth_hash(request, request.user)
-    
+
     # Clear auth cache
     cache_key = f"user_auth_{request.user.username.lower()}"
     cache.delete(cache_key)
-    
+
     logger.info(f"Password changed for user: {request.user.username}")
     messages.success(request, "Password updated successfully")
 
-    return redirect("craftsman_profile" if get_craftsman_profile(request.user) else "customer_profile")
+    return redirect(
+        "craftsman_profile"
+        if get_craftsman_profile(request.user)
+        else "customer_profile"
+    )
 
 
 @login_required
 def user_logout(request):
     """User logout"""
-    
+
     # Clear auth cache
     if request.user.is_authenticated:
         cache_key = f"user_auth_{request.user.username.lower()}"
         cache.delete(cache_key)
         logger.info(f"User logged out: {request.user.username}")
-    
+
     auth_logout(request)
-    
+
     return redirect("home")
 
 

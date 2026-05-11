@@ -57,35 +57,28 @@ class CustomerSignUpForm(UserCreationForm):
         return email
 
     def clean_phone(self):
-        
+
         phone = self.cleaned_data.get("phone", "")
-        
-        # Make sure it's a string
+
         phone = str(phone).strip()
-        
-        # Remove everything except digits and +
-        phone = re.sub(r'[^\d+]', '', phone)
-        
-        # Check if empty after cleaning
+
+        phone = re.sub(r"[^\d+]", "", phone)
+
         if not phone:
             raise ValidationError("Please enter a phone number.")
-        
-        # Check if already exists
+
         if CustomerProfile.objects.filter(phone=phone).exists():
             raise ValidationError("This phone number is already registered.")
-        
-        # Store in +39XXXXXXXXXX format
-        if phone.startswith('+39'):
-            # Already has +39
+
+        if phone.startswith("+39"):
+
             pass
-        elif phone.startswith('39'):
-            # Has 39 without +
-            phone = '+' + phone
-        elif phone.startswith('3') or phone.startswith('0'):
-            # Italian mobile (3) or landline (0)
-            phone = '+39' + phone
-        
-        
+        elif phone.startswith("39"):
+
+            phone = "+" + phone
+        elif phone.startswith("3") or phone.startswith("0"):
+
+            phone = "+39" + phone
 
         return phone
 
@@ -130,35 +123,28 @@ class CraftsmanSignUpForm(UserCreationForm):
         return email
 
     def clean_phone(self):
-        
+
         phone = self.cleaned_data.get("phone", "")
-        
-        # Make sure it's a string
+
         phone = str(phone).strip()
-        
-        # Remove everything except digits and +
-        phone = re.sub(r'[^\d+]', '', phone)
-        
-        # Check if empty after cleaning
+
+        phone = re.sub(r"[^\d+]", "", phone)
+
         if not phone:
             raise ValidationError("Please enter a phone number.")
-        
-        # Check if already exists
+
         if CustomerProfile.objects.filter(phone=phone).exists():
             raise ValidationError("This phone number is already registered.")
-        
-        # Store in +39XXXXXXXXXX format
-        if phone.startswith('+39'):
-            # Already has +39
+
+        if phone.startswith("+39"):
+
             pass
-        elif phone.startswith('39'):
-            # Has 39 without +
-            phone = '+' + phone
-        elif phone.startswith('3') or phone.startswith('0'):
-            # Italian mobile (3) or landline (0)
-            phone = '+39' + phone
-        
-        
+        elif phone.startswith("39"):
+
+            phone = "+" + phone
+        elif phone.startswith("3") or phone.startswith("0"):
+
+            phone = "+39" + phone
 
         return phone
 
@@ -382,33 +368,47 @@ class ReviewForm(forms.ModelForm):
             (1, "⭐ Poor"),
         ]
 
+
 class ServiceBasicInfoForm(forms.ModelForm):
     title = forms.CharField(
         max_length=100,
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g., Emergency Plumbing Repair"}),
-        label="Service Title"
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "e.g., Emergency Plumbing Repair",
+            }
+        ),
+        label="Service Title",
     )
     category = forms.ChoiceField(
         choices=CATEGORY_CHOICES,
         widget=forms.Select(attrs={"class": "form-control"}),
-        label="Category"
+        label="Category",
     )
     price_type = forms.ChoiceField(
         choices=PRICE_TYPE_CHOICES,
-        widget=forms.RadioSelect(attrs={"class": "modal-radio-input"}), 
+        widget=forms.RadioSelect(attrs={"class": "modal-radio-input"}),
         initial="hourly",
-        label="Pricing Type"
+        label="Pricing Type",
     )
-    
+
     hourly_rate = forms.DecimalField(
-        max_digits=8, decimal_places=2, required=False,
-        widget=forms.NumberInput(attrs={"class": "modal-currency-field", "placeholder": "0.00"}),
-        label="Hourly Rate"
+        max_digits=8,
+        decimal_places=2,
+        required=False,
+        widget=forms.NumberInput(
+            attrs={"class": "modal-currency-field", "placeholder": "0.00"}
+        ),
+        label="Hourly Rate",
     )
     fixed_price = forms.DecimalField(
-        max_digits=8, decimal_places=2, required=False,
-        widget=forms.NumberInput(attrs={"class": "modal-currency-field", "placeholder": "0.00"}),
-        label="Fixed Price"
+        max_digits=8,
+        decimal_places=2,
+        required=False,
+        widget=forms.NumberInput(
+            attrs={"class": "modal-currency-field", "placeholder": "0.00"}
+        ),
+        label="Fixed Price",
     )
 
     class Meta:
@@ -422,28 +422,36 @@ class ServiceBasicInfoForm(forms.ModelForm):
         fixed_price = cleaned_data.get("fixed_price")
 
         if price_type == "hourly" and not hourly_rate:
-            self.add_error('hourly_rate', "Hourly rate is required for hourly pricing")
+            self.add_error("hourly_rate", "Hourly rate is required for hourly pricing")
         if price_type == "fixed" and not fixed_price:
-            self.add_error('fixed_price', "Fixed price is required for fixed pricing")
-        
+            self.add_error("fixed_price", "Fixed price is required for fixed pricing")
+
         return cleaned_data
 
 
 class ServiceDetailsForm(forms.ModelForm):
     description = forms.CharField(
-        widget=forms.Textarea(attrs={"class": "form-control", "rows": 4, "placeholder": "Describe what you offer..."}),
-        label="Description"
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "rows": 4,
+                "placeholder": "Describe what you offer...",
+            }
+        ),
+        label="Description",
     )
     image = forms.ImageField(
         required=False,
-        widget=forms.FileInput(attrs={"class": "file-input-hidden", "accept": "image/*"}),
-        label="Service Image"
+        widget=forms.FileInput(
+            attrs={"class": "file-input-hidden", "accept": "image/*"}
+        ),
+        label="Service Image",
     )
     features = forms.MultipleChoiceField(
-        choices=ServiceForm.SERVICE_FEATURES, 
+        choices=ServiceForm.SERVICE_FEATURES,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox-input"}),
         required=False,
-        label="Key Features"
+        label="Key Features",
     )
 
     class Meta:
@@ -455,24 +463,26 @@ class ServiceLocationForm(forms.ModelForm):
     availability = forms.ChoiceField(
         choices=AVAILABILITY_CHOICES,
         widget=forms.Select(attrs={"class": "form-control"}),
-        label="Availability"
+        label="Availability",
     )
     travel_fee = forms.DecimalField(
         max_digits=6,
         decimal_places=2,
         required=False,
-        widget=forms.NumberInput(attrs={"class": "modal-currency-field", "placeholder": "0.00"}),
-        label="Travel Fee"
+        widget=forms.NumberInput(
+            attrs={"class": "modal-currency-field", "placeholder": "0.00"}
+        ),
+        label="Travel Fee",
     )
     region = forms.ChoiceField(
         choices=REGION_CHOICES,
-        widget=forms.Select(attrs={"class": "form-control"}), # Or custom widget for multiselect if single region isn't enough, but model says CharField
-        label="Service Region"
+        widget=forms.Select(attrs={"class": "form-control"}),
+        label="Service Region",
     )
     materials_included = forms.BooleanField(
         required=False,
         widget=forms.CheckboxInput(attrs={"class": "checkbox-input"}),
-        label="Materials included"
+        label="Materials included",
     )
 
     class Meta:

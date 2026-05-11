@@ -6,4 +6,4 @@ class FindusConfig(AppConfig):
     name = "findus"
 
     def ready(self):
-        import findus.signals  # noqa: F401 - connect Service save/delete to cache invalidation
+        import findus.signals

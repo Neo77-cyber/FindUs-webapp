@@ -11,25 +11,18 @@ class Migration(migrations.Migration):
     operations = [
         # Index for craftsman lookup
         migrations.AddIndex(
-            model_name='service',
+            model_name="service",
             index=models.Index(
-                fields=['craftsman', 'service_status'], 
-                name='svc_craft_stat_idx'
+                fields=["craftsman", "service_status"], name="svc_craft_stat_idx"
             ),
         ),
         # Index for price filtering (combined)
         migrations.AddIndex(
-            model_name='service',
-            index=models.Index(
-                fields=['hourly_rate'], 
-                name='svc_hourly_idx'
-            ),
+            model_name="service",
+            index=models.Index(fields=["hourly_rate"], name="svc_hourly_idx"),
         ),
         migrations.AddIndex(
-            model_name='service',
-            index=models.Index(
-                fields=['fixed_price'], 
-                name='svc_fixed_idx'
-            ),
+            model_name="service",
+            index=models.Index(fields=["fixed_price"], name="svc_fixed_idx"),
         ),
     ]

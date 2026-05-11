@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 
-# Translate all choice labels
+
 CATEGORY_CHOICES = [
     ("plumbing", _("Plumber")),
     ("electrical", _("Electrician")),
@@ -111,7 +111,9 @@ BOOST_STATUS_CHOICES = [
 
 
 class Service(models.Model):
-    craftsman = models.ForeignKey("CraftsmanProfile", on_delete=models.CASCADE, verbose_name=_("craftsman"))
+    craftsman = models.ForeignKey(
+        "CraftsmanProfile", on_delete=models.CASCADE, verbose_name=_("craftsman")
+    )
     title = models.CharField(_("title"), max_length=100)
     slug = models.SlugField(_("slug"), max_length=120, blank=True, null=True)
     category = models.CharField(_("category"), max_length=50, choices=CATEGORY_CHOICES)
@@ -124,7 +126,9 @@ class Service(models.Model):
         blank=True,
     )
     description = models.TextField(_("description"))
-    price_type = models.CharField(_("price type"), max_length=10, choices=PRICE_TYPE_CHOICES)
+    price_type = models.CharField(
+        _("price type"), max_length=10, choices=PRICE_TYPE_CHOICES
+    )
     hourly_rate = models.DecimalField(
         _("hourly rate"), max_digits=8, decimal_places=2, null=True, blank=True
     )
@@ -133,9 +137,14 @@ class Service(models.Model):
     )
     estimated_duration = models.CharField(_("estimated duration"), max_length=100)
     min_hours = models.CharField(_("minimum hours"), max_length=100, blank=True)
-    image = models.ImageField(_("image"), upload_to="service_images/", null=True, blank=True)
+    image = models.ImageField(
+        _("image"), upload_to="service_images/", null=True, blank=True
+    )
     availability = models.CharField(
-        _("availability"), max_length=20, choices=AVAILABILITY_CHOICES, default="immediate"
+        _("availability"),
+        max_length=20,
+        choices=AVAILABILITY_CHOICES,
+        default="immediate",
     )
     job_size = models.CharField(
         _("job size"), max_length=20, choices=SERVICE_SCOPE_CHOICES, default="medium"
@@ -153,23 +162,23 @@ class Service(models.Model):
         verbose_name = _("service")
         verbose_name_plural = _("services")
         indexes = [
-            models.Index(fields=['service_status', '-created_at']),
-            models.Index(fields=['category', 'service_status']),
-            models.Index(fields=['region', 'service_status']),
-            models.Index(fields=['availability']),
-            models.Index(fields=['job_size']),
-            models.Index(fields=['price_type']),
+            models.Index(fields=["service_status", "-created_at"]),
+            models.Index(fields=["category", "service_status"]),
+            models.Index(fields=["region", "service_status"]),
+            models.Index(fields=["availability"]),
+            models.Index(fields=["job_size"]),
+            models.Index(fields=["price_type"]),
         ]
 
     def __str__(self):
         return f"{self.title} - {self.get_category_display()}"
 
     def save(self, *args, **kwargs):
-        if not self.slug or self.slug == '':
+        if not self.slug or self.slug == "":
             base_slug = slugify(self.title)
             slug = base_slug
             counter = 1
-            # Exclude self when checking for existing slugs
+
             existing = Service.objects.filter(slug=slug)
             if self.pk:
                 existing = existing.exclude(pk=self.pk)
@@ -193,7 +202,9 @@ class Service(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("user"))
-    user_type = models.CharField(_("user type"), max_length=10, choices=USER_TYPE_CHOICES)
+    user_type = models.CharField(
+        _("user type"), max_length=10, choices=USER_TYPE_CHOICES
+    )
 
     class Meta:
         verbose_name = _("user profile")
@@ -204,10 +215,15 @@ class UserProfile(models.Model):
 
 
 class CustomerProfile(models.Model):
-    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name=_("user profile"))
+    user_profile = models.OneToOneField(
+        UserProfile, on_delete=models.CASCADE, verbose_name=_("user profile")
+    )
     phone = models.CharField(_("phone"), max_length=20, blank=True, null=True)
     saved_services = models.ManyToManyField(
-        Service, related_name="saved_by_customers", blank=True, verbose_name=_("saved services")
+        Service,
+        related_name="saved_by_customers",
+        blank=True,
+        verbose_name=_("saved services"),
     )
 
     class Meta:
@@ -219,15 +235,21 @@ class CustomerProfile(models.Model):
 
 
 class CraftsmanProfile(models.Model):
-    user_profile = models.OneToOneField("UserProfile", on_delete=models.CASCADE, verbose_name=_("user profile"))
+    user_profile = models.OneToOneField(
+        "UserProfile", on_delete=models.CASCADE, verbose_name=_("user profile")
+    )
     business_name = models.CharField(_("business name"), max_length=255)
     slug = models.SlugField(_("slug"), max_length=260, blank=True, null=True)
-    years_of_experience = models.CharField(_("years of experience"), max_length=20, choices=EXPERIENCE_CHOICES)
+    years_of_experience = models.CharField(
+        _("years of experience"), max_length=20, choices=EXPERIENCE_CHOICES
+    )
     profile_photo = models.ImageField(
         _("profile photo"), upload_to="craftsman_profiles/", null=True, blank=True
     )
     has_license = models.BooleanField(_("has license"), default=False)
-    license_number = models.CharField(_("license number"), max_length=100, blank=True, null=True)
+    license_number = models.CharField(
+        _("license number"), max_length=100, blank=True, null=True
+    )
     is_verified = models.BooleanField(_("is verified"), default=False)
     rating = models.FloatField(_("rating"), default=0.0)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
@@ -242,17 +264,17 @@ class CraftsmanProfile(models.Model):
         return f"{self.user_profile.user.username}"
 
     def save(self, *args, **kwargs):
-        if not self.slug or self.slug == '':
-            # Use business_name if available, otherwise use username
+        if not self.slug or self.slug == "":
+
             if self.business_name and self.business_name.strip():
                 base_string = self.business_name
             else:
                 base_string = self.user_profile.user.username
-            
+
             base_slug = slugify(base_string)
             slug = base_slug
             counter = 1
-            # Exclude self when checking for existing slugs
+
             existing = CraftsmanProfile.objects.filter(slug=slug)
             if self.pk:
                 existing = existing.exclude(pk=self.pk)
@@ -277,10 +299,16 @@ class CraftsmanProfile(models.Model):
 
 class Review(models.Model):
     service = models.ForeignKey(
-        Service, on_delete=models.CASCADE, related_name="reviews", verbose_name=_("service")
+        Service,
+        on_delete=models.CASCADE,
+        related_name="reviews",
+        verbose_name=_("service"),
     )
     customer = models.ForeignKey(
-        CustomerProfile, on_delete=models.CASCADE, related_name="reviews", verbose_name=_("customer")
+        CustomerProfile,
+        on_delete=models.CASCADE,
+        related_name="reviews",
+        verbose_name=_("customer"),
     )
     rating = models.IntegerField(_("rating"), choices=RATING_CHOICES)
     title = models.CharField(_("title"), max_length=200)
@@ -301,7 +329,10 @@ class Review(models.Model):
 
 class BoostRequest(models.Model):
     service = models.ForeignKey(
-        Service, on_delete=models.CASCADE, related_name="boost_requests", verbose_name=_("service")
+        Service,
+        on_delete=models.CASCADE,
+        related_name="boost_requests",
+        verbose_name=_("service"),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("user"))
     price = models.DecimalField(_("price"), max_digits=6, decimal_places=2)

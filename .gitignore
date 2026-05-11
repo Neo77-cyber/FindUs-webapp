@@ -5,3 +5,5 @@
 .env.production.local
 .env.test.local
 staticfiles/
+populate.py
+.cursorrules

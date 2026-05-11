@@ -11,7 +11,7 @@ def send_customer_welcome_email(user_email):
     Send welcome email to customer after registration
     """
     try:
-        RESEND_API_KEY = "re_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ"
+        RESEND_API_KEY = settings.RESEND_API_KEY
 
         subject = "Trova il professionista giusto per il lavoro!"
 
@@ -117,7 +117,7 @@ Il Team FidaMano"""
         )
 
         if response.status_code == 200:
-            print(f"DEBUG: ✅ Craftsman email sent to {user_email}")
+            print(f"DEBUG: Craftsman email sent to {user_email}")
             logger.info(f"Customer welcome email sent to {user_email}")
             return True
         else:
@@ -139,7 +139,7 @@ def send_craftsman_welcome_email(
     try:
         print(f"DEBUG: Starting craftsman email to {user_email}")
 
-        RESEND_API_KEY = "re_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ"
+        RESEND_API_KEY = settings.RESEND_API_KEY
 
         subject = "Sei pronto per lavorare! Troviamo il tuo primo cliente."
 
@@ -239,7 +239,7 @@ Il Team FidaMano"""
         )
 
         if response.status_code == 200:
-            print(f"DEBUG: ✅ Craftsman email sent to {user_email}")
+            print(f"DEBUG: Craftsman email sent to {user_email}")
             logger.info(f"Craftsman welcome email sent to {user_email}")
             return True
         else:
@@ -264,12 +264,13 @@ def send_welcome_email_async(user_email, is_craftsman=False):
     email_thread.daemon = True
     email_thread.start()
 
+
 def send_waitlist_confirmation_email(user_email, user_name, city, category):
     """
     Send waitlist confirmation email to users who signed up
     """
     try:
-        RESEND_API_KEY = "re_dmz9pidY_71yM9R6vrP6VkeNfJesh8cKZ"
+        RESEND_API_KEY = settings.RESEND_API_KEY
 
         subject = f"Stiamo cercando i migliori professionisti {category} a {city}!"
 
@@ -412,7 +413,7 @@ Questa email è stata inviata a {user_email} perché ti sei iscritto alla lista 
         )
 
         if response.status_code == 200:
-            print(f"DEBUG: ✅ Waitlist confirmation email sent to {user_email}")
+            print(f"DEBUG: Waitlist confirmation email sent to {user_email}")
             logger.info(f"Waitlist confirmation email sent to {user_email}")
             return True
         else:
@@ -429,6 +430,7 @@ def send_waitlist_email_async(user_email, user_name, city, category):
     """
     Send waitlist email asynchronously
     """
+
     def send_email():
         send_waitlist_confirmation_email(user_email, user_name, city, category)
 
